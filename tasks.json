@@ -1,0 +1,21 @@
+{
+  "updated": "2026-10-25",
+  "tasks": [
+    {"id":"d1","status":"doing","owner":"doc","kind":"creature","title":"AI 이미지 분류 심화편","progress":60,"lines":["예제 데이터 고르는 중","하하! 정확도 올라간다!","이 고양이, 개처럼 생겼군"]},
+    {"id":"d2","status":"doing","owner":"asst","kind":"robot","title":"연구실 현황판","progress":45,"lines":["로봇 팔 배선 중…","박사님, 커피 또 드셨어요?","맵 충돌 범위 조정 중"]},
+    {"id":"d3","status":"doing","owner":"fly","kind":"doc","title":"초파리 뇌 연구 Review 2편","progress":40,"lines":["논문 3편째 읽는 중","윙— 시냅스가 너무 많다","현미경 초점 맞추는 중"]},
+    {"id":"d4","status":"doing","owner":"robo","kind":"doc","title":"Global Business 새 글","progress":20,"lines":["시장 데이터 수집 중","삐빅. 환율 확인 완료","숫자는 거짓말 안 해"]},
+    {"id":"t1","status":"todo","owner":"doc","kind":"creature","title":"스틱맨이 특징이 되는 과정","due":"11월"},
+    {"id":"t2","status":"todo","owner":"fly","kind":"creature","title":"초파리와 함께하는 딥러닝 다음 편","due":"11월"},
+    {"id":"t3","status":"todo","owner":"asst","kind":"creature","title":"알고리즘 패밀리 4편","due":"12월"},
+    {"id":"t4","status":"todo","owner":"robo","kind":"robot","title":"뉴스 자동 요약 로봇","due":"미정"},
+    {"id":"c1","status":"done","owner":"doc","kind":"creature","title":"Fish Market Data로 쉽게 배우는 머신러닝","link":"https://adminmrobo.github.io/Fish_Market_Data_Machine_Learning/"},
+    {"id":"c2","status":"done","owner":"doc","kind":"creature","title":"신경망 모델의 이해: 퍼셉트론 vs 함수모형","link":"https://adminmrobo.github.io/deep_learning_00_neural_net_learns/"},
+    {"id":"c3","status":"done","owner":"fly","kind":"creature","title":"초파리 연구실의 딥러닝 A to Z","link":"https://adminmrobo.github.io/AI_Model_Review/#map"},
+    {"id":"c4","status":"done","owner":"fly","kind":"doc","title":"초파리(Fruit-Fly) 뇌 연구 Review","link":"https://adminmrobo.github.io/AI_Model_Review_Fruit_fly_special/"},
+    {"id":"c5","status":"done","owner":"doc","kind":"creature","title":"AI는 이미지를 어떻게 구분할까?","link":"https://adminmrobo.github.io/AI_image_classification/"},
+    {"id":"c6","status":"done","owner":"doc","kind":"creature","title":"AI는 동작을 어떻게 알아보고 만들까?","link":"https://adminmrobo.github.io/motion_ai_series_01/"},
+    {"id":"c7","status":"done","owner":"asst","kind":"creature","title":"인공지능 알고리즘 패밀리 3부작","link":"https://adminmrobo.github.io/ML_00_Algorithm-family-build_01/"},
+    {"id":"c8","status":"done","owner":"robo","kind":"robot","title":"Money-Robo: 로봇저널리즘 프로젝트","link":"http://www.money-robo.com"}
+  ]
+}

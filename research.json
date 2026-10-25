@@ -1,0 +1,37 @@
+{
+  "updated": "2026-10-26",
+  "_guide": "이 파일만 고치면 연구실의 '박사 연구실적'이 바뀝니다. 항목을 복사해서 붙이고 title·url만 바꾸면 됩니다. url이 없으면 \"\"로 두세요.",
+  "github": [
+    {"title": "GitHub 프로필 (adminmrobo)", "url": "https://github.com/adminmrobo", "desc": "모든 강의·연구 페이지의 저장소"},
+    {"title": "Fish Market Data로 쉽게 배우는 머신러닝", "url": "https://adminmrobo.github.io/Fish_Market_Data_Machine_Learning/", "desc": "머신러닝 가벼운 스케치"},
+    {"title": "신경망 모델의 이해: 퍼셉트론 vs 함수모형", "url": "https://adminmrobo.github.io/deep_learning_00_neural_net_learns/", "desc": "머신러닝 가벼운 스케치"},
+    {"title": "초파리 연구실의 딥러닝 A to Z", "url": "https://adminmrobo.github.io/AI_Model_Review/#map", "desc": "초파리 연구원과 함께하는 쉬운 딥러닝"},
+    {"title": "초파리(Fruit-Fly) 뇌 연구 Review", "url": "https://adminmrobo.github.io/AI_Model_Review_Fruit_fly_special/", "desc": "초파리 연구원과 함께하는 쉬운 딥러닝"},
+    {"title": "AI는 이미지를 어떻게 구분할까?", "url": "https://adminmrobo.github.io/AI_image_classification/", "desc": "직접 만드는 인공지능 감각"},
+    {"title": "AI는 동작을 어떻게 알아보고 만들까?", "url": "https://adminmrobo.github.io/motion_ai_series_01/", "desc": "직접 만드는 인공지능 감각"},
+    {"title": "인공지능 알고리즘 패밀리 가계도", "url": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_01/", "desc": "특별편: 인공지능 알고리즘 패밀리"},
+    {"title": "인공지능 알고리즘 패밀리 조직원 명부", "url": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_02/", "desc": "특별편: 인공지능 알고리즘 패밀리"},
+    {"title": "인공지능 알고리즘 패밀리 가문 회합", "url": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_03/", "desc": "특별편: 인공지능 알고리즘 패밀리"}
+  ],
+  "papers": [
+    {"date": "2025.07", "title": "국민노후보장패널데이터를 활용한 가구지출 예측 모델 연구: 인공지능 모델 기반 접근", "venue": "미래사회 제16권 2호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=508"},
+    {"date": "2025.05", "title": "국민노후보장패널데이터를 활용한 가구지출 예측 모델 연구: 인공지능 접근", "venue": "국민노후보장패널 학술대회 발표 · 국민연금연구원", "url": "https://drive.google.com/file/d/1LbYLSxtmmWZGBAwKHrnaLMIA-RX4dCD0/view?usp=sharing"},
+    {"date": "2025.03", "title": "SNS 텍스트 기반 마약 의심 거래 탐지 알고리즘에 대한 연구: 패턴 및 맥락 분석을 중심으로", "venue": "미래사회 제16권 1호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=490"},
+    {"date": "2024.11", "title": "금융분야의 이상탐지 모델 보안을 위한 통계 기반의 적대적 데이터 대응 방안", "venue": "미래사회 제15권 3호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=464"},
+    {"date": "2024.06", "title": "인공지능을 활용한 가상 캐릭터 특성 기반 SNS 포스팅 탐지 솔루션", "venue": "2024 Summer Newmedia Party 포스터 발표", "url": ""},
+    {"date": "2024.05", "title": "산업재해 패널 데이터를 활용한 머신러닝 모델", "venue": "제10회 산재보험패널 학술대회 포스터 발표 · 근로복지연구원", "url": ""},
+    {"date": "2024.02", "title": "가상 자산 시계열 데이터의 분석과 예측 — 시계열 모델 및 인공지능 모델의 비교, 개선점 제시", "venue": "미래사회 제15권 1호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=379"},
+    {"date": "2021.12", "title": "암호화폐 자산의 정보 효율성에 대한 연구", "venue": "미래사회 제12권 2호 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=204"},
+    {"date": "2018", "title": "ERC-20 경제적 성과 분석", "venue": "이드콘 2018 발표", "url": "https://decenter.kr/NewsView/1VJB0BLUD4"}
+  ],
+  "patents": [
+    {"no": "제 10-2666665 호", "title": "이미지 추천 방법, 장치, 컴퓨터 판독 가능한 기록매체 및 컴퓨터 프로그램", "date": "등록 2024.05.13", "url": ""},
+    {"no": "제 10-2618473 호", "title": "로봇 저널리즘을 이용한 암호 화폐의 분석 뉴스 콘텐츠 서비스 시스템과 그 서비스 방법", "date": "등록 2023.12.21", "url": ""},
+    {"no": "제 10-2555652 호", "title": "블록체인 데이터의 모니터링을 통한 이상징후 탐지시스템 및 방법", "date": "등록 2023.07.11", "url": ""},
+    {"no": "제 10-2486672 호", "title": "태양광 데이터를 이용한 폭염피해 예측 시스템 및 방법", "date": "등록 2023.01.05", "url": ""},
+    {"no": "제 10-2135712 호", "title": "주식 기사 생성 장치 및 방법", "date": "등록 2020.07.14", "url": ""}
+  ],
+  "books": [
+    {"title": "AI 범죄와 자기 방어", "venue": "커뮤니케이션북스 · 2025 · 인공지능총서", "url": ""}
+  ]
+}

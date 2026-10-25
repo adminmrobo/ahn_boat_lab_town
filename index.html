@@ -1,0 +1,736 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ahn Lab Town</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column. Header → lab stats → the walkable lab (camera follows you; dialogue panel top-left, info panel top-right on wide screens, stacked below on phones) → experiment console → full log. Night-lab palette taken from the map; single dark theme by choice. */
+:root{
+  --bg:#12101c; --panel:#1b1729; --panel-2:#2a1f3d; --line:#3a2f55;
+  --fg:#eeeaf8; --muted:#a59dc2; --cyan:#4de0d0; --magenta:#d0449a; --amber:#e8a24b; --alarm:#e02a3c;
+  --todo:#e8a24b; --doing:#4de0d0; --done:#b59bff;
+  --display:"Do Hyeon","IBM Plex Sans KR",system-ui,sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1440px;margin:0 auto;padding-block:16px 56px;display:flex;flex-direction:column;gap:14px}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+button{font-family:inherit}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.top a{color:var(--muted);text-decoration:none}.top a:hover{color:var(--fg)}
+.proto{font-family:var(--mono);font-size:12px;border:1px dashed var(--line);border-radius:999px;padding:3px 12px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--display);font-weight:400;margin:0;line-height:1.15;font-size:clamp(30px,5vw,46px);text-wrap:balance}
+h2{font-family:var(--display);font-weight:400;margin:0;font-size:24px}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.lead b{color:var(--fg);font-weight:500}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:0}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-family:var(--display);font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat.acc{border-color:#5a2433}.stat.acc .v{color:#ff7584}
+.stat .s{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.bump{animation:bump .5s ease}
+@keyframes bump{30%{transform:scale(1.18)}}
+
+/* toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nbtn{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:6px 12px;font-size:13px;cursor:pointer;text-decoration:none}
+.nbtn:hover{border-color:var(--cyan)}
+.nbtn.hl{border-color:var(--amber);color:#ffd59a}
+.nbtn img{width:22px;height:22px;object-fit:contain}
+.picker{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.pick{display:inline-flex;align-items:center;gap:4px;background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:2px 10px 2px 3px;font-size:13px;cursor:pointer}
+.pick img{width:26px;height:26px;object-fit:contain}
+.pick[aria-pressed="true"]{border-color:var(--cyan);background:#173a3a}
+
+/* game */
+.game{position:relative;border:3px solid #2a1f3d;border-radius:14px;overflow:hidden;background:#0d0b16}
+.game canvas{display:block;width:100%;touch-action:none;cursor:pointer}
+.game.alarm{border-color:var(--alarm)}
+.game.alarm canvas{animation:shake .32s linear infinite}
+@keyframes shake{25%{transform:translate(2px,-1px)}75%{transform:translate(-2px,1px)}}
+@media (prefers-reduced-motion:reduce){.game.alarm canvas{animation:none}.bump{animation:none}}
+.ctrl{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
+.ctrl>*{pointer-events:auto}
+.act{margin-left:auto;font-family:var(--display);font-size:19px;background:var(--cyan);color:#0a2622;border:0;border-radius:12px;padding:8px 16px;box-shadow:0 3px 0 #23988b;cursor:pointer}
+.act:disabled{background:#2a1f3d;color:var(--muted);box-shadow:0 3px 0 #1b1729;cursor:default}
+.pad{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:2px}
+.pad button{background:rgba(42,31,61,.9);border:1px solid var(--line);color:var(--fg);border-radius:8px;font-size:16px;touch-action:none;user-select:none;-webkit-user-select:none}
+.pad .u{grid-column:2;grid-row:1}.pad .l{grid-column:1;grid-row:2}.pad .r{grid-column:3;grid-row:2}.pad .d{grid-column:2;grid-row:3}
+@media (hover:hover) and (pointer:fine){.pad{display:none}}
+@media (pointer:coarse){.keys{display:none}}
+.keys{font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--fg);background:var(--panel)}
+.toast{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:rgba(18,16,28,.92);border:1px solid var(--line);border-radius:999px;padding:6px 16px;font-size:14px;white-space:nowrap;pointer-events:none;z-index:4}
+.toast.bad{border-color:var(--alarm);color:#ffb3ba}
+.toast.good{border-color:var(--cyan);color:#b8fff6}
+
+/* panels: overlay on wide screens, stacked on narrow */
+.panel{background:rgba(27,23,41,.96);border:1px solid var(--line);border-radius:14px;padding:14px 16px;z-index:3}
+.dlg{position:absolute;left:12px;top:12px;width:min(560px,54%);display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start}
+.dlg .pt{width:96px;height:112px;background:var(--panel-2);border-radius:10px;display:grid;place-items:center;overflow:hidden}
+.dlg .pt img{max-width:92%;max-height:92%;object-fit:contain}
+.dlg .nm{font-family:var(--display);font-size:20px;line-height:1.1}
+.dlg .rl{font-size:12px;color:var(--muted)}
+.dlg .tx{font-size:15px;margin:6px 0 8px;min-height:3.2em}
+.dlg .bt{display:flex;gap:6px;justify-content:flex-end}
+.info{position:absolute;right:12px;top:12px;width:min(400px,42%);max-height:calc(100% - 24px);overflow:auto}
+.x{float:right;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:8px;width:30px;height:30px;cursor:pointer;margin:-4px -6px 0 8px}
+.x:hover{color:var(--fg);border-color:var(--cyan)}
+.info h3{margin:2px 0 6px;font-size:18px;line-height:1.35}
+.info .hero{display:block;width:100%;max-height:220px;object-fit:contain;margin:6px 0 10px}
+.info .hero.wide{max-height:180px}
+.meta{font-size:13px;color:var(--muted)}
+.badge{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid currentColor;letter-spacing:.06em}
+.b-todo{color:var(--todo)}.b-doing{color:var(--doing)}.b-done{color:var(--done)}.b-alarm{color:#ff6b78}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;background:var(--doing)}
+.items{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:7px}
+.items li{font-size:14px;line-height:1.45}
+.items .who{display:block;font-size:12px;color:var(--muted)}
+.sec{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan);margin:14px 0 2px;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:13px;text-decoration:none;color:var(--fg);background:var(--panel-2);cursor:pointer}
+.btn:hover{border-color:var(--cyan)}
+.btn.pri{background:var(--cyan);color:#0a2622;border-color:var(--cyan);font-weight:500}
+.btn.big{width:100%;padding:11px 12px;font-size:14px;justify-content:flex-start}
+.btn.big img{width:34px;height:34px;object-fit:contain}
+.links{display:grid;gap:8px;margin-top:8px}
+.cutov{position:absolute;inset:0;background:rgba(10,6,14,.84);display:grid;place-items:center;padding:16px;z-index:5}
+.cutov figure{margin:0;max-width:900px;width:100%;display:flex;flex-direction:column;gap:10px;align-items:center}
+.cutov img{width:100%;max-height:70vh;object-fit:contain;border-radius:10px;border:2px solid var(--alarm)}
+.cutov figcaption{font-family:var(--display);font-size:22px;text-align:center}
+@media (max-width:899px){
+  .dlg,.info{position:static;width:auto;max-height:none;margin-top:10px;background:var(--panel)}
+  .stack{display:flex;flex-direction:column}
+}
+@media (max-width:640px){
+  .ctrl{position:static;padding:10px;background:var(--panel);border-top:2px solid #2a1f3d}
+  .act{font-size:16px;padding:8px 12px}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .stat{padding:8px 10px}.stat .v{font-size:22px}.stat .k{font-size:11px;line-height:1.3}
+  .dlg{grid-template-columns:72px minmax(0,1fr)}.dlg .pt{width:72px;height:88px}
+}
+
+/* console */
+.console{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:12px}
+.evs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ev{display:flex;gap:10px;align-items:center;text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:8px 10px;color:var(--fg);cursor:pointer;min-width:0}
+.ev img{width:40px;height:40px;object-fit:contain;flex:0 0 40px}
+.ev b{display:block;font-size:14px;font-weight:500}
+.ev small{display:block;font-size:12px;color:var(--muted)}
+.ev[aria-pressed="true"]{border-color:var(--amber);background:#3a2a1d}
+.lvl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+.lvl input{width:100%;accent-color:var(--amber)}
+.lvl output{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.run{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.go{font-family:var(--display);font-size:22px;background:var(--amber);color:#2b1606;border:0;border-radius:12px;padding:10px 22px;box-shadow:0 3px 0 #a86a20;cursor:pointer}
+.go:disabled{opacity:.55;cursor:default}
+.risk{font-size:13px;color:var(--muted)}
+.risk b{color:#ffb15c;font-family:var(--mono)}
+@media (max-width:820px){.evs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.evs{grid-template-columns:1fr}}
+
+details.log{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 16px}
+details.log summary{cursor:pointer;padding:10px 0;font-family:var(--display);font-size:20px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-bottom:14px}
+.col h4{margin:0 0 8px;font-size:14px;display:flex;gap:6px;align-items:center}
+.col ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.col li{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+.col li small{display:block;color:var(--muted);font-size:12px}
+@media (max-width:720px){.board{grid-template-columns:1fr}}
+footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <a href="https://ahnboat.xyz/">← Reon Ahn's page</a>
+    <span class="proto">프로토타입 · 진행 중 작업은 예시</span>
+  </div>
+
+  <header>
+    <div class="eyebrow">연구실 입장</div>
+    <h1>어서 와라, 휴먼.</h1>
+    <p class="lead">한밤의 AI 연구소다. 걸어 다니며 둘러보고, 연구원을 <b>눌러서</b> 말을 걸어 봐라. 아래 <b>실험 콘솔</b>에서 직접 실험을 일으킬 수도 있다. 출력을 올릴수록 사고가 잘 난다.</p>
+  </header>
+
+  <section class="stats" aria-label="연구소 누적 기록">
+    <div class="stat"><div class="k">누적 실험 클릭 수</div><div class="v" id="sClicks">0</div><div class="s" id="sMode">이 브라우저 기준</div></div>
+    <div class="stat acc"><div class="k">총 돌발 사고 이벤트 발생 건수</div><div class="v" id="sAcc">0</div><div class="s" id="sRate">사고율 –</div></div>
+    <div class="stat"><div class="k">작업 현황</div><div class="v" id="sWork" style="font-size:20px;line-height:1.5"></div><div class="s" id="sMine">내 실험 0회</div></div>
+  </section>
+
+  <div class="toolbar">
+    <div class="nav">
+      <button class="nbtn hl" id="goDoc"><img src="assets/pose/doc_ok.webp" alt="">박사 소개</button>
+      <button class="nbtn hl" id="goRes">★ 박사 연구실적 보기</button>
+      <a class="nbtn" href="#console">⚗ 실험 콘솔로</a>
+      <button class="nbtn" id="zoomBtn" aria-pressed="false">전체 보기</button>
+    </div>
+    <div class="picker" role="group" aria-label="둘러볼 캐릭터 고르기"><span>누구로 둘러볼까?</span><span id="picker" class="row"></span></div>
+  </div>
+
+  <div class="stack">
+    <div class="game" id="game">
+      <canvas id="cv" tabindex="0" aria-label="연구소 지도. 방향키로 이동, 스페이스로 살펴보기, 연구원을 누르면 대화. 바닥을 눌러 그 자리로 걸어갈 수도 있다."></canvas>
+      <div class="toast" id="toast" hidden></div>
+      <div class="ctrl">
+        <div class="pad" aria-hidden="true">
+          <button class="u" data-k="up">▲</button><button class="l" data-k="left">◀</button><button class="r" data-k="right">▶</button><button class="d" data-k="down">▼</button>
+        </div>
+        <button class="act" id="act" disabled>살펴보기</button>
+      </div>
+      <div class="cutov" id="cutov" hidden>
+        <figure><img id="cutImg" alt=""><figcaption id="cutCap"></figcaption><button class="btn" id="cutClose">닫기</button></figure>
+      </div>
+      <section class="panel dlg" id="dlg" hidden aria-live="polite">
+        <div class="pt"><img id="dPt" alt=""></div>
+        <div style="min-width:0">
+          <div class="nm" id="dNm"></div><div class="rl" id="dRl"></div>
+          <div class="tx" id="dTx"></div>
+          <div class="bt"><span class="meta" id="dPg" style="margin-right:auto;align-self:center"></span><button class="btn" id="dClose">닫기</button><button class="btn pri" id="dNext">다음 ▶</button></div>
+        </div>
+      </section>
+      <section class="panel info" id="info" aria-live="polite"></section>
+    </div>
+  </div>
+  <div class="keys">
+    <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> 또는 <kbd>WASD</kbd> 이동</span><span><kbd>Space</kbd> 살펴보기 · 대화 넘기기</span><span>연구원을 누르면 대화, 바닥이나 물건을 누르면 그쪽으로 걸어간다</span>
+  </div>
+
+  <section class="console" id="console" aria-labelledby="hCon">
+    <div class="row" style="justify-content:space-between"><h2 id="hCon">⚗ 실험 콘솔</h2><span class="meta">실험을 고르고 출력 레벨을 정한 뒤 실행해라. 실행할 때마다 클릭 수가 누적된다.</span></div>
+    <div class="evs" id="evs" role="group" aria-label="실험 고르기"></div>
+    <div class="lvl"><label for="lvl">출력 레벨</label><input type="range" id="lvl" min="1" max="5" step="1" value="2"><output id="lvlOut" for="lvl"></output></div>
+    <div class="run"><button class="go" id="go">실험 실행 ▶</button><span class="risk" id="risk"></span></div>
+  </section>
+
+  <details class="log">
+    <summary>실험 기록 전체 보기</summary>
+    <div class="board" id="board"></div>
+  </details>
+
+  <footer>
+    <span>마지막 갱신 <span style="font-family:var(--mono)" id="updated">2026-10-26</span></span>
+    <span><a href="https://ahnboat.xyz/my_profile/">주인장 자기소개서</a> · <a href="https://adminmrobo.github.io/who_am_i/who_am_i.html">마스코트가 소개하는 주인장</a></span>
+  </footer>
+</div>
+
+<script>
+/* ======================================================================
+   data
+   ====================================================================== */
+const A="assets/", P=A+"pose/";
+let CFG={COUNTER_URL:"",PROFILE_MASCOT_URL:"https://adminmrobo.github.io/who_am_i/who_am_i.html",PROFILE_RESUME_URL:"https://ahnboat.xyz/my_profile/"};
+const POSE = {"doc_write": {"w": 179, "h": 293, "ax": 0.485}, "doc_think": {"w": 161, "h": 294, "ax": 0.416}, "doc_flask": {"w": 213, "h": 293, "ax": 0.558}, "doc_rush": {"w": 283, "h": 282, "ax": 0.38}, "doc_sleep": {"w": 258, "h": 265, "ax": 0.522}, "doc_ok": {"w": 244, "h": 297, "ax": 0.435}, "doc_data": {"w": 211, "h": 298, "ax": 0.542}, "asst_present": {"w": 182, "h": 293, "ax": 0.674}, "asst_think": {"w": 101, "h": 291, "ax": 0.439}, "asst_type": {"w": 135, "h": 290, "ax": 0.634}, "asst_check": {"w": 130, "h": 347, "ax": 0.473}, "asst_wave": {"w": 130, "h": 291, "ax": 0.546}, "asst_idea": {"w": 121, "h": 336, "ax": 0.553}, "asst_cheer": {"w": 138, "h": 286, "ax": 0.473}, "fly_scan": {"w": 246, "h": 278, "ax": 0.511}, "fly_hover": {"w": 278, "h": 253, "ax": 0.53}, "fly_idea": {"w": 284, "h": 306, "ax": 0.551}, "fly_panic": {"w": 262, "h": 281, "ax": 0.504}, "fly_report": {"w": 290, "h": 268, "ax": 0.561}, "fly_analyze": {"w": 310, "h": 271, "ax": 0.333}, "robo_search": {"w": 232, "h": 305, "ax": 0.508}, "robo_lock": {"w": 212, "h": 307, "ax": 0.496}, "robo_scan": {"w": 342, "h": 305, "ax": 0.332}, "robo_delivery": {"w": 215, "h": 306, "ax": 0.493}, "robo_battery": {"w": 192, "h": 303, "ax": 0.498}, "robo_dance": {"w": 377, "h": 317, "ax": 0.408}, "robo_alert": {"w": 262, "h": 333, "ax": 0.486}};
+const CREW = {
+  doc:{name:"박사",role:"총괄 · 원리 설명과 최종 검수",idle:["doc_write","doc_think","doc_write","doc_data","doc_write","doc_sleep"],move:"doc_rush",base:"doc_write",h:130},
+  asst:{name:"조수",role:"질문·실수·발견 담당 · 코드와 자동화 제조",idle:["asst_type","asst_think","asst_type","asst_present"],move:"asst_wave",base:"asst_wave",h:128},
+  fly:{name:"초파리 연구원",role:"의심·현장 비유·반박 담당 · 뇌 연구",idle:["fly_scan","fly_analyze","fly_scan","fly_report"],move:"fly_hover",base:"fly_scan",h:114},
+  robo:{name:"Money-Robo",role:"계산·오류 감지·결과 보고 · 데이터",idle:["robo_search","robo_scan","robo_search","robo_lock"],move:"robo_delivery",base:"robo_search",h:78,float:true}
+};
+// lines follow the character bible's voice: ASST "~일까?"/"박사님, ~입니다!", DOC "~입니다.", FLY "~이다."/"휴먼, 조건부터 확인해라.", ROBO "박사님, ~입니다."
+const TALK = {
+  doc:[["doc_ok","어서 오십시오. 이 연구소의 책임자, 박사입니다."],["doc_write","지금은 「{task}」를 기록하고 있습니다. 진행률은 {p}%입니다."],["doc_think","원리부터 정리하겠습니다. 데이터가 바뀌면 결론도 바뀝니다."],["doc_flask","실험은 작게, 자주 하는 것이 원칙입니다."],["doc_data","완성된 결과물 {done}건은 데이터 코어에 보관해 두었습니다."],["doc_rush","주의하십시오. 출력 레벨을 너무 올리면 사고가 납니다!"],["doc_sleep","…쿨. (밤샘 실험 중입니다. 깨우지 마십시오.)"]],
+  asst:[["asst_wave","안녕하세요! 저는 조수예요. 처음 오셨나요?"],["asst_type","「{task}」 만드는 중이에요. 이 버그는 어디서 온 걸까?"],["asst_think","배선을 바꾸면 로봇 팔이 더 빨라질까?"],["asst_idea","아, 알았다! 박사님, 원인을 찾았습니다!"],["asst_check","박사님, 테스트 통과입니다!"],["asst_present","다음 의뢰는 {todo}건이에요. 핀보드에 붙여 뒀어요."],["asst_cheer","완성품이 {done}건이 됐어요! 다음은 뭘 만들까?"]],
+  fly:[["fly_hover","윙— 휴먼, 여기 처음인가."],["fly_scan","휴먼, 조건부터 확인해라."],["fly_analyze","데이터는 정직하다. 해석하는 쪽이 문제다."],["fly_report","보고다. 「{task}」, 진행률 {p}%."],["fly_idea","초파리 뇌는 작다. 그래도 계산은 정확하다."],["fly_panic","홀로그램 출력은 올리지 마라. 진심이다."]],
+  robo:[["robo_search","삐빅. 방문자 감지. 환영합니다."],["robo_scan","스캔 완료. 누적 실험 클릭 {clicks}회입니다."],["robo_alert","경보. 총 돌발 사고 {acc}건입니다."],["robo_lock","박사님, 연구 기록은 안전하게 잠겨 있습니다."],["robo_delivery","완성 결과물 {done}건, 배송 준비 완료입니다."],["robo_battery","박사님… 배터리 부족입니다. 충전이 필요합니다."],["robo_dance","삐빅♪ 계산이 맞으면 춤이 나옵니다. 박사님 소개는 출입문 옆 안내판에 있습니다."]]
+};
+const ALARM_LINES={doc:["소화기! 소화기 어디 있습니까!","침착하십시오! …아니, 피하십시오!"],asst:["으아아 박사님!!","제 코드 탓 아니죠?!"],fly:["홀로그램이 깨진다!","휴먼, 출력 내려라!"],robo:["경보. 경보. 경보.","박사님, 위험 수준입니다!"]};
+const GOOD_LINES={doc:["하하! 실험 성공입니다."],asst:["됐다! 박사님, 성공입니다!"],fly:["…인정한다. 잘됐다."],robo:["삐빅♪ 결과 정상입니다."]};
+const REACT_BAD={doc:"doc_rush",asst:"asst_think",fly:"fly_panic",robo:"robo_alert"};
+const REACT_GOOD={doc:"doc_ok",asst:"asst_cheer",fly:"fly_idea",robo:"robo_dance"};
+const STATUS={todo:"할 작업",doing:"제조 중",done:"완성"};
+const KIND={robot:"로봇 · 앱/자동화",creature:"생명체 · 강의/연구",doc:"문서 · 글/보고서"};
+let TASKS=[], RES=null;
+const FALLBACK_TASKS = {"updated": "2026-10-25", "tasks": [{"id": "d1", "status": "doing", "owner": "doc", "kind": "creature", "title": "AI 이미지 분류 심화편", "progress": 60, "lines": ["예제 데이터 고르는 중", "하하! 정확도 올라간다!", "이 고양이, 개처럼 생겼군"]}, {"id": "d2", "status": "doing", "owner": "asst", "kind": "robot", "title": "연구실 현황판", "progress": 45, "lines": ["로봇 팔 배선 중…", "박사님, 커피 또 드셨어요?", "맵 충돌 범위 조정 중"]}, {"id": "d3", "status": "doing", "owner": "fly", "kind": "doc", "title": "초파리 뇌 연구 Review 2편", "progress": 40, "lines": ["논문 3편째 읽는 중", "윙— 시냅스가 너무 많다", "현미경 초점 맞추는 중"]}, {"id": "d4", "status": "doing", "owner": "robo", "kind": "doc", "title": "Global Business 새 글", "progress": 20, "lines": ["시장 데이터 수집 중", "삐빅. 환율 확인 완료", "숫자는 거짓말 안 해"]}, {"id": "t1", "status": "todo", "owner": "doc", "kind": "creature", "title": "스틱맨이 특징이 되는 과정", "due": "11월"}, {"id": "t2", "status": "todo", "owner": "fly", "kind": "creature", "title": "초파리와 함께하는 딥러닝 다음 편", "due": "11월"}, {"id": "t3", "status": "todo", "owner": "asst", "kind": "creature", "title": "알고리즘 패밀리 4편", "due": "12월"}, {"id": "t4", "status": "todo", "owner": "robo", "kind": "robot", "title": "뉴스 자동 요약 로봇", "due": "미정"}, {"id": "c1", "status": "done", "owner": "doc", "kind": "creature", "title": "Fish Market Data로 쉽게 배우는 머신러닝", "link": "https://adminmrobo.github.io/Fish_Market_Data_Machine_Learning/"}, {"id": "c2", "status": "done", "owner": "doc", "kind": "creature", "title": "신경망 모델의 이해: 퍼셉트론 vs 함수모형", "link": "https://adminmrobo.github.io/deep_learning_00_neural_net_learns/"}, {"id": "c3", "status": "done", "owner": "fly", "kind": "creature", "title": "초파리 연구실의 딥러닝 A to Z", "link": "https://adminmrobo.github.io/AI_Model_Review/#map"}, {"id": "c4", "status": "done", "owner": "fly", "kind": "doc", "title": "초파리(Fruit-Fly) 뇌 연구 Review", "link": "https://adminmrobo.github.io/AI_Model_Review_Fruit_fly_special/"}, {"id": "c5", "status": "done", "owner": "doc", "kind": "creature", "title": "AI는 이미지를 어떻게 구분할까?", "link": "https://adminmrobo.github.io/AI_image_classification/"}, {"id": "c6", "status": "done", "owner": "doc", "kind": "creature", "title": "AI는 동작을 어떻게 알아보고 만들까?", "link": "https://adminmrobo.github.io/motion_ai_series_01/"}, {"id": "c7", "status": "done", "owner": "asst", "kind": "creature", "title": "인공지능 알고리즘 패밀리 3부작", "link": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_01/"}, {"id": "c8", "status": "done", "owner": "robo", "kind": "robot", "title": "Money-Robo: 로봇저널리즘 프로젝트", "link": "http://www.money-robo.com"}]};
+const FALLBACK_RES = {"updated": "2026-10-26", "_guide": "이 파일만 고치면 연구실의 '박사 연구실적'이 바뀝니다. 항목을 복사해서 붙이고 title·url만 바꾸면 됩니다. url이 없으면 \"\"로 두세요.", "github": [{"title": "GitHub 프로필 (adminmrobo)", "url": "https://github.com/adminmrobo", "desc": "모든 강의·연구 페이지의 저장소"}, {"title": "Fish Market Data로 쉽게 배우는 머신러닝", "url": "https://adminmrobo.github.io/Fish_Market_Data_Machine_Learning/", "desc": "머신러닝 가벼운 스케치"}, {"title": "신경망 모델의 이해: 퍼셉트론 vs 함수모형", "url": "https://adminmrobo.github.io/deep_learning_00_neural_net_learns/", "desc": "머신러닝 가벼운 스케치"}, {"title": "초파리 연구실의 딥러닝 A to Z", "url": "https://adminmrobo.github.io/AI_Model_Review/#map", "desc": "초파리 연구원과 함께하는 쉬운 딥러닝"}, {"title": "초파리(Fruit-Fly) 뇌 연구 Review", "url": "https://adminmrobo.github.io/AI_Model_Review_Fruit_fly_special/", "desc": "초파리 연구원과 함께하는 쉬운 딥러닝"}, {"title": "AI는 이미지를 어떻게 구분할까?", "url": "https://adminmrobo.github.io/AI_image_classification/", "desc": "직접 만드는 인공지능 감각"}, {"title": "AI는 동작을 어떻게 알아보고 만들까?", "url": "https://adminmrobo.github.io/motion_ai_series_01/", "desc": "직접 만드는 인공지능 감각"}, {"title": "인공지능 알고리즘 패밀리 가계도", "url": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_01/", "desc": "특별편: 인공지능 알고리즘 패밀리"}, {"title": "인공지능 알고리즘 패밀리 조직원 명부", "url": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_02/", "desc": "특별편: 인공지능 알고리즘 패밀리"}, {"title": "인공지능 알고리즘 패밀리 가문 회합", "url": "https://adminmrobo.github.io/ML_00_Algorithm-family-build_03/", "desc": "특별편: 인공지능 알고리즘 패밀리"}], "papers": [{"date": "2025.07", "title": "국민노후보장패널데이터를 활용한 가구지출 예측 모델 연구: 인공지능 모델 기반 접근", "venue": "미래사회 제16권 2호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=508"}, {"date": "2025.05", "title": "국민노후보장패널데이터를 활용한 가구지출 예측 모델 연구: 인공지능 접근", "venue": "국민노후보장패널 학술대회 발표 · 국민연금연구원", "url": "https://drive.google.com/file/d/1LbYLSxtmmWZGBAwKHrnaLMIA-RX4dCD0/view?usp=sharing"}, {"date": "2025.03", "title": "SNS 텍스트 기반 마약 의심 거래 탐지 알고리즘에 대한 연구: 패턴 및 맥락 분석을 중심으로", "venue": "미래사회 제16권 1호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=490"}, {"date": "2024.11", "title": "금융분야의 이상탐지 모델 보안을 위한 통계 기반의 적대적 데이터 대응 방안", "venue": "미래사회 제15권 3호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=464"}, {"date": "2024.06", "title": "인공지능을 활용한 가상 캐릭터 특성 기반 SNS 포스팅 탐지 솔루션", "venue": "2024 Summer Newmedia Party 포스터 발표", "url": ""}, {"date": "2024.05", "title": "산업재해 패널 데이터를 활용한 머신러닝 모델", "venue": "제10회 산재보험패널 학술대회 포스터 발표 · 근로복지연구원", "url": ""}, {"date": "2024.02", "title": "가상 자산 시계열 데이터의 분석과 예측 — 시계열 모델 및 인공지능 모델의 비교, 개선점 제시", "venue": "미래사회 제15권 1호 · 학술등재지 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=379"}, {"date": "2021.12", "title": "암호화폐 자산의 정보 효율성에 대한 연구", "venue": "미래사회 제12권 2호 · 단독", "url": "https://ifso.iscu.ac.kr/02_res/sub2_1_view.asp?idx=204"}, {"date": "2018", "title": "ERC-20 경제적 성과 분석", "venue": "이드콘 2018 발표", "url": "https://decenter.kr/NewsView/1VJB0BLUD4"}], "patents": [{"no": "제 10-2666665 호", "title": "이미지 추천 방법, 장치, 컴퓨터 판독 가능한 기록매체 및 컴퓨터 프로그램", "date": "등록 2024.05.13", "url": ""}, {"no": "제 10-2618473 호", "title": "로봇 저널리즘을 이용한 암호 화폐의 분석 뉴스 콘텐츠 서비스 시스템과 그 서비스 방법", "date": "등록 2023.12.21", "url": ""}, {"no": "제 10-2555652 호", "title": "블록체인 데이터의 모니터링을 통한 이상징후 탐지시스템 및 방법", "date": "등록 2023.07.11", "url": ""}, {"no": "제 10-2486672 호", "title": "태양광 데이터를 이용한 폭염피해 예측 시스템 및 방법", "date": "등록 2023.01.05", "url": ""}, {"no": "제 10-2135712 호", "title": "주식 기사 생성 장치 및 방법", "date": "등록 2020.07.14", "url": ""}], "books": [{"title": "AI 범죄와 자기 방어", "venue": "커뮤니케이션북스 · 2025 · 인공지능총서", "url": ""}]};
+const doingOf=k=>TASKS.find(t=>t.status==="doing"&&t.owner===k);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const EVENTS=[
+  {id:"e1",zone:"초파리 뇌 연구",name:"뇌 홀로그램 가동",x:235,y:170,owner:"fly",risk:.04,pose:"fly_hover",cut:"cut4_fly.webp",cap:"초파리 뇌 홀로그램이 글리치를 일으켰다!"},
+  {id:"e2",zone:"비즈니스 AI",name:"자동매매 알고리즘 실행",x:690,y:150,owner:"robo",risk:.03,pose:"robo_scan",cut:"cut1_panic.webp",cap:"차트 폭락! 연구원들이 패닉에 빠졌다."},
+  {id:"e3",zone:"제조·로봇 AI",name:"로봇 조립 라인 가동",x:1150,y:210,owner:"asst",risk:.06,pose:"robo_alert",cut:"cut2_robot.webp",cap:"조립 중이던 로봇이 폭주했다!"},
+  {id:"e4",zone:"자연어 분석",name:"문서 대량 스캔·분석",x:200,y:450,owner:"asst",risk:.01,pose:"asst_type",cut:"cut1_panic.webp",cap:"스캐너 과열! 종이가 사방으로 날아간다."},
+  {id:"e5",zone:"데이터 코어",name:"GPU 풀가동 학습",x:1150,y:460,owner:"robo",risk:.08,pose:"robo_battery",cut:"cut3_gpu.webp",cap:"GPU 랙이 과열됐다. 냉각수 누수!"},
+  {id:"e6",zone:"중앙 허브",name:"신경망 홀로그램 학습",x:690,y:420,owner:"doc",risk:.03,pose:"doc_flask",cut:"cut1_panic.webp",cap:"전 구역 과부하! 연구소가 흔들린다."}
+];
+const LEVELS=["","안전","보통","공격적","무모함","미친 과학자"];
+const riskOf=(ev,l)=>Math.min(.75, ev.risk + l*.065);
+
+/* ======================================================================
+   map geometry (map pixels 1376 x 768)
+   ====================================================================== */
+const MW=1376, MH=768;
+const WALK=[[385,290,965,722],[135,292,385,336],[25,556,385,722],[965,582,1352,722]];
+const BLOCK=[[598,382,782,502],[533,428,602,532],[752,332,808,408],[368,598,502,722],[543,642,582,704],[596,558,784,768],[25,606,178,722],[1076,646,1212,722],[1212,628,1352,722],[868,278,902,314],[872,650,998,716]];
+const CELL=16, GC=Math.ceil(MW/CELL), GR=Math.ceil(MH/CELL);
+const inR=(x,y,r)=>x>=r[0]&&x<r[2]&&y>=r[1]&&y<r[3];
+const walkPt=(x,y)=>WALK.some(r=>inR(x,y,r))&&!BLOCK.some(r=>inR(x,y,r));
+const grid=Array.from({length:GR},(_,j)=>Array.from({length:GC},(_,i)=>walkPt(i*CELL+CELL/2,j*CELL+CELL/2)));
+const POS={doc:[478,474],asst:[928,372],fly:[262,330],robo:[690,312]};
+const KIOSK={x:935,y:712,w:118,h:112};
+const SPOTS=[
+  {id:"docinfo",x:935,y:632,label:"박사 소개 안내판",r:[872,596,998,716],sign:"박사 소개",sx:935,sy:592,hot:true},
+  {id:"research",x:436,y:584,label:"박사 연구실적",r:[368,598,502,722],sign:"★ 박사 연구실적",sx:436,sy:594,hot:true},
+  {id:"pin",x:205,y:572,label:"의뢰 핀보드",r:[25,345,385,556],sign:"의뢰 핀보드",sx:138,sy:350},
+  {id:"z5",x:1110,y:604,label:"데이터 코어 · 완성품 저장소",r:[985,345,1352,582],sign:"완성품 저장소",sx:1150,sy:352},
+  {id:"z1",x:262,y:326,owner:"fly",label:"초파리 뇌 연구 구역",r:[25,40,410,292]},
+  {id:"z2",x:690,y:306,owner:"robo",label:"비즈니스 AI 구역",r:[530,30,845,292]},
+  {id:"z3",x:928,y:368,owner:"asst",label:"제조·로봇 AI 구역",r:[960,30,1352,336]},
+  {id:"z6",x:478,y:470,owner:"doc",label:"중앙 허브",r:[598,330,782,502]},
+  {id:"door",x:690,y:546,label:"출입문",r:[596,558,784,768]}
+];
+
+/* ======================================================================
+   images
+   ====================================================================== */
+const IMG={};
+const load=(k,src)=>new Promise(r=>{const i=new Image();i.decoding="async";i.onload=()=>{IMG[k]=i;r()};i.onerror=()=>r();i.src=src});
+
+/* ======================================================================
+   state
+   ====================================================================== */
+const cv=document.getElementById("cv"), ctx=cv.getContext("2d"), game=document.getElementById("game");
+let playerKey="robo";
+const player={x:690,y:540,dir:1,step:0,moving:false,path:null,goal:null};
+let NPC=[];
+let near=null, cam={x:0,y:0}, zoom=1.5, fit=false, cssW=0, cssH=0, dpr=1;
+let alarmUntil=0, cine=null, fx=[], react=null, talk=null;
+const now=()=>performance.now()/1000;
+const isAlarm=()=>now()<alarmUntil;
+function buildNPC(){
+  NPC=Object.keys(CREW).filter(k=>k!==playerKey).map((k,i)=>({k,hx:POS[k][0],hy:POS[k][1],x:POS[k][0],y:POS[k][1],off:0,goal:0,next:3+i*2.1,ph:i*1.7,line:0,dir:k==="fly"?1:-1,idle:0,idleT:5+i*1.3}));
+}
+
+/* ======================================================================
+   sizing (zoom 1.5 = the map shown 50% larger; phones get their own zoom)
+   ====================================================================== */
+function resize(){
+  cssW=game.clientWidth; dpr=Math.min(window.devicePixelRatio||1,2);
+  if(fit){ zoom=cssW/MW; cssH=Math.round(MH*zoom); }
+  else {
+    zoom = cssW<640 ? Math.max(.62,Math.min(1.5,cssW/560)) : 1.5;
+    const want = Math.floor(window.innerHeight*(cssW<640?.62:.76));
+    cssH = Math.round(Math.min(MH*zoom, Math.max(cssW<640?340:440, want)));
+  }
+  cv.style.height=cssH+"px";
+  cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr);
+}
+window.addEventListener("resize",resize);
+document.getElementById("zoomBtn").addEventListener("click",e=>{
+  fit=!fit; e.currentTarget.setAttribute("aria-pressed",fit); e.currentTarget.textContent=fit?"확대 보기":"전체 보기"; resize();
+});
+
+/* ======================================================================
+   drawing helpers
+   ====================================================================== */
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+const toS=(wx,wy)=>[(wx-cam.x)*zoom,(wy-cam.y)*zoom];
+function tag(g,x,y,text,color,size=13){
+  g.font=`600 ${size}px 'IBM Plex Sans KR',sans-serif`; g.textAlign="center";
+  const w=g.measureText(text).width+14;
+  g.fillStyle="rgba(18,16,28,.84)"; rr(g,x-w/2,y-size-5,w,size+8,6); g.fill();
+  g.fillStyle=color; g.fillText(text,x,y-2);
+}
+function sign(g,x,y,text,hot,t){
+  g.font=`400 ${hot?17:14}px 'Do Hyeon',sans-serif`; g.textAlign="center";
+  const w=g.measureText(text).width+20, h=hot?26:22;
+  const glow = hot? .55+.35*Math.sin(t*3) : .25;
+  g.save(); g.shadowColor=hot?"#e8a24b":"#4de0d0"; g.shadowBlur=12*glow;
+  g.fillStyle="rgba(18,16,28,.9)"; rr(g,x-w/2,y-h,w,h,8); g.fill();
+  g.lineWidth=1.5; g.strokeStyle=hot?"#e8a24b":"#4de0d0"; g.stroke(); g.restore();
+  g.fillStyle=hot?"#ffd59a":"#b8fff6"; g.fillText(text,x,y-(hot?7:6));
+}
+function bubble(g,x,y,text,hot){
+  g.font="500 14px 'IBM Plex Sans KR',sans-serif"; g.textAlign="center";
+  const w=Math.min(g.measureText(text).width+20, cssW-12);
+  const bx=Math.max(6,Math.min(cssW-6-w,x-w/2));
+  g.fillStyle=hot?"#ffe1e4":"#f6f3ff"; rr(g,bx,y-26,w,24,8); g.fill();
+  g.beginPath(); g.moveTo(x-6,y-3); g.lineTo(x,y+5); g.lineTo(x+6,y-3); g.fill();
+  g.fillStyle=hot?"#7a0f1c":"#1b1729"; g.fillText(text,bx+w/2,y-9,w-12);
+}
+function poseOf(k,o){
+  if(talk&&talk.k===k) return talk.pose;
+  if(react&&now()<react.until) return react.poses[k];
+  if(o.moving) return CREW[k].move;
+  return CREW[k].idle[o.idle%CREW[k].idle.length];
+}
+// draws a character in world space; returns its screen-space bbox top & extents for tags/hit tests
+function drawChar(g,k,x,y,t,o){
+  const c=CREW[k], pose=poseOf(k,o), img=IMG[pose], m=POSE[pose]; if(!img||!m) return null;
+  const base=POSE[c.base], s=c.h/base.h;
+  const w=m.w*s, h=m.h*s;
+  const alarm=isAlarm();
+  let bob = c.float ? Math.sin(t*2.6+o.ph)*4-12 : (o.moving? -Math.abs(Math.sin(o.step*11))*4 : Math.sin(t*2+o.ph)*1);
+  if(react&&now()<react.until&&!react.bad) bob -= Math.abs(Math.sin(t*9+o.ph))*6;
+  const shake = alarm ? Math.sin(t*40+o.ph)*1.6 : 0;
+  g.fillStyle="rgba(0,0,0,.36)"; g.beginPath(); g.ellipse(x,y-2,Math.min(w,c.h*.9)*0.3,6,0,0,7); g.fill();
+  g.save(); g.translate(x+shake,y+bob); if(o.dir<0) g.scale(-1,1);
+  if(o.moving&&!c.float) g.rotate(Math.sin(o.step*11)*0.035);
+  const ax=m.ax*w; g.drawImage(img,-ax,-h,w,h); g.restore();
+  const left = o.dir<0 ? x-(w-ax) : x-ax;
+  return {x0:left,x1:left+w,top:y-h+bob,y};
+}
+function drawKiosk(g,t){
+  const {x,y,w,h}=KIOSK, x0=x-w/2, y0=y-h;
+  g.fillStyle="rgba(0,0,0,.4)"; g.beginPath(); g.ellipse(x,y-2,w*.5,8,0,0,7); g.fill();
+  g.fillStyle="#2a2f3d"; g.fillRect(x-8,y-26,16,24); g.fillStyle="#3b4152"; g.fillRect(x-30,y-6,60,6);
+  g.save(); g.shadowColor="#e8a24b"; g.shadowBlur=14+6*Math.sin(t*3);
+  g.fillStyle="#1a1530"; rr(g,x0,y0,w,h-24,10); g.fill(); g.restore();
+  g.lineWidth=2; g.strokeStyle="#e8a24b"; rr(g,x0,y0,w,h-24,10); g.stroke();
+  const img=IMG.doc_ok; if(img){ const m=POSE.doc_ok, hh=h-34, ww=m.w*hh/m.h; g.drawImage(img,x-ww/2+4,y0+4,ww,hh-6); }
+  g.globalAlpha=.10+.06*Math.sin(t*5); g.fillStyle="#e8a24b"; for(let i=0;i<h-24;i+=4) g.fillRect(x0+2,y0+i,w-4,1); g.globalAlpha=1;
+}
+function zoneGlow(g,t){
+  const glow=(x,y,rx,ry,c,al)=>{const gr=g.createRadialGradient(x,y,0,x,y,Math.max(rx,ry)); gr.addColorStop(0,c); gr.addColorStop(1,"rgba(0,0,0,0)"); g.globalAlpha=al; g.fillStyle=gr; g.beginPath(); g.ellipse(x,y,rx,ry,0,0,7); g.fill();};
+  g.save(); g.globalCompositeOperation="lighter";
+  if(!isAlarm()){ const a=.10+.06*Math.sin(t*2.2); glow(688,395,120,90,"#4de0d0",a); glow(255,95,110,80,"#4de0d0",a*.9); glow(690,115,170,90,"#d0449a",.05+.03*Math.sin(t*3.1)); }
+  else { glow(1180,230,180,120,"#ff7a2a",.18+.12*Math.sin(t*9)); glow(1150,470,140,110,"#ff3a2a",.14+.1*Math.sin(t*7)); glow(240,130,160,120,"#4de0d0",.12+.1*Math.abs(Math.sin(t*13))); glow(690,160,170,90,"#ff2a3a",.10+.08*Math.sin(t*6)); }
+  g.restore();
+}
+function spawnFx(x,y,bad){
+  for(let i=0;i<(bad?46:34);i++){ const a=Math.random()*Math.PI*2, sp=40+Math.random()*(bad?170:120);
+    fx.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(bad?60:90),life:1.2+Math.random()*.8,age:0,c:bad?["#ff7a2a","#ffd04b","#ff3a2a","#9aa0aa"][i%4]:["#4de0d0","#ffe27a","#b59bff","#ffffff"][i%4],s:bad?4+Math.random()*4:2+Math.random()*3}); }
+}
+
+/* ======================================================================
+   frame
+   ====================================================================== */
+let heads=[];
+function draw(t){
+  const vw=cssW/zoom, vh=cssH/zoom;
+  // camera
+  let tx=player.x, ty=player.y-40;
+  if(cine&&now()<cine.until){ tx=cine.x; ty=cine.y; }
+  const want={x:Math.max(0,Math.min(MW-vw,tx-vw/2)), y:Math.max(0,Math.min(MH-vh,ty-vh/2))};
+  if(vw>=MW) want.x=(MW-vw)/2; if(vh>=MH) want.y=(MH-vh)/2;
+  cam.x+=(want.x-cam.x)*Math.min(1,.12*60/60); cam.y+=(want.y-cam.y)*.12;
+  if(!draw.init){ cam.x=want.x; cam.y=want.y; draw.init=1; }
+
+  ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle="#0d0b16"; ctx.fillRect(0,0,cv.width,cv.height);
+  const S=dpr*zoom; ctx.setTransform(S,0,0,S,-cam.x*S,-cam.y*S);
+  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality="high";
+  const bg=isAlarm()?(IMG.map_ov||IMG.map):IMG.map;
+  if(bg) ctx.drawImage(bg,0,0,MW,MH);
+  zoneGlow(ctx,t);
+  // y-sorted world objects
+  const list=NPC.map(n=>({y:n.y,n}));
+  list.push({y:player.y,p:true}); list.push({y:KIOSK.y,kiosk:true});
+  list.sort((a,b)=>a.y-b.y);
+  heads=[];
+  for(const o of list){
+    if(o.kiosk){ drawKiosk(ctx,t); continue; }
+    if(o.p){ const b=drawChar(ctx,playerKey,player.x,player.y,t,{moving:player.moving,step:player.step,dir:player.dir,ph:0,idle:0}); if(b) heads.push(Object.assign(b,{k:playerKey,me:true})); }
+    else { const n=o.n; const b=drawChar(ctx,n.k,n.x,n.y,t,{moving:false,step:t,dir:n.dir,ph:n.ph,idle:n.idle}); if(b) heads.push(Object.assign(b,{k:n.k,n})); }
+  }
+  // particles
+  for(const p of fx){ ctx.globalAlpha=Math.max(0,1-p.age/p.life); ctx.fillStyle=p.c; ctx.fillRect(p.x-p.s/2,p.y-p.s/2,p.s,p.s); } ctx.globalAlpha=1;
+
+  // screen-space UI (fixed size at every zoom)
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  for(const s of SPOTS) if(s.sign){ const [x,y]=toS(s.sx,s.sy); if(x>-80&&x<cssW+80&&y>-20&&y<cssH+40) sign(ctx,x,y,s.sign,s.hot,t); }
+  const alarm=isAlarm();
+  for(const hd of heads){
+    const [x,yTop]=toS((hd.x0+hd.x1)/2,hd.top); const cx=toS(hd.y?((hd.x0+hd.x1)/2):0,0)[0];
+    const fx_= hd.me? toS(player.x,0)[0] : toS(hd.n.x,0)[0];
+    if(fx_<-30||fx_>cssW+30||yTop>cssH+20) continue;
+    if(hd.me){ tag(ctx,fx_,yTop-4,`나 · ${CREW[hd.k].name}`,"#e8a24b"); continue; }
+    tag(ctx,fx_,yTop-4,CREW[hd.k].name,"#4de0d0");
+    if(talk&&talk.k===hd.k) continue;
+    let line;
+    if(alarm) line=ALARM_LINES[hd.k][hd.n.line%2];
+    else if(react&&now()<react.until&&!react.bad) line=GOOD_LINES[hd.k][0];
+    else { const task=doingOf(hd.k); line = task? task.lines[hd.n.line%task.lines.length] : CREW[hd.k].role; }
+    if(hd.n.line%3!==2 || alarm || react) bubble(ctx,fx_,yTop-26,line,alarm);
+  }
+  if(near){ const [x,y]=toS(near.x,near.y-150); const yy=y+Math.sin(t*5)*3; ctx.fillStyle=alarm?"#e02a3c":"#e8a24b"; rr(ctx,x-11,yy-22,22,24,6); ctx.fill(); ctx.fillStyle="#12101c"; ctx.font="bold 17px 'IBM Plex Mono',monospace"; ctx.textAlign="center"; ctx.fillText("!",x,yy-4); }
+  if(alarm){ ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle=`rgba(224,42,60,${.08+.08*Math.max(0,Math.sin(t*5))})`; ctx.fillRect(0,0,cv.width,cv.height); }
+}
+
+/* ======================================================================
+   movement + input
+   ====================================================================== */
+const keys={};
+const KM={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right",w:"up",s:"down",a:"left",d:"right",W:"up",S:"down",A:"left",D:"right"};
+let active=false;
+cv.addEventListener("focus",()=>active=true);
+cv.addEventListener("blur",()=>{active=false; for(const k in keys) keys[k]=false});
+window.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ closeDlg(); hideCut(); return; }
+  if(!active) return;
+  if(KM[e.key]){ keys[KM[e.key]]=true; player.path=null; e.preventDefault(); }
+  if(e.key===" "||e.key==="Enter"){ e.preventDefault(); if(talk) nextLine(); else if(near) inspect(near); }
+});
+window.addEventListener("keyup",e=>{ if(KM[e.key]) keys[KM[e.key]]=false });
+document.querySelectorAll(".pad button").forEach(b=>{
+  const k=b.dataset.k;
+  b.addEventListener("pointerdown",e=>{e.preventDefault(); keys[k]=true; player.path=null});
+  ["pointerup","pointercancel","pointerleave"].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false));
+});
+const foot=(x,y)=>walkPt(x-12,y)&&walkPt(x+12,y)&&walkPt(x-12,y-8)&&walkPt(x+12,y-8);
+cv.addEventListener("pointerdown",e=>{
+  cv.focus({preventScroll:true});
+  const r=cv.getBoundingClientRect();
+  const sx=e.clientX-r.left, sy=e.clientY-r.top;
+  const wx=cam.x+sx/zoom, wy=cam.y+sy/zoom;
+  // a character? → talk
+  const hit=[...heads].reverse().find(h=>wx>=h.x0-6&&wx<=h.x1+6&&wy>=h.top-10&&wy<=h.y+6);
+  if(hit){ startTalk(hit.k); return; }
+  const target=SPOTS.find(s=>inR(wx,wy,s.r))||null;
+  walkTo(target?target.x:wx, target?target.y:wy, target);
+});
+function walkTo(x,y,target){
+  const path=findPath(player.x,player.y,x,y);
+  if(path){ player.path=path; if(target) player.path.push([target.x,target.y]); player.goal=target; if(!path.length&&target){ inspect(target); player.goal=null; } }
+}
+function findPath(sx,sy,tx,ty){
+  const c=v=>Math.max(0,Math.floor(v/CELL));
+  let gx=Math.min(GC-1,c(tx)), gy=Math.min(GR-1,c(ty));
+  if(!grid[gy]?.[gx]){ let best=null,bd=1e9; for(let j=0;j<GR;j++)for(let i=0;i<GC;i++) if(grid[j][i]){const d=(i-gx)**2+(j-gy)**2; if(d<bd){bd=d;best=[i,j]}} if(!best) return null; [gx,gy]=best; }
+  const st=[Math.min(GC-1,c(sx)),Math.min(GR-1,c(sy))], start=st[1]*GC+st[0], goal=gy*GC+gx, prev=new Map([[start,-1]]), q=[start];
+  while(q.length){ const cur=q.shift(); if(cur===goal){ const out=[]; let k=cur; while(k!==start&&k!==-1){ out.unshift([(k%GC)*CELL+CELL/2,Math.floor(k/GC)*CELL+CELL/2]); k=prev.get(k);} return out; }
+    const cx=cur%GC, cy=Math.floor(cur/GC);
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){ const nx=cx+dx, ny=cy+dy, nk=ny*GC+nx; if(nx<0||ny<0||nx>=GC||ny>=GR||!grid[ny][nx]||prev.has(nk)) continue; prev.set(nk,cur); q.push(nk);} }
+  return null;
+}
+function nearestSpot(){ let best=null,bd=1e9; for(const s of SPOTS){ const d=Math.hypot(player.x-s.x,player.y-s.y); if(d<bd){bd=d;best=s} } return bd<70?best:null; }
+let lastLine=0;
+function update(dt,t){
+  let vx=0,vy=0; const sp=190;
+  if(keys.left)vx-=1; if(keys.right)vx+=1; if(keys.up)vy-=1; if(keys.down)vy+=1;
+  if(!vx&&!vy&&player.path&&player.path.length){
+    const [tx,ty]=player.path[0], dx=tx-player.x, dy=ty-player.y, d=Math.hypot(dx,dy);
+    if(d<5){ player.path.shift(); if(!player.path.length&&player.goal){ inspect(player.goal); player.goal=null; } }
+    else { vx=dx/d; vy=dy/d; }
+  }
+  if(vx&&vy&&!player.path){vx*=.7071;vy*=.7071}
+  const nx=player.x+vx*sp*dt, ny=player.y+vy*sp*dt;
+  if(foot(nx,player.y)||player.path) player.x=nx;
+  if(foot(player.x,ny)||player.path) player.y=ny;
+  if(vx) player.dir=vx<0?-1:1;
+  player.moving=!!(vx||vy); if(player.moving) player.step+=dt;
+  NPC.forEach(n=>{
+    n.next-=dt; if(n.next<=0){ n.goal=n.goal?0:(Math.random()<.5?-1:1)*22; n.next=6+Math.random()*6; }
+    const d=n.goal-n.off; if(Math.abs(d)>.6){ n.off+=Math.sign(d)*28*dt; n.dir=Math.sign(d)||n.dir; }
+    n.x=n.hx+n.off;
+    n.idleT-=dt; if(n.idleT<=0){ n.idle++; n.idleT=5+Math.random()*4; }
+  });
+  if(t-lastLine>(isAlarm()?1.6:4.2)){ lastLine=t; NPC.forEach(n=>n.line++); }
+  for(const p of fx){ p.age+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=160*dt; } fx=fx.filter(p=>p.age<p.life);
+  if(talk && now()-talk.at>14) closeDlg();
+  const s=nearestSpot();
+  if(s!==near){ near=s; act.disabled=!near; act.textContent=near?`${near.label.split(" · ")[0]} 살펴보기`:"살펴보기"; }
+  if(game.classList.contains("alarm")!==isAlarm()) game.classList.toggle("alarm",isAlarm());
+}
+
+/* ======================================================================
+   dialogue (bank poses + character voice)
+   ====================================================================== */
+const dlg=document.getElementById("dlg"), dPt=document.getElementById("dPt"), dNm=document.getElementById("dNm"), dRl=document.getElementById("dRl"), dTx=document.getElementById("dTx"), dPg=document.getElementById("dPg");
+let typer=null;
+function fill(s,k){
+  const t=doingOf(k)||doingOf("doc")||{title:"-",progress:0};
+  return s.replace("{task}",t.title).replace("{p}",t.progress).replace("{done}",TASKS.filter(x=>x.status==="done").length).replace("{todo}",TASKS.filter(x=>x.status==="todo").length).replace("{clicks}",STATS.clicks.toLocaleString()).replace("{acc}",STATS.acc.toLocaleString());
+}
+function startTalk(k){
+  if(talk&&talk.k===k){ nextLine(); return; }
+  const lines=TALK[k]; talk={k,i:0,pose:lines[0][0],at:now()};
+  const n=NPC.find(x=>x.k===k); if(n) n.dir = player.x<n.x?-1:1;
+  showLine();
+}
+function showLine(){
+  const [pose,text]=TALK[talk.k][talk.i]; talk.pose=pose; talk.at=now();
+  dlg.hidden=false; dPt.src=P+pose+".webp"; dPt.alt=`${CREW[talk.k].name} (${pose.split("_")[1]})`;
+  dNm.textContent=CREW[talk.k].name; dRl.textContent=CREW[talk.k].role; dPg.textContent=`${talk.i+1} / ${TALK[talk.k].length}`;
+  const full=fill(text,talk.k); clearInterval(typer); let i=0; dTx.textContent="";
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){ dTx.textContent=full; return; }
+  typer=setInterval(()=>{ i+=2; dTx.textContent=full.slice(0,i); if(i>=full.length){clearInterval(typer);typer=null} },30);
+  dTx.dataset.full=full;
+}
+function nextLine(){
+  if(!talk) return;
+  if(typer){ clearInterval(typer); typer=null; dTx.textContent=dTx.dataset.full; return; }
+  talk.i=(talk.i+1)%TALK[talk.k].length; showLine();
+}
+function closeDlg(){ talk=null; dlg.hidden=true; clearInterval(typer); typer=null; }
+document.getElementById("dNext").addEventListener("click",nextLine);
+document.getElementById("dClose").addEventListener("click",()=>{closeDlg(); cv.focus({preventScroll:true})});
+
+/* ======================================================================
+   info panel
+   ====================================================================== */
+const info=document.getElementById("info"), act=document.getElementById("act");
+act.addEventListener("click",()=>{ if(near) inspect(near); cv.focus({preventScroll:true}) });
+const pimg=p=>`<img src="${P}${p}.webp" alt="" style="width:40px;height:40px;object-fit:contain;vertical-align:middle">`;
+function setInfo(html){ info.hidden=false; info.innerHTML=`<button class="x" aria-label="닫기" id="infoX">✕</button>${html}`; info.scrollTop=0; document.getElementById("infoX").onclick=()=>{info.hidden=true; cv.focus({preventScroll:true})}; }
+function linkItem(it,meta){ const t=esc(it.title); return `<li>${it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener">${t}</a>`:t}<span class="who">${esc(meta)}</span></li>`; }
+function inspect(s){
+  const alarm=isAlarm(); closeDlg();
+  if(s.id==="docinfo"){
+    setInfo(`<span class="badge b-todo">박사 소개</span><h3>이 연구소의 책임자, 박사</h3>
+      <img class="hero" src="${A}doc_large.webp" alt="두 팔을 번쩍 든 박사 캐릭터">
+      <div class="meta">경제학 박사 · 로봇기자 신문 Money-Robo 발행인 · 데이터와 인공지능을 가르친다. 두 가지 방법으로 만나 볼 수 있다.</div>
+      <div class="links">
+        <a class="btn big" href="${esc(CFG.PROFILE_MASCOT_URL)}" target="_blank" rel="noopener">${pimg("robo_dance")}<span><b>Money-Robo가 소개하는 박사</b><br><span class="meta">마스코트들이 숫자로 소개하는 버전</span></span></a>
+        <a class="btn big" href="${esc(CFG.PROFILE_RESUME_URL)}" target="_blank" rel="noopener">${pimg("doc_write")}<span><b>박사가 쓴 이력서 보기</b><br><span class="meta">경력·학력·저서를 정리한 공식 버전</span></span></a>
+      </div>`);
+    return;
+  }
+  if(s.id==="research"){
+    const R=RES||FALLBACK_RES;
+    setInfo(`<span class="badge b-done">★ 박사 연구실적</span><h3>연구실적 아카이브</h3>
+      <div class="meta">마지막 갱신 ${esc(R.updated||"")} · GitHub 강의 페이지 ${R.github.length} · 논문·발표 ${R.papers.length} · 특허 ${R.patents.length} · 저서 ${R.books.length}</div>
+      <div class="sec">GitHub 페이지</div><ul class="items">${R.github.map(g=>linkItem(g,g.desc||"")).join("")}</ul>
+      <div class="sec">논문 · 발표</div><ul class="items">${R.papers.map(p=>linkItem(p,`${p.date||""} · ${p.venue||""}`)).join("")}</ul>
+      <div class="sec">등록 특허</div><ul class="items">${R.patents.map(p=>linkItem(p,`${p.no||""} · ${p.date||""}`)).join("")}</ul>
+      <div class="sec">저서</div><ul class="items">${R.books.map(b=>linkItem(b,b.venue||"")).join("")}</ul>`);
+    return;
+  }
+  if(s.owner){
+    const k=s.owner, t=doingOf(k), m=CREW[k];
+    if(!t){ setInfo(`<span class="meta">${s.label}</span><h3>${m.name}</h3><div class="meta">${m.role}</div>`); return; }
+    setInfo(`<div class="row"><span class="badge ${alarm?"b-alarm":"b-doing"}">${alarm?"비상":STATUS.doing}</span><span class="meta">${s.label} · ${KIND[t.kind]}</span></div>
+      <h3>${esc(t.title)}</h3><div class="row">${pimg(CREW[k].idle[0])}<div class="meta">${m.name} — ${m.role}${k===playerKey?"<br>(지금은 네가 이 캐릭터로 돌아다니는 중)":""}</div></div>
+      <div class="prog"><i style="width:${t.progress}%"></i></div><div class="meta" style="margin-top:4px">진행률 ${t.progress}% · “${esc(t.lines[0])}”</div>
+      <button class="btn" style="margin-top:10px" onclick="startTalk('${k}')">${m.name}에게 말 걸기</button>`);
+    return;
+  }
+  if(s.id==="pin"){
+    const td=TASKS.filter(t=>t.status==="todo");
+    setInfo(`<span class="badge b-todo">${STATUS.todo} ${td.length}</span><h3>의뢰 핀보드 · 다음에 만들 것들</h3><ul class="items">${td.map(t=>`<li>${esc(t.title)}<span class="who">${CREW[t.owner].name} · ${esc(t.due)}</span></li>`).join("")}</ul>`);
+  } else if(s.id==="z5"){
+    const dn=TASKS.filter(t=>t.status==="done");
+    setInfo(`<span class="badge ${alarm?"b-alarm":"b-done"}">${alarm?"과열 경고":STATUS.done+" "+dn.length}</span><h3>데이터 코어 · 완성품 저장소</h3><ul class="items">${dn.map(t=>linkItem({title:t.title,url:t.link},CREW[t.owner].name)).join("")}</ul>`);
+  } else if(s.id==="door"){
+    setInfo(`<span class="meta">출입문</span><h3>연구소 밖으로</h3><div class="links"><a class="btn" href="https://ahnboat.xyz/">ahnboat.xyz 메인으로</a><a class="btn" href="https://ahnboat.xyz/articlestudy/" target="_blank" rel="noopener">Article &amp; Study</a></div>`);
+  }
+}
+function welcome(){
+  setInfo(`<span class="meta">초파리 연구원</span><h3>윙— 방문자다!</h3><div class="row">${pimg("fly_hover")}<div class="meta">연구원을 눌러 말을 걸어 봐라. 노란 안내판 <b style="color:#ffd59a">박사 소개</b>와 <b style="color:#ffd59a">★ 박사 연구실적</b>도 눌러 볼 수 있다. 실험은 아래 콘솔에서 일으킨다.</div></div>`);
+}
+document.getElementById("goDoc").addEventListener("click",()=>{ const s=SPOTS[0]; walkTo(s.x,s.y,s); inspect(s); });
+document.getElementById("goRes").addEventListener("click",()=>{ const s=SPOTS[1]; walkTo(s.x,s.y,s); inspect(s); });
+
+/* ======================================================================
+   cut overlay + toast
+   ====================================================================== */
+const cutov=document.getElementById("cutov");
+function showCut(file,cap){ document.getElementById("cutImg").src=A+file; document.getElementById("cutImg").alt=cap; document.getElementById("cutCap").textContent=cap; cutov.hidden=false; }
+function hideCut(){ cutov.hidden=true; }
+document.getElementById("cutClose").addEventListener("click",()=>{hideCut(); cv.focus({preventScroll:true})});
+let toastT=0;
+function toast(msg,kind){ const el=document.getElementById("toast"); el.textContent=msg; el.className="toast "+(kind||""); el.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>el.hidden=true,2600); }
+
+/* ======================================================================
+   shared counters: Google Apps Script when configured, else this browser
+   ====================================================================== */
+const STATS={clicks:0,acc:0,mine:0,mode:"local"};
+const LS={get(k){try{return Number(localStorage.getItem(k)||0)}catch(e){return 0}},set(k,v){try{localStorage.setItem(k,String(v))}catch(e){}}};
+async function counterInit(){
+  STATS.mine=LS.get("alt_mine");
+  if(CFG.COUNTER_URL){
+    try{ const r=await fetch(CFG.COUNTER_URL+"?action=get"); const j=await r.json(); STATS.clicks=j.clicks|0; STATS.acc=j.accidents|0; STATS.mode="remote"; renderStats(); return; }catch(e){}
+  }
+  STATS.clicks=LS.get("alt_clicks"); STATS.acc=LS.get("alt_acc"); STATS.mode="local"; renderStats();
+}
+async function counterHit(ev,acc,level){
+  STATS.mine++; LS.set("alt_mine",STATS.mine);
+  STATS.clicks++; if(acc) STATS.acc++;
+  renderStats(acc);
+  if(STATS.mode==="remote"){
+    try{ const r=await fetch(`${CFG.COUNTER_URL}?action=hit&event=${ev}&accident=${acc?1:0}&level=${level}`); const j=await r.json(); STATS.clicks=Math.max(STATS.clicks,j.clicks|0); STATS.acc=Math.max(STATS.acc,j.accidents|0); renderStats(); }catch(e){}
+  } else { LS.set("alt_clicks",STATS.clicks); LS.set("alt_acc",STATS.acc); }
+}
+function renderStats(bumpAcc){
+  const c=document.getElementById("sClicks"), a=document.getElementById("sAcc");
+  c.textContent=STATS.clicks.toLocaleString(); a.textContent=STATS.acc.toLocaleString();
+  document.getElementById("sRate").textContent = STATS.clicks? `사고율 ${(STATS.acc/STATS.clicks*100).toFixed(1)}%` : "사고율 –";
+  document.getElementById("sMode").textContent = STATS.mode==="remote"? "모든 방문자 합계" : "이 브라우저 기준";
+  document.getElementById("sMine").textContent = `내 실험 ${STATS.mine}회`;
+  c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+  if(bumpAcc){ a.classList.remove("bump"); void a.offsetWidth; a.classList.add("bump"); }
+}
+
+/* ======================================================================
+   experiment console
+   ====================================================================== */
+let evSel="e1";
+const evs=document.getElementById("evs"), lvl=document.getElementById("lvl"), go=document.getElementById("go");
+function renderEvs(){
+  evs.innerHTML=EVENTS.map(e=>`<button class="ev" data-id="${e.id}" aria-pressed="${e.id===evSel}"><img src="${P}${e.pose}.webp" alt=""><span style="min-width:0"><b>${e.name}</b><small>${e.zone} 구역</small></span></button>`).join("");
+  updRisk();
+}
+function updRisk(){
+  const e=EVENTS.find(x=>x.id===evSel), l=+lvl.value;
+  document.getElementById("lvlOut").textContent=`${l} · ${LEVELS[l]}`;
+  document.getElementById("risk").innerHTML=`${esc(e.zone)} 구역에서 「${esc(e.name)}」 · 예상 사고 확률 <b>${Math.round(riskOf(e,l)*100)}%</b>`;
+}
+evs.addEventListener("click",e=>{ const b=e.target.closest(".ev"); if(!b) return; evSel=b.dataset.id; renderEvs(); });
+lvl.addEventListener("input",updRisk);
+go.addEventListener("click",()=>{
+  const e=EVENTS.find(x=>x.id===evSel), l=+lvl.value, bad=Math.random()<riskOf(e,l);
+  go.disabled=true; setTimeout(()=>go.disabled=false,900);
+  closeDlg();
+  game.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"center"});
+  cine={x:e.x,y:e.y+120,until:now()+2.8};
+  spawnFx(e.x,e.y+60,bad);
+  counterHit(e.id,bad,l);
+  if(bad){
+    alarmUntil=now()+8; react={bad:true,until:now()+8,poses:REACT_BAD};
+    toast(`⚠ 돌발 사고! ${e.zone} 구역 — ${e.name}`,"bad");
+    setTimeout(()=>showCut(e.cut,e.cap),900);
+    setInfo(`<span class="badge b-alarm">돌발 사고 #${STATS.acc}</span><h3>${esc(e.cap)}</h3><div class="row">${pimg("robo_alert")}<div class="meta">${esc(e.zone)} 구역 · 출력 레벨 ${l} (${LEVELS[l]}). 총 돌발 사고 이벤트 발생 건수에 1건이 더해졌다. 약 8초 뒤 자동으로 정상화된다.</div></div>`);
+  } else {
+    react={bad:false,until:now()+3.2,poses:REACT_GOOD};
+    toast(`✓ 실험 성공 — ${e.name}`,"good");
+  }
+});
+
+/* ======================================================================
+   picker + lists
+   ====================================================================== */
+const picker=document.getElementById("picker");
+function renderPicker(){ picker.innerHTML=Object.keys(CREW).map(k=>`<button class="pick" data-k="${k}" aria-pressed="${k===playerKey}"><img src="${P}${CREW[k].base}.webp" alt="">${CREW[k].name}</button>`).join(""); }
+picker.addEventListener("click",e=>{ const b=e.target.closest(".pick"); if(!b) return; playerKey=b.dataset.k; buildNPC(); renderPicker(); closeDlg(); cv.focus({preventScroll:true}); });
+function renderLists(){
+  const n=s=>TASKS.filter(t=>t.status===s).length;
+  document.getElementById("sWork").innerHTML=["todo","doing","done"].map(s=>`<span class="chip"><span class="dot" style="background:var(--${s})"></span>${STATUS[s]} ${n(s)}</span>`).join(" ");
+  document.getElementById("board").innerHTML=["todo","doing","done"].map(s=>`<div class="col"><h4><span class="dot" style="background:var(--${s})"></span>${STATUS[s]} ${n(s)}</h4><ul>${
+    TASKS.filter(t=>t.status===s).map(t=>`<li>${t.link?`<a href="${t.link}" target="_blank" rel="noopener">${esc(t.title)}</a>`:esc(t.title)}<small>${CREW[t.owner].name} · ${KIND[t.kind].split(" · ")[0]}${t.progress!=null?` · ${t.progress}%`:""}${t.due?` · ${esc(t.due)}`:""}</small></li>`).join("")}</ul></div>`).join("");
+}
+
+/* ======================================================================
+   loop + boot
+   ====================================================================== */
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let last=0;
+function frame(ms){ const t=ms/1000, dt=Math.min(.05,t-(last||t)); last=t; update(dt,t); draw(reduce?0:t); requestAnimationFrame(frame); }
+const getJSON=async(u,fb)=>{ try{ const r=await fetch(u,{cache:"no-store"}); if(r.ok) return await r.json(); }catch(e){} return fb; };
+async function boot(){
+  const [tasks,res,cfg]=await Promise.all([getJSON("tasks.json",FALLBACK_TASKS),getJSON("research.json",FALLBACK_RES),getJSON("config.json",null)]);
+  if(cfg) Object.assign(CFG,cfg);
+  TASKS=tasks.tasks||[]; RES=res; if(tasks.updated) document.getElementById("updated").textContent=tasks.updated;
+  renderLists(); renderPicker(); renderEvs(); buildNPC(); welcome(); resize(); counterInit();
+  const poses=Object.keys(POSE);
+  await Promise.all([["map","map@2x.webp"],["map_ov","map_overload@2x.webp"]].map(([k,f])=>load(k,A+f)).concat(poses.map(p=>load(p,P+p+".webp"))));
+  ["cut1_panic","cut2_robot","cut3_gpu","cut4_fly","doc_large"].forEach(f=>{const i=new Image(); i.src=A+f+".webp"});
+  requestAnimationFrame(frame);
+}
+boot();
+</script>
