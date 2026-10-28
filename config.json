@@ -1,6 +1,9 @@
 {
-  "_guide": "COUNTER_URL에 Google Apps Script 웹앱 주소(…/exec)를 넣으면 모든 방문자의 클릭·사고 건수가 함께 누적됩니다. 비워 두면 방문자 각자의 브라우저 안에서만 누적됩니다.",
-  "COUNTER_URL": "",
-  "PROFILE_MASCOT_URL": "https://adminmrobo.github.io/who_am_i/who_am_i.html",
-  "PROFILE_RESUME_URL": "https://ahnboat.xyz/my_profile/"
+ "_guide": "COUNTER_URL: Google Apps Script 웹앱 주소(…/exec)를 넣으면 모든 방문자의 클릭·사고·대박 건수가 함께 누적됩니다. TELEGRAM_BOT_URL: 조교 봇이 열리면 https://t.me/봇아이디 를 넣으세요. 비워 두면 '준비 중'으로 보입니다. SERVER_CSV_URL: 서버실 CSV를 둔 별도 repo의 raw 주소(https://raw.githubusercontent.com/아이디/저장소/main/servers.csv)를 넣으세요. 비워 두면 같은 폴더의 servers.csv를 읽습니다. OST_PLAYLIST_URL: 공간별 OST 순서표(ost.csv) 위치. 기본은 같은 저장소의 ost/ost.csv입니다.",
+ "COUNTER_URL": "",
+ "PROFILE_MASCOT_URL": "https://adminmrobo.github.io/who_am_i/who_am_i.html",
+ "PROFILE_RESUME_URL": "https://ahnboat.xyz/my_profile/",
+ "TELEGRAM_BOT_URL": "",
+ "SERVER_CSV_URL": "https://raw.githubusercontent.com/adminmrobo/ahnboat_lab_town_floor_b01/main/servers.csv",
+ "OST_PLAYLIST_URL": "ost/ost.csv"
 }

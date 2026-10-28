@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ahn Lab Projects</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column work board. Header (language top) → four counts → filters → timeline (scrolls sideways on phones) → in progress / planned / done → Telegram + footer (language bottom). Same night-lab palette as Lab Town; single dark theme by choice. */
+:root{
+  --bg:#12101c; --panel:#1b1729; --panel-2:#2a1f3d; --line:#3a2f55;
+  --fg:#eeeaf8; --muted:#a59dc2; --cyan:#4de0d0; --amber:#e8a24b; --alarm:#e02a3c;
+  --todo:#e8a24b; --doing:#4de0d0; --done:#b59bff;
+  --display:"Do Hyeon","IBM Plex Sans KR","PingFang SC","Hiragino Sans","Microsoft YaHei","Yu Gothic",system-ui,sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic","PingFang SC","Hiragino Sans","Microsoft YaHei","Yu Gothic","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1200px;margin:0 auto;padding-block:16px 40px;display:flex;flex-direction:column;gap:18px}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+button,select,input{font-family:inherit}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.back{display:inline-flex;align-items:center;gap:8px;color:var(--fg);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:5px 12px 5px 6px}
+.back img{width:26px;height:26px;object-fit:contain}
+.back:hover{border-color:var(--cyan)}
+.langsel{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.langsel select{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:5px 10px;font-size:13px;cursor:pointer}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--display);font-weight:400;margin:0;line-height:1.15;font-size:clamp(30px,5vw,44px);text-wrap:balance}
+h2{font-family:var(--display);font-weight:400;margin:0;font-size:24px;display:flex;align-items:center;gap:10px}
+.lead{color:var(--muted);margin:6px 0 0;max-width:68ch}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end}
+.hero .crew{display:flex;align-items:flex-end}
+.hero .crew img{height:96px;width:auto;margin-left:-14px}
+.warn{font-size:13px;color:#ffd59a;border:1px dashed #6b4f22;border-radius:10px;padding:6px 12px}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;border-top:3px solid var(--line);min-width:0}
+.stat.doing{border-top-color:var(--doing)}.stat.todo{border-top-color:var(--todo)}.stat.done{border-top-color:var(--done)}.stat.due{border-top-color:var(--alarm)}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-family:var(--display);font-size:32px;line-height:1.15;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero .crew img{height:70px}}
+
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:4px 12px;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--cyan);background:#173a3a}
+.chip .n{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:4px}
+.search{background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:7px 12px;font-size:14px;min-width:0;width:min(280px,100%)}
+
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tl-wrap{overflow-x:auto;margin-top:10px}
+.tl{position:relative;min-width:760px}
+.tl .months{display:grid;font-family:var(--mono);font-size:11px;color:var(--muted);border-bottom:1px solid var(--line);margin-left:var(--lw)}
+.tl .months span{padding:2px 6px;border-left:1px solid var(--line)}
+.tl .row{display:grid;grid-template-columns:var(--lw) minmax(0,1fr);align-items:center;min-height:30px}
+.tl .row .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:10px;display:flex;align-items:center;gap:6px}
+.tl .row .nm img{width:20px;height:20px;object-fit:contain;flex:0 0 20px}
+.tl .track{position:relative;height:30px}
+.tl .bar{position:absolute;top:8px;height:14px;border-radius:7px;background:var(--todo);opacity:.9;min-width:6px}
+.tl .bar.doing{background:linear-gradient(90deg,var(--doing) var(--p),#2a6e67 var(--p))}
+.tl .bar.done{background:var(--done);opacity:.6}
+.tl .today{position:absolute;top:0;bottom:0;width:2px;background:var(--alarm);pointer-events:none}
+.tl .today b{position:absolute;top:-1px;left:4px;white-space:nowrap;font-family:var(--mono);font-size:10px;color:#ff8f99;font-weight:500}
+.tl .grid{position:absolute;top:0;bottom:0;border-left:1px dashed rgba(58,47,85,.6);pointer-events:none}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.list{display:grid;gap:10px;margin-top:10px}
+.card{background:var(--panel-2);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
+.card.doing{border-left-color:var(--doing)}.card.todo{border-left-color:var(--todo)}.card.done{border-left-color:var(--done)}
+.card .av{width:44px;height:52px;object-fit:contain}
+.card h3{margin:0;font-size:16px;line-height:1.35;font-weight:500}
+.card h3 a{color:var(--fg);text-decoration:none;border-bottom:1px solid rgba(77,224,208,.5)}
+.card h3 a:hover{color:var(--cyan)}
+.card .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-top:3px}
+.card .cat{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:0 8px}
+.card .note{font-size:13px;color:var(--muted);margin-top:6px}
+.card .dd{font-family:var(--mono);font-size:12px;color:var(--amber)}
+.card .dd.over{color:#ff8f99}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;background:var(--doing)}
+.done-list{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:820px){.done-list{grid-template-columns:1fr}}
+.done-list li{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;gap:10px;align-items:center;min-width:0}
+.done-list img{width:30px;height:34px;object-fit:contain;flex:0 0 30px}
+.done-list .t{min-width:0}
+.done-list a{color:var(--fg)}
+.done-list small{display:block;color:var(--muted);font-size:12px}
+.empty{color:var(--muted);font-size:14px;margin:10px 0 0}
+.count{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+.tg{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}
+.tg img{width:56px;height:70px;object-fit:contain}
+.tg h3{margin:0;font-size:17px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.soon{font-size:11px;font-family:var(--mono);border:1px solid var(--amber);color:#ffd59a;border-radius:999px;padding:0 8px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:14px;text-decoration:none;color:var(--fg);background:var(--panel-2)}
+.btn.pri{background:var(--cyan);color:#0a2622;border-color:var(--cyan);font-weight:500}
+.btn[aria-disabled="true"]{opacity:.55}
+@media (max-width:640px){.tg{grid-template-columns:auto minmax(0,1fr)}.tg .act{grid-column:1/-1}}
+footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html"><img src="assets/pose/robo_delivery.webp" alt=""><span data-i18n="back"></span></a>
+    <label class="langsel"><span aria-hidden="true">🌐</span><span data-i18n="lang"></span><select id="langTop" aria-label="Language"></select></label>
+  </div>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow" data-i18n="p_eyebrow"></div>
+      <h1 data-i18n="p_h1"></h1>
+      <p class="lead" data-i18n="p_lead"></p>
+    </div>
+    <div class="crew" aria-hidden="true"><img src="assets/pose/doc_write.webp" alt=""><img src="assets/pose/asst_present.webp" alt=""><img src="assets/pose/fly_report.webp" alt=""><img src="assets/pose/robo_delivery.webp" alt=""></div>
+  </header>
+  <p class="warn" id="warn" hidden data-i18n="p_csv_err"></p>
+
+  <section class="stats" aria-label="summary">
+    <div class="stat doing"><div class="k" data-i18n="p_doing"></div><div class="v" id="nDoing">0</div></div>
+    <div class="stat todo"><div class="k" data-i18n="p_todo"></div><div class="v" id="nTodo">0</div></div>
+    <div class="stat done"><div class="k" data-i18n="p_done"></div><div class="v" id="nDone">0</div></div>
+    <div class="stat due"><div class="k" data-i18n="p_due30"></div><div class="v" id="nDue">0</div></div>
+  </section>
+
+  <div class="filters">
+    <div class="chips" id="cats" role="group"></div>
+    <input class="search" id="q" type="search" autocomplete="off">
+  </div>
+
+  <section class="box" aria-labelledby="hTl">
+    <h2 id="hTl"><span data-i18n="p_timeline"></span></h2>
+    <div class="tl-wrap"><div class="tl" id="tl"></div></div>
+  </section>
+
+  <div class="cols">
+    <section class="box" aria-labelledby="hDoing"><h2 id="hDoing"><span class="dot" style="background:var(--doing)"></span><span data-i18n="p_doing"></span> <span class="count" id="cDoing"></span></h2><div class="list" id="lDoing"></div></section>
+    <section class="box" aria-labelledby="hTodo"><h2 id="hTodo"><span class="dot" style="background:var(--todo)"></span><span data-i18n="p_todo"></span> <span class="count" id="cTodo"></span></h2><div class="list" id="lTodo"></div></section>
+  </div>
+  <section class="box" aria-labelledby="hDone"><h2 id="hDone"><span class="dot" style="background:var(--done)"></span><span data-i18n="p_done"></span> <span class="count" id="cDone"></span></h2><ul class="done-list" id="lDone"></ul></section>
+
+  <section class="box tg" aria-labelledby="hTg">
+    <img src="assets/pose/asst_type.webp" alt="">
+    <div><h3 id="hTg"><span data-i18n="tg_btn"></span><span class="soon" id="tgSoon" data-i18n="tg_soon"></span></h3><div class="meta" data-i18n="tg_desc" style="font-size:13px;color:var(--muted)"></div></div>
+    <div class="act" id="tgAct"></div>
+  </section>
+
+  <footer>
+    <span data-i18n="p_source"></span>
+    <label class="langsel"><span aria-hidden="true">🌐</span><span data-i18n="lang"></span><select id="langBottom" aria-label="Language"></select></label>
+    <a href="index.html" data-i18n="back"></a>
+  </footer>
+</div>
+<script>
+const LANGS=[["ko","한국어"],["en","English"],["zh","中文"],["ja","日本語"],["uz","Oʻzbekcha"],["ru","Русский"]];
+const L6=(ko,en,zh,ja,uz,ru)=>({ko,en,zh,ja,uz,ru});
+const UI={
+  proto:L6("프로토타입 · 진행 중 작업은 예시","Prototype · in-progress items are examples","原型 · 进行中的工作为示例","プロトタイプ・進行中の作業は例示","Prototip · jarayondagi ishlar namuna","Прототип · текущие задачи — примеры"),
+  lang:L6("언어","Language","语言","言語","Til","Язык"),
+  eyebrow:L6("연구실 입장","Enter the lab","进入研究室","研究室に入る","Laboratoriyaga kirish","Вход в лабораторию"),
+  h1:L6("어서 와라, 휴먼.","Welcome, human.","欢迎你，人类。","ようこそ、ヒューマン。","Xush kelibsan, inson.","Добро пожаловать, человек."),
+  lead:L6("한밤의 AI 연구소다. 걸어 다니며 둘러보고, 연구원을 <b>눌러서</b> 말을 걸어 봐라. 아래 <b>실험 콘솔</b>에서 직접 실험을 일으킬 수도 있다. 출력을 올릴수록 사고도, 대박도 잘 난다.",
+    "A midnight AI lab. Walk around, <b>tap</b> a researcher to talk, or start your own experiment from the <b>console</b> below. The higher the power, the more accidents — and jackpots.",
+    "这是一间深夜的 AI 研究所。四处走走，<b>点一下</b>研究员和他们聊聊，也可以在下方的<b>实验控制台</b>亲自发起实验。输出越高，事故和大成功都越容易发生。",
+    "真夜中のAI研究所だ。歩き回って、研究員を<b>タップ</b>して話しかけてみろ。下の<b>実験コンソール</b>から自分で実験を起こすこともできる。出力を上げるほど、事故も大当たりも起きやすい。",
+    "Yarim tungi AI laboratoriyasi. Aylanib chiqing, gaplashish uchun tadqiqotchini <b>bosing</b> yoki pastdagi <b>tajriba pultidan</b> o'z tajribangizni boshlang. Quvvat qancha yuqori bo'lsa, avariya ham, katta omad ham shuncha ko'p.",
+    "Полуночная ИИ-лаборатория. Гуляйте, <b>нажимайте</b> на исследователей, чтобы поговорить, или запустите свой эксперимент с <b>пульта</b> ниже. Чем выше мощность, тем чаще аварии — и джекпоты."),
+  st_clicks:L6("누적 실험 클릭 수","Total experiment clicks","累计实验点击数","累計実験クリック数","Jami tajriba bosishlari","Всего запусков экспериментов"),
+  st_acc:L6("총 돌발 사고 이벤트 발생 건수","Total accident events","突发事故事件总数","突発事故イベント総件数","Jami kutilmagan avariyalar","Всего аварийных событий"),
+  st_jack:L6("총 대박 이벤트 발생 건수","Total jackpot events","大成功事件总数","大当たりイベント総件数","Jami katta omad hodisalari","Всего событий-джекпотов"),
+  st_work:L6("작업 현황","Work status","工作进度","作業状況","Ish holati","Статус работ"),
+  mode_local:L6("이 브라우저 기준","this browser only","仅限本浏览器","このブラウザのみ","faqat shu brauzer","только этот браузер"),
+  mode_remote:L6("모든 방문자 합계","all visitors combined","所有访客合计","全訪問者の合計","barcha mehmonlar jami","все посетители вместе"),
+  rate:L6("사고율 {r}%","accident rate {r}%","事故率 {r}%","事故率 {r}%","avariya ulushi {r}%","доля аварий {r}%"),
+  jrate:L6("대박률 {r}%","jackpot rate {r}%","大成功率 {r}%","大当たり率 {r}%","omad ulushi {r}%","доля джекпотов {r}%"),
+  mine:L6("내 실험 {n}회","my runs: {n}","我的实验 {n} 次","自分の実験 {n}回","mening tajribalarim: {n}","мои запуски: {n}"),
+  nav_doc:L6("박사 소개","About the Doctor","博士介绍","博士の紹介","Doktor haqida","О Докторе"),
+  nav_res:L6("★ 박사 연구실적 보기","★ Doctor's research","★ 查看博士研究成果","★ 博士の研究実績を見る","★ Doktorning ilmiy ishlari","★ Научные работы Доктора"),
+  nav_proj:L6("📋 작업 진행 페이지","📋 Project page","📋 工作进度页","📋 作業進行ページ","📋 Loyihalar sahifasi","📋 Страница проектов"),
+  see_all:L6("작업 진행 페이지에서 전체 보기 →","See everything on the project page →","在工作进度页查看全部 →","作業進行ページですべて見る →","Hammasini loyihalar sahifasida ko'rish →","Всё на странице проектов →"),
+  work_doc:L6("「{n}」 정리 중입니다","Working through “{n}”","正在整理「{n}」","「{n}」を整理中です","«{n}» ustida ishlamoqdaman","Разбираю «{n}»"),
+  work_asst:L6("「{n}」 만드는 중이에요!","Building “{n}”!","正在做「{n}」！","「{n}」を作ってます！","«{n}»ni yasayapman!","Делаю «{n}»!"),
+  work_fly:L6("「{n}」 조사 중이다","Investigating “{n}”","正在调查「{n}」","「{n}」を調査中だ","«{n}»ni tekshiryapman","Изучаю «{n}»"),
+  work_robo:L6("「{n}」 계산 중입니다","Calculating “{n}”","正在计算「{n}」","「{n}」を計算中です","«{n}» hisoblanmoqda","Считаю «{n}»"),
+  tg_btn:L6("✈ 텔레그램 조교 봇","✈ Telegram assistant bot","✈ Telegram 助教机器人","✈ Telegram 助手ボット","✈ Telegram yordamchi bot","✈ Telegram-бот ассистента"),
+  tg_soon:L6("준비 중","Coming soon","准备中","準備中","Tez kunda","Скоро"),
+  tg_desc:L6("조수와 텔레그램으로 이야기하는 조교 봇을 준비하고 있다. 열리면 여기서 바로 연결된다.","A Telegram bot for chatting with the Assistant is being prepared. Once it's live, you can connect right here.","正在准备可以通过 Telegram 和助手聊天的助教机器人。上线后可在这里直接连接。","Telegramで助手と話せる助手ボットを準備中だ。公開されたらここからすぐつながる。","Yordamchi bilan Telegram orqali suhbatlashish uchun bot tayyorlanmoqda. Ishga tushgach, shu yerdan ulanasiz.","Готовится Telegram-бот для общения с Ассистентом. Когда он заработает, подключиться можно будет прямо отсюда."),
+  tg_open:L6("텔레그램에서 조교와 대화하기","Chat with the assistant on Telegram","在 Telegram 上和助教聊天","Telegramで助手と話す","Telegram'da yordamchi bilan suhbatlashish","Поговорить с ассистентом в Telegram"),
+  nav_con:L6("⚗ 실험 콘솔로","⚗ To the console","⚗ 前往实验控制台","⚗ 実験コンソールへ","⚗ Tajriba pultiga","⚗ К пульту"),
+  zoom_all:L6("전체 보기","Full map","查看全图","全体を見る","To'liq xarita","Вся карта"),
+  zoom_in:L6("확대 보기","Zoom in","放大查看","拡大して見る","Kattalashtirish","Крупнее"),
+  picker:L6("누구로 둘러볼까?","Explore as:","用谁来逛？","誰で歩く？","Kim bo'lib aylanasiz?","Играть за:"),
+  inspect:L6("살펴보기","Look","查看","調べる","Ko'rish","Осмотреть"),
+  inspect_x:L6("{x} 살펴보기","Look: {x}","查看：{x}","{x}を調べる","Ko'rish: {x}","Осмотреть: {x}"),
+  k_or:L6("또는","or","或","または","yoki","или"),
+  k_move:L6("이동","move","移动","移動","yurish","движение"),
+  k_space:L6("살펴보기 · 대화 넘기기","look · next line","查看 · 下一句","調べる・会話を進める","ko'rish · keyingi gap","осмотреть · далее"),
+  k_hint:L6("연구원을 누르면 대화, 바닥이나 물건을 누르면 그쪽으로 걸어간다","Tap a researcher to talk; tap the floor or an object to walk there","点研究员即可对话，点地面或物品就会走过去","研究員をタップで会話、床や物をタップでそこまで歩く","Tadqiqotchini bossangiz — suhbat, polni yoki buyumni bossangiz — o'sha tomonga yurasiz","Нажмите на исследователя — разговор, на пол или предмет — идти туда"),
+  close:L6("닫기","Close","关闭","閉じる","Yopish","Закрыть"),
+  next:L6("다음 ▶","Next ▶","下一句 ▶","次へ ▶","Keyingi ▶","Далее ▶"),
+  con_title:L6("⚗ 실험 콘솔","⚗ Experiment console","⚗ 实验控制台","⚗ 実験コンソール","⚗ Tajriba pulti","⚗ Пульт экспериментов"),
+  con_hint:L6("실험을 고르고 출력 레벨을 정한 뒤 실행해라. 3초 카운트다운 후 결과가 3초간 나타나고 자동으로 정상화된다.","Pick an experiment, set the power level and run it. After a 3-second countdown the result shows for 3 seconds, then the lab returns to normal.","选择实验、设定输出等级后执行。倒计时 3 秒后显示结果 3 秒，然后自动恢复正常。","実験を選び、出力レベルを決めて実行しろ。3秒のカウントダウン後に結果が3秒間表示され、自動で正常化する。","Tajribani tanlang, quvvat darajasini belgilang va ishga tushiring. 3 soniyalik sanoqdan keyin natija 3 soniya ko'rinadi, so'ng hammasi me'yorga qaytadi.","Выберите эксперимент, задайте мощность и запустите. После отсчёта 3 секунды результат покажется на 3 секунды, затем всё вернётся в норму."),
+  lvl:L6("출력 레벨","Power level","输出等级","出力レベル","Quvvat darajasi","Уровень мощности"),
+  levels:L6(["안전","보통","공격적","무모함","미친 과학자"],["Safe","Normal","Aggressive","Reckless","Mad scientist"],["安全","普通","激进","鲁莽","疯狂科学家"],["安全","ふつう","攻め","無謀","マッドサイエンティスト"],["Xavfsiz","Oddiy","Shiddatli","Telbalarcha","Jinni olim"],["Безопасно","Обычно","Агрессивно","Безрассудно","Безумный учёный"]),
+  go:L6("실험 실행 ▶","Run experiment ▶","执行实验 ▶","実験開始 ▶","Tajribani boshlash ▶","Запустить ▶"),
+  risk:L6("{z} 「{n}」 · 사고 확률 {p}% · 대박 확률 {p}%","{z}: “{n}” · accident chance {p}% · jackpot chance {p}%","{z}「{n}」· 事故概率 {p}% · 大成功概率 {p}%","{z}「{n}」・事故確率 {p}%・大当たり確率 {p}%","{z}: «{n}» · avariya ehtimoli {p}% · katta omad ehtimoli {p}%","{z}: «{n}» · шанс аварии {p}% · шанс джекпота {p}%"),
+  zone_fmt:L6("{z} 구역","{z} zone","{z}区","{z}エリア","{z} hududi","зона «{z}»"),
+  log:L6("실험 기록 전체 보기","Full experiment log","查看全部实验记录","実験記録をすべて見る","Barcha tajriba yozuvlari","Весь журнал экспериментов"),
+  updated:L6("마지막 갱신","Last updated","最后更新","最終更新","Oxirgi yangilanish","Обновлено"),
+  foot_resume:L6("주인장 자기소개서","Owner's résumé","站长自我介绍","管理人の自己紹介書","Sayt egasining rezyumesi","Резюме владельца"),
+  foot_mascot:L6("마스코트가 소개하는 주인장","The owner, by the mascots","吉祥物介绍站长","マスコットが紹介する管理人","Maskotlar tanishtiradigan sayt egasi","Владелец глазами маскотов"),
+  me:L6("나 · {n}","Me · {n}","我 · {n}","わたし・{n}","Men · {n}","Я · {n}"),
+  todo:L6("할 작업","To do","待办","これから","Rejada","В планах"),
+  doing:L6("제조 중","In the making","制作中","製造中","Jarayonda","В работе"),
+  done:L6("완성","Done","已完成","完成","Tayyor","Готово"),
+  k_robot:L6("로봇 · 앱/자동화","Robot · app/automation","机器人 · 应用/自动化","ロボット・アプリ/自動化","Robot · ilova/avtomatlashtirish","Робот · приложение/автоматизация"),
+  k_creature:L6("생명체 · 강의/연구","Creature · lecture/research","生命体 · 课程/研究","生命体・講義/研究","Jonzot · ma'ruza/tadqiqot","Существо · лекция/исследование"),
+  k_doc:L6("문서 · 글/보고서","Document · article/report","文档 · 文章/报告","文書・記事/レポート","Hujjat · maqola/hisobot","Документ · статья/отчёт"),
+  sign_doc:L6("박사 소개","About the Doctor","博士介绍","博士の紹介","Doktor haqida","О Докторе"),
+  sign_res:L6("★ 박사 연구실적","★ Research record","★ 研究成果","★ 研究実績","★ Ilmiy ishlar","★ Научные работы"),
+  sign_pin:L6("의뢰 핀보드","Request board","委托公告板","依頼ピンボード","Buyurtmalar doskasi","Доска заявок"),
+  sign_z5:L6("완성품 저장소","Finished works","成品仓库","完成品保管庫","Tayyor ishlar","Готовые работы"),
+  sp_docinfo:L6("박사 소개 안내판","Doctor's profile sign","博士介绍牌","博士紹介の案内板","Doktor haqida lavha","Табличка «О Докторе»"),
+  sp_research:L6("박사 연구실적","Doctor's research record","博士研究成果","博士の研究実績","Doktorning ilmiy ishlari","Научные работы Доктора"),
+  sp_pin:L6("의뢰 핀보드","Request pinboard","委托公告板","依頼ピンボード","Buyurtmalar doskasi","Доска заявок"),
+  sp_z5:L6("데이터 코어 · 완성품 저장소","Data Core · finished-work archive","数据核心 · 成品仓库","データコア・完成品保管庫","Ma'lumotlar yadrosi · tayyor ishlar arxivi","Ядро данных · архив готовых работ"),
+  sp_door:L6("출입문","Exit door","出入口","出入口","Chiqish eshigi","Выход"),
+  doc_h:L6("이 연구소의 책임자, 박사","The Doctor, head of this lab","研究所负责人——博士","この研究所の責任者、博士","Laboratoriya rahbari — Doktor","Доктор, руководитель лаборатории"),
+  doc_desc:L6("경제학 박사 · 로봇기자 신문 Money-Robo 발행인 · 데이터와 인공지능을 가르친다. 두 가지 방법으로 만나 볼 수 있다.","PhD in Economics · publisher of the robot-journalism paper Money-Robo · teaches data and AI. Meet him in two ways.","经济学博士 · 机器人新闻报 Money-Robo 发行人 · 教授数据与人工智能。有两种方式认识他。","経済学博士・ロボット記者新聞 Money-Robo 発行人・データとAIを教えている。二つの方法で会える。","Iqtisodiyot fanlari doktori · Money-Robo robot-jurnalistika nashri noshiri · ma'lumotlar va AI dan dars beradi. U bilan ikki yo'l bilan tanishing.","Доктор экономических наук · издатель робот-газеты Money-Robo · преподаёт данные и ИИ. Познакомьтесь с ним двумя способами."),
+  doc_b1:L6("Money-Robo가 소개하는 박사","The Doctor, introduced by Money-Robo","Money-Robo 介绍的博士","Money-Roboが紹介する博士","Money-Robo tanishtiradigan Doktor","Доктор глазами Money-Robo"),
+  doc_b1s:L6("마스코트들이 숫자로 소개하는 버전","The mascots' version, told in numbers","吉祥物用数字介绍的版本","マスコットたちが数字で紹介する版","Maskotlar raqamlar bilan tanishtirgan versiya","Версия маскотов — в цифрах"),
+  doc_b2:L6("박사가 쓴 이력서 보기","Read the Doctor's own résumé","查看博士亲笔履历","博士が書いた履歴書を見る","Doktor yozgan rezyumeni ko'rish","Резюме, написанное Доктором"),
+  doc_b2s:L6("경력·학력·저서를 정리한 공식 버전","Official version: career, education, books (Korean)","整理了经历、学历与著作的正式版本（韩语）","経歴・学歴・著書をまとめた公式版（韓国語）","Rasmiy versiya: faoliyat, ta'lim, kitoblar (koreyscha)","Официальная версия: карьера, образование, книги (на корейском)"),
+  res_h:L6("연구실적 아카이브","Research archive","研究成果档案","研究実績アーカイブ","Ilmiy ishlar arxivi","Архив научных работ"),
+  res_meta:L6("마지막 갱신 {u} · GitHub 페이지 {a} · 논문·발표 {b} · 특허 {c} · 저서 {d}","Updated {u} · GitHub pages {a} · Papers & talks {b} · Patents {c} · Books {d}","最后更新 {u} · GitHub 页面 {a} · 论文与发表 {b} · 专利 {c} · 著作 {d}","最終更新 {u}・GitHubページ {a}・論文・発表 {b}・特許 {c}・著書 {d}","Yangilangan {u} · GitHub sahifalari {a} · Maqolalar va ma'ruzalar {b} · Patentlar {c} · Kitoblar {d}","Обновлено {u} · Страницы GitHub {a} · Статьи и доклады {b} · Патенты {c} · Книги {d}"),
+  res_note:L6("","Titles are shown in their original Korean.","作品标题保留韩语原文。","タイトルは原文（韓国語）のまま表記しています。","Sarlavhalar asl koreys tilida berilgan.","Названия приведены в оригинале на корейском."),
+  sec_gh:L6("GitHub 페이지","GitHub pages","GitHub 页面","GitHubページ","GitHub sahifalari","Страницы GitHub"),
+  sec_pp:L6("논문 · 발표","Papers & talks","论文 · 发表","論文・発表","Maqolalar va ma'ruzalar","Статьи и доклады"),
+  sec_pt:L6("등록 특허","Registered patents","已注册专利","登録特許","Ro'yxatdan o'tgan patentlar","Зарегистрированные патенты"),
+  sec_bk:L6("저서","Books","著作","著書","Kitoblar","Книги"),
+  playing:L6("(지금은 네가 이 캐릭터로 돌아다니는 중)","(You're currently playing as this character)","（你正在用这个角色四处逛）","（いまはあなたがこのキャラで歩き回っています）","(Hozir siz shu qahramon sifatida yuribsiz)","(Сейчас вы играете за этого персонажа)"),
+  prog:L6("진행률 {p}%","Progress {p}%","进度 {p}%","進捗 {p}%","Bajarilish {p}%","Прогресс {p}%"),
+  talkto:L6("{n}에게 말 걸기","Talk to {n}","和{n}说话","{n}に話しかける","{n} bilan gaplashish","Поговорить: {n}"),
+  emerg:L6("비상","EMERGENCY","紧急","緊急","FAVQULODDA","ТРЕВОГА"),
+  pin_h:L6("다음에 만들 것들","What we'll build next","接下来要做的","次に作るもの","Keyingi yaratiladiganlar","Что сделаем дальше"),
+  z5_h:L6("보관된 완성 결과물","Finished results in storage","已保存的成品","保管された完成成果物","Saqlangan tayyor natijalar","Готовые результаты в хранилище"),
+  overheat:L6("과열 경고","OVERHEAT","过热警告","過熱警告","QIZIB KETISH","ПЕРЕГРЕВ"),
+  door_h:L6("연구소 밖으로","Leave the lab","离开研究所","研究所の外へ","Laboratoriyadan chiqish","Выйти из лаборатории"),
+  door_main:L6("ahnboat.xyz 메인으로","To ahnboat.xyz","前往 ahnboat.xyz 首页","ahnboat.xyz トップへ","ahnboat.xyz bosh sahifasiga","На главную ahnboat.xyz"),
+  wel_h:L6("윙— 방문자다!","Bzzz— a visitor!","嗡——有访客！","ブーン…訪問者だ！","Vizz— mehmon keldi!","Ж-ж-ж… посетитель!"),
+  wel_b:L6("연구원을 눌러 말을 걸어 봐라. 노란 안내판 <b>박사 소개</b>와 <b>★ 박사 연구실적</b>도 눌러 볼 수 있다. 실험은 아래 콘솔에서 일으킨다.",
+    "Tap a researcher to talk. You can also open the yellow signs <b>About the Doctor</b> and <b>★ Research record</b>. Start experiments from the console below.",
+    "点一下研究员就能对话。也可以点开黄色指示牌<b>博士介绍</b>和<b>★ 研究成果</b>。实验请在下方控制台发起。",
+    "研究員をタップすると話せる。黄色い案内板<b>博士の紹介</b>と<b>★ 研究実績</b>も開ける。実験は下のコンソールから起こせ。",
+    "Gaplashish uchun tadqiqotchini bosing. Sariq lavhalar — <b>Doktor haqida</b> va <b>★ Ilmiy ishlar</b>ni ham ochish mumkin. Tajribalar pastdagi pultdan boshlanadi.",
+    "Нажмите на исследователя, чтобы поговорить. Жёлтые таблички <b>О Докторе</b> и <b>★ Научные работы</b> тоже открываются. Эксперименты запускаются с пульта ниже."),
+  cd_label:L6("실험 개시까지","Experiment starts in","实验倒计时","実験開始まで","Tajriba boshlanishiga","До запуска эксперимента"),
+  cd_go:L6("가동!","GO!","启动！","起動！","Boshladik!","Пуск!"),
+  auto:L6("3초 뒤 자동 정상화","Back to normal in 3 s","3 秒后自动恢复","3秒後に自動で正常化","3 soniyadan so'ng me'yorga qaytadi","Норма через 3 с"),
+  normal:L6("✓ 정상화 완료","✓ Back to normal","✓ 已恢复正常","✓ 正常化完了","✓ Me'yorga qaytdi","✓ Всё в норме"),
+  t_bad:L6("⚠ 돌발 사고! {z} — {n}","⚠ Accident! {z} — {n}","⚠ 突发事故！{z} — {n}","⚠ 突発事故！{z} — {n}","⚠ Kutilmagan avariya! {z} — {n}","⚠ Авария! {z} — {n}"),
+  t_good:L6("✓ 실험 성공 — {n}","✓ Experiment succeeded — {n}","✓ 实验成功 — {n}","✓ 実験成功 — {n}","✓ Tajriba muvaffaqiyatli — {n}","✓ Эксперимент удался — {n}"),
+  t_jack:L6("★ 대박! {z} — {n}","★ Jackpot! {z} — {n}","★ 大成功！{z} — {n}","★ 大当たり！{z} — {n}","★ Katta omad! {z} — {n}","★ Джекпот! {z} — {n}"),
+  b_acc:L6("돌발 사고 #{n}","Accident #{n}","突发事故 #{n}","突発事故 #{n}","Avariya #{n}","Авария #{n}"),
+  b_jack:L6("대박 #{n}","Jackpot #{n}","大成功 #{n}","大当たり #{n}","Katta omad #{n}","Джекпот #{n}"),
+  acc_body:L6("{z} · 출력 레벨 {l} ({lv}). 총 돌발 사고 이벤트 발생 건수에 1건이 더해졌다.","{z} · power level {l} ({lv}). One more added to the total accident count.","{z} · 输出等级 {l}（{lv}）。突发事故总数 +1。","{z}・出力レベル{l}（{lv}）。突発事故の総件数に1件加算。","{z} · quvvat darajasi {l} ({lv}). Avariyalar soniga yana bittasi qo'shildi.","{z} · уровень мощности {l} ({lv}). К общему числу аварий добавлена ещё одна."),
+  jack_body:L6("{z} · 출력 레벨 {l} ({lv}). 위험을 무릅쓴 실험이 뜻밖의 대박으로 끝났다!","{z} · power level {l} ({lv}). A risky run turned into an unexpected jackpot!","{z} · 输出等级 {l}（{lv}）。冒险的实验竟然大获成功！","{z}・出力レベル{l}（{lv}）。危ない実験がまさかの大当たりに！","{z} · quvvat darajasi {l} ({lv}). Xavfli tajriba kutilmaganda katta omad keltirdi!","{z} · уровень мощности {l} ({lv}). Рискованный запуск неожиданно принёс джекпот!")
+};
+const DUE={"11월":L6("11월","Nov","11月","11月","Noyabr","Ноябрь"),"12월":L6("12월","Dec","12月","12月","Dekabr","Декабрь"),"미정":L6("미정","TBD","待定","未定","Belgilanmagan","Не назначено")};
+const CREW_T={
+  doc:{name:L6("박사","Doctor","博士","博士","Doktor","Доктор"),role:L6("총괄 · 원리 설명과 최종 검수","Head · explains principles, final review","总负责 · 讲解原理与最终审核","総括・原理の説明と最終チェック","Rahbar · tamoyillarni tushuntiradi, yakuniy tekshiruv","Руководитель · объясняет принципы, финальная проверка")},
+  asst:{name:L6("조수","Assistant","助手","助手","Yordamchi","Ассистент"),role:L6("질문·실수·발견 담당 · 코드와 자동화 제조","Questions, mistakes, discoveries · builds code and automation","负责提问、犯错与发现 · 制作代码和自动化","質問・ミス・発見担当・コードと自動化づくり","Savollar, xatolar, kashfiyotlar · kod va avtomatlashtirish","Вопросы, ошибки, открытия · код и автоматизация")},
+  fly:{name:L6("초파리 연구원","Fruit-Fly Researcher","果蝇研究员","ショウジョウバエ研究員","Meva pashshasi tadqiqotchisi","Исследователь-дрозофила"),role:L6("의심·현장 비유·반박 담당 · 뇌 연구","Doubts, field analogies, rebuttals · brain research","负责质疑、现场比喻与反驳 · 大脑研究","疑い・現場のたとえ・反論担当・脳研究","Shubha, misollar, e'tirozlar · miya tadqiqoti","Сомнения, сравнения, возражения · исследования мозга")},
+  robo:{name:L6("Money-Robo","Money-Robo","Money-Robo","Money-Robo","Money-Robo","Money-Robo"),role:L6("계산·오류 감지·결과 보고 · 데이터","Calculation, error detection, reporting · data","负责计算、纠错与汇报结果 · 数据","計算・エラー検知・結果報告・データ","Hisob-kitob, xatolarni aniqlash, hisobot · ma'lumot","Расчёты, поиск ошибок, отчёты · данные")}
+};
+// dialogue: [pose, line per language]. Voice follows the character bible.
+const TALK={
+  doc:[
+    ["doc_ok",L6("어서 오십시오. 이 연구소의 책임자, 박사입니다.","Welcome. I am the Doctor, head of this laboratory.","欢迎光临。我是这间研究所的负责人——博士。","ようこそ。この研究所の責任者、博士です。","Xush kelibsiz. Men Doktorman, ushbu laboratoriya rahbari.","Добро пожаловать. Я Доктор, руководитель этой лаборатории.")],
+    ["doc_write",L6("지금은 「{task}」를 기록하고 있습니다. 진행률은 {p}%입니다.","I am currently documenting “{task}”. Progress: {p}%.","我正在记录「{task}」。进度为 {p}%。","いまは「{task}」を記録しています。進捗は{p}%です。","Hozir «{task}» ustida yozuv olib bormoqdaman. Bajarilish: {p}%.","Сейчас я документирую «{task}». Прогресс: {p}%.")],
+    ["doc_think",L6("원리부터 정리하겠습니다. 데이터가 바뀌면 결론도 바뀝니다.","Let us start from first principles. When the data changes, so does the conclusion.","先从原理开始整理。数据变了，结论也会变。","まず原理から整理しましょう。データが変われば結論も変わります。","Avval tamoyillardan boshlaymiz. Ma'lumot o'zgarsa, xulosa ham o'zgaradi.","Начнём с принципов. Меняются данные — меняется и вывод.")],
+    ["doc_flask",L6("실험은 작게, 자주 하는 것이 원칙입니다.","The rule is simple: experiment small, experiment often.","原则是：实验要小，要勤。","実験は小さく、こまめに。これが原則です。","Qoida oddiy: tajriba kichik va tez-tez bo'lsin.","Правило простое: экспериментировать понемногу, но часто.")],
+    ["doc_data",L6("완성된 결과물 {done}건은 데이터 코어에 보관해 두었습니다.","All {done} finished results are stored in the Data Core.","已完成的 {done} 项成果都保存在数据核心里。","完成した成果物{done}件はデータコアに保管してあります。","Tayyor {done} ta natija Ma'lumotlar yadrosida saqlanmoqda.","Все {done} готовых результатов хранятся в Ядре данных.")],
+    ["doc_rush",L6("주의하십시오. 출력 레벨을 너무 올리면 사고가 납니다!","Careful! Push the power level too high and accidents happen!","请注意！输出等级调得太高会出事故！","ご注意を。出力レベルを上げすぎると事故が起きます！","Ehtiyot bo'ling! Quvvat darajasini juda oshirsangiz, avariya bo'ladi!","Осторожно! Слишком высокий уровень мощности ведёт к авариям!")],
+    ["doc_sleep",L6("…쿨. (밤샘 실험 중입니다. 깨우지 마십시오.)","…Zzz. (All-night experiment. Please do not wake me.)","……呼。（通宵实验中，请勿打扰。）","…すぴー。（徹夜実験中です。起こさないでください。）","…Xurr. (Tun bo'yi tajriba. Iltimos, uyg'otmang.)","…Хрр. (Ночной эксперимент. Прошу не будить.)")]],
+  asst:[
+    ["asst_wave",L6("안녕하세요! 저는 조수예요. 처음 오셨나요?","Hi! I'm the Assistant. Is this your first visit?","你好！我是助手。你是第一次来吗？","こんにちは！助手です。はじめてですか？","Salom! Men Yordamchiman. Birinchi marta keldingizmi?","Привет! Я Ассистент. Вы здесь впервые?")],
+    ["asst_type",L6("「{task}」 만드는 중이에요. 이 버그는 어디서 온 걸까?","I'm building “{task}”. Where did this bug come from, I wonder?","我正在做「{task}」。这个 bug 是从哪来的呢？","「{task}」を作っています。このバグ、どこから来たんだろう？","«{task}»ni yasayapman. Bu xato qayerdan chiqdi ekan?","Делаю «{task}». Откуда же взялся этот баг?")],
+    ["asst_think",L6("배선을 바꾸면 로봇 팔이 더 빨라질까?","If I rewire it, will the robot arm get faster?","改一下接线，机械臂会不会更快呢？","配線を変えたら、ロボットアームはもっと速くなるかな？","Simlarni o'zgartirsam, robot qo'li tezroq ishlarmikan?","Если перепаять провода, рука робота станет быстрее?")],
+    ["asst_idea",L6("아, 알았다! 박사님, 원인을 찾았습니다!","Oh, I got it! Doctor, I found the cause!","啊，我知道了！博士，找到原因了！","あっ、わかった！博士、原因を見つけました！","A, topdim! Doktor, sababini topdim!","А, поняла! Доктор, я нашла причину!")],
+    ["asst_check",L6("박사님, 테스트 통과입니다!","Doctor, the test passed!","博士，测试通过了！","博士、テスト合格です！","Doktor, test muvaffaqiyatli o'tdi!","Доктор, тест пройден!")],
+    ["asst_present",L6("다음 의뢰는 {todo}건이에요. 핀보드에 붙여 뒀어요.","There are {todo} requests up next. I pinned them on the board.","接下来有 {todo} 项委托，我都钉在公告板上了。","次の依頼は{todo}件です。ピンボードに貼っておきました。","Navbatda {todo} ta buyurtma bor. Ularni doskaga ilib qo'ydim.","Впереди {todo} заявки. Я приколола их на доску.")],
+    ["asst_type",L6("곧 텔레그램 조교 봇으로도 저랑 이야기할 수 있어요. 지금은 준비 중이에요!","Soon you'll be able to talk with me through the Telegram assistant bot. It's still being prepared!","很快就能通过 Telegram 助教机器人和我聊天啦。现在还在准备中！","もうすぐTelegramの助手ボットでもわたしと話せますよ。いまは準備中です！","Tez orada Telegram yordamchi boti orqali men bilan gaplasha olasiz. Hozircha tayyorlanmoqda!","Скоро со мной можно будет поговорить через Telegram-бота. Пока он готовится!")],
+    ["asst_cheer",L6("완성품이 {done}건이 됐어요! 다음은 뭘 만들까?","That makes {done} finished pieces! What should we build next?","成品已经有 {done} 件了！下一个做什么呢？","完成品が{done}件になりました！次は何を作ろうかな？","Tayyor ishlar {done} taga yetdi! Endi nima yasaymiz?","Готовых работ уже {done}! Что сделаем дальше?")]],
+  fly:[
+    ["fly_hover",L6("윙— 휴먼, 여기 처음인가.","Bzzz— Human, first time here?","嗡——人类，第一次来？","ブーン…ヒューマン、ここは初めてか。","Vizz— Inson, bu yerga birinchi marta keldingmi?","Ж-ж-ж… Человек, ты здесь впервые?")],
+    ["fly_scan",L6("휴먼, 조건부터 확인해라.","Human, check the conditions first.","人类，先确认条件。","ヒューマン、まず条件を確認しろ。","Inson, avval shartlarni tekshir.","Человек, сначала проверь условия.")],
+    ["fly_analyze",L6("데이터는 정직하다. 해석하는 쪽이 문제다.","Data is honest. The problem is whoever reads it.","数据是诚实的。问题出在解读的人。","データは正直だ。問題は解釈する側だ。","Ma'lumot halol. Muammo uni talqin qilganda.","Данные честны. Проблема в том, кто их толкует.")],
+    ["fly_report",L6("보고다. 「{task}」, 진행률 {p}%.","Report. “{task}”, {p}% complete.","报告。「{task}」，进度 {p}%。","報告だ。「{task}」、進捗{p}%。","Hisobot. «{task}», {p}% bajarildi.","Доклад. «{task}», готово на {p}%.")],
+    ["fly_idea",L6("초파리 뇌는 작다. 그래도 계산은 정확하다.","A fruit-fly brain is small. Its math is still exact.","果蝇的大脑很小，但计算很精确。","ショウジョウバエの脳は小さい。だが計算は正確だ。","Meva pashshasining miyasi kichik. Lekin hisobi aniq.","Мозг дрозофилы мал. Но считает он точно.")],
+    ["fly_panic",L6("홀로그램 출력은 올리지 마라. 진심이다.","Do not raise the hologram output. I mean it.","别调高全息投影的输出。我是认真的。","ホログラムの出力は上げるな。本気だ。","Gologramma quvvatini oshirma. Jiddiy aytyapman.","Не повышай мощность голограммы. Я серьёзно.")]],
+  robo:[
+    ["robo_search",L6("삐빅. 방문자 감지. 환영합니다.","Beep-boop. Visitor detected. Welcome.","哔哔。检测到访客。欢迎光临。","ピピッ。訪問者を検知。ようこそ。","Bip-bip. Mehmon aniqlandi. Xush kelibsiz.","Бип-бип. Обнаружен посетитель. Добро пожаловать.")],
+    ["robo_scan",L6("스캔 완료. 누적 실험 클릭 {clicks}회입니다.","Scan complete. Total experiment clicks: {clicks}.","扫描完成。累计实验点击 {clicks} 次。","スキャン完了。累計実験クリック{clicks}回です。","Skanerlash tugadi. Jami tajriba bosishlari: {clicks}.","Сканирование завершено. Всего запусков экспериментов: {clicks}.")],
+    ["robo_alert",L6("경보. 총 돌발 사고 {acc}건, 대박 {jack}건입니다.","Alert. {acc} accidents and {jack} jackpots so far.","警报。累计突发事故 {acc} 起，大成功 {jack} 次。","警報。突発事故は計{acc}件、大当たりは{jack}件です。","Diqqat. Jami {acc} ta avariya va {jack} ta katta omad.","Тревога. Аварий: {acc}, джекпотов: {jack}.")],
+    ["robo_lock",L6("박사님, 연구 기록은 안전하게 잠겨 있습니다.","Doctor, the research records are safely locked.","博士，研究记录已安全上锁。","博士、研究記録は安全にロックされています。","Doktor, tadqiqot yozuvlari xavfsiz qulflangan.","Доктор, исследовательские записи надёжно заперты.")],
+    ["robo_delivery",L6("완성 결과물 {done}건, 배송 준비 완료입니다.","{done} finished results, ready for delivery.","已完成成果 {done} 件，准备发货完毕。","完成した成果物{done}件、配送準備完了です。","{done} ta tayyor natija jo'natishga tayyor.","{done} готовых результатов готовы к отправке.")],
+    ["robo_battery",L6("박사님… 배터리 부족입니다. 충전이 필요합니다.","Doctor… battery low. Charging required.","博士……电量不足，需要充电。","博士…バッテリー残量わずかです。充電が必要です。","Doktor… batareya kam. Quvvatlash kerak.","Доктор… батарея садится. Нужна зарядка.")],
+    ["robo_dance",L6("삐빅♪ 계산이 맞으면 춤이 나옵니다. 박사님 소개는 출입문 옆 안내판에 있습니다.","Beep♪ When the numbers add up, I dance. The Doctor's profile is on the sign by the door.","哔♪ 算对了就会跳舞。博士介绍在门口旁边的指示牌上。","ピピッ♪ 計算が合うと踊りたくなります。博士の紹介は出入口横の案内板にあります。","Bip♪ Hisob to'g'ri chiqsa, raqsga tushaman. Doktor haqida ma'lumot eshik yonidagi lavhada.","Бип♪ Когда цифры сходятся, я танцую. Про Доктора — на табличке у двери.")]]
+};
+const ALARM_LINES={
+  doc:[L6("소화기! 소화기 어디 있습니까!","Extinguisher! Where is the extinguisher?!","灭火器！灭火器在哪儿？！","消火器！消火器はどこですか！","O't o'chirgich! O't o'chirgich qayerda?!","Огнетушитель! Где огнетушитель?!"),L6("침착하십시오! …아니, 피하십시오!","Stay calm! …No, take cover!","冷静！……不，快躲开！","落ち着いて！…いや、逃げてください！","Xotirjam bo'ling! …Yo'q, qoching!","Спокойно! …Нет, в укрытие!")],
+  asst:[L6("으아아 박사님!!","Aaah, Doctor!!","啊啊啊博士！！","うわああ博士！！","Voy-voy, Doktor!!","А-а-а, Доктор!!"),L6("제 코드 탓 아니죠?!","That wasn't my code, right?!","不是我代码的锅吧？！","わたしのコードのせいじゃないですよね？！","Bu mening kodim aybi emas-ku?!","Это же не из-за моего кода?!")],
+  fly:[L6("홀로그램이 깨진다!","The hologram is breaking!","全息影像要碎了！","ホログラムが壊れる！","Gologramma sinyapti!","Голограмма рассыпается!"),L6("휴먼, 출력 내려라!","Human, lower the power!","人类，把输出调低！","ヒューマン、出力を下げろ！","Inson, quvvatni pasaytir!","Человек, убавь мощность!")],
+  robo:[L6("경보. 경보. 경보.","Alert. Alert. Alert.","警报。警报。警报。","警報。警報。警報。","Xavf. Xavf. Xavf.","Тревога. Тревога. Тревога."),L6("박사님, 위험 수준입니다!","Doctor, danger level reached!","博士，已达危险等级！","博士、危険レベルです！","Doktor, xavfli darajaga yetdi!","Доктор, опасный уровень!")]
+};
+const GOOD_LINES={doc:L6("하하! 실험 성공입니다.","Ha! The experiment succeeded.","哈哈！实验成功。","はは！実験成功です。","Ha-ha! Tajriba muvaffaqiyatli.","Ха! Эксперимент удался."),asst:L6("됐다! 박사님, 성공입니다!","Yes! Doctor, it worked!","成了！博士，成功了！","やった！博士、成功です！","Bo'ldi! Doktor, muvaffaqiyat!","Получилось! Доктор, успех!"),fly:L6("…인정한다. 잘됐다.","…I admit it. Well done.","……我承认，做得好。","…認めよう。上出来だ。","…Tan olaman. Yaxshi chiqdi.","…Признаю. Неплохо."),robo:L6("삐빅♪ 결과 정상입니다.","Beep♪ Results normal.","哔♪ 结果正常。","ピピッ♪ 結果は正常です。","Bip♪ Natija me'yorida.","Бип♪ Результат в норме.")};
+const JACK_LINES={doc:L6("이, 이건… 대발견입니다!!","Th-this is… a major discovery!!","这、这是……重大发现！！","こ、これは…大発見です！！","Bu… bu katta kashfiyot!!","Это… это великое открытие!!"),asst:L6("대박! 박사님, 논문감이에요!","Jackpot! Doctor, this is paper-worthy!","大成功！博士，这能写论文了！","大当たり！博士、論文になりますよ！","Katta omad! Doktor, bu maqolaga arziydi!","Джекпот! Доктор, это тянет на статью!"),fly:L6("…믿을 수 없다. 데이터가 완벽하다.","…Unbelievable. The data is perfect.","……难以置信。数据完美。","…信じられん。データが完璧だ。","…Ishonib bo'lmaydi. Ma'lumot mukammal.","…Невероятно. Данные идеальны."),robo:L6("삐빅♪♪ 수익률 측정 불가!","Beep♪♪ Returns off the charts!","哔♪♪ 收益率无法测量！","ピピッ♪♪ 収益率、測定不能！","Bip♪♪ Daromad o'lchab bo'lmas darajada!","Бип♪♪ Доходность зашкаливает!")};
+const EVENTS=[
+  {id:"e1",x:235,y:170,risk:.04,pose:"fly_hover",cut:"cut4_fly.webp",
+   zone:L6("초파리 뇌 연구","Fruit-Fly Brain Lab","果蝇脑研究","ショウジョウバエ脳研究","Meva pashshasi miyasi tadqiqoti","Мозг дрозофилы"),
+   name:L6("뇌 홀로그램 가동","Power up the brain hologram","启动大脑全息投影","脳ホログラム起動","Miya gologrammasini yoqish","Запустить голограмму мозга"),
+   acc:L6("초파리 뇌 홀로그램이 글리치를 일으켰다!","The fruit-fly brain hologram glitched!","果蝇大脑全息影像出现故障！","ショウジョウバエの脳ホログラムがグリッチを起こした！","Meva pashshasi miyasi gologrammasi buzildi!","Голограмма мозга дрозофилы дала сбой!"),
+   jack:L6("뇌 지도가 완성됐다! 신경 회로가 전부 빛난다!","The full brain map lit up — every circuit traced!","大脑图谱完成了！所有神经回路都亮了！","脳マップが完成！神経回路がすべて光った！","Miya xaritasi tayyor! Barcha neyron zanjirlar porladi!","Карта мозга готова — светятся все нейронные цепи!")},
+  {id:"e2",x:690,y:150,risk:.03,pose:"robo_scan",cut:"cut1_panic.webp",
+   zone:L6("비즈니스 AI","Business AI","商业 AI","ビジネスAI","Biznes AI","Бизнес-ИИ"),
+   name:L6("자동매매 알고리즘 실행","Run the trading algorithm","运行自动交易算法","自動売買アルゴリズム実行","Avto-savdo algoritmini ishga tushirish","Запустить торгового робота"),
+   acc:L6("차트 폭락! 연구원들이 패닉에 빠졌다.","Market crash! The researchers panic.","图表暴跌！研究员们陷入恐慌。","チャート暴落！研究員たちがパニックに。","Grafik qulab tushdi! Tadqiqotchilar vahimada.","Обвал графика! Исследователи в панике."),
+   jack:L6("연속 상한가! 수익률 그래프가 하늘을 뚫었다!","Limit-up after limit-up! The returns chart broke the ceiling!","连续涨停！收益曲线冲破天际！","連続ストップ高！収益グラフが天井を突き抜けた！","Ketma-ket rekord o'sish! Daromad grafigi osmonga chiqdi!","Рост за ростом! График доходности пробил потолок!")},
+  {id:"e3",x:1150,y:210,risk:.06,pose:"robo_alert",cut:"cut2_robot.webp",
+   zone:L6("제조·로봇 AI","Manufacturing & Robot AI","制造·机器人 AI","製造・ロボットAI","Ishlab chiqarish va robot AI","Производство и роботы"),
+   name:L6("로봇 조립 라인 가동","Start the robot assembly line","启动机器人装配线","ロボット組立ライン稼働","Robot yig'ish liniyasini ishga tushirish","Запустить сборку роботов"),
+   acc:L6("조립 중이던 로봇이 폭주했다!","The robot on the line went berserk!","组装中的机器人失控了！","組立中のロボットが暴走した！","Yig'ilayotgan robot nazoratdan chiqdi!","Собираемый робот вышел из-под контроля!"),
+   jack:L6("로봇이 스스로 다음 로봇을 조립했다!","The robot started assembling the next robot by itself!","机器人自己组装出了下一台机器人！","ロボットが自分で次のロボットを組み立てた！","Robot keyingi robotni o'zi yig'ib qo'ydi!","Робот сам собрал следующего робота!")},
+  {id:"e4",x:200,y:450,risk:.01,pose:"asst_type",cut:"cut1_panic.webp",
+   zone:L6("자연어 분석","Language Analysis","自然语言分析","自然言語分析","Tabiiy til tahlili","Анализ текста"),
+   name:L6("문서 대량 스캔·분석","Mass-scan and analyze documents","批量扫描与分析文档","文書の大量スキャン・分析","Hujjatlarni ommaviy skanerlash","Массовое сканирование документов"),
+   acc:L6("스캐너 과열! 종이가 사방으로 날아간다.","Scanner overheated! Paper everywhere.","扫描仪过热！纸张四处乱飞。","スキャナー過熱！紙が四方に舞い散る。","Skaner qizib ketdi! Qog'ozlar har tomonga uchmoqda.","Сканер перегрелся! Бумаги летят во все стороны."),
+   jack:L6("만 장의 문서가 한 줄 요약으로 정리됐다!","Ten thousand pages summed up in one line!","一万页文档浓缩成一句话！","一万枚の文書が一行に要約された！","O'n ming sahifa bitta jumlaga jamlandi!","Десять тысяч страниц — в одну строку!")},
+  {id:"e5",x:1150,y:460,risk:.08,pose:"robo_battery",cut:"cut3_gpu.webp",
+   zone:L6("데이터 코어","Data Core","数据核心","データコア","Ma'lumotlar yadrosi","Ядро данных"),
+   name:L6("GPU 풀가동 학습","Full-power GPU training","GPU 满载训练","GPUフル稼働学習","GPU to'liq quvvatda o'qitish","Обучение на полной мощности GPU"),
+   acc:L6("GPU 랙이 과열됐다. 냉각수 누수!","The GPU rack overheated. Coolant leak!","GPU 机架过热，冷却液泄漏！","GPUラックが過熱。冷却水漏れ！","GPU tokchasi qizib ketdi. Sovutgich oqmoqda!","Стойка GPU перегрелась. Утечка охлаждения!"),
+   jack:L6("정확도 99.9%! 모델이 하룻밤 만에 수렴했다!","99.9% accuracy! The model converged overnight!","准确率 99.9%！模型一夜之间就收敛了！","精度99.9%！モデルが一晩で収束した！","Aniqlik 99,9%! Model bir kechada yaqinlashdi!","Точность 99,9%! Модель сошлась за одну ночь!")},
+  {id:"e6",x:690,y:420,risk:.03,pose:"doc_flask",cut:"cut1_panic.webp",
+   zone:L6("중앙 허브","Central Hub","中央枢纽","中央ハブ","Markaziy xab","Центральный узел"),
+   name:L6("신경망 홀로그램 학습","Train the neural-net hologram","神经网络全息训练","ニューラルネット・ホログラム学習","Neyron tarmoq gologrammasini o'qitish","Обучить голограмму нейросети"),
+   acc:L6("전 구역 과부하! 연구소가 흔들린다.","Overload in every zone! The lab is shaking.","全区过载！研究所在摇晃。","全区画オーバーロード！研究所が揺れる。","Barcha hududlarda ortiqcha yuklanish! Laboratoriya larzada.","Перегрузка во всех зонах! Лабораторию трясёт."),
+   jack:L6("신경망이 스스로 새 아이디어를 그려냈다!","The neural net drew up a brand-new idea on its own!","神经网络自己画出了新点子！","ニューラルネットが自ら新しいアイデアを描き出した！","Neyron tarmoq o'zi yangi g'oya chizib berdi!","Нейросеть сама нарисовала новую идею!")}
+];
+/* ---------- elevator, server room, dungeon ---------- */
+Object.assign(UI,{
+  el_btn:L6("🛗 엘리베이터","🛗 Elevator","🛗 电梯","🛗 エレベーター","🛗 Lift","🛗 Лифт"),
+  sign_elev:L6("엘리베이터","Elevator","电梯","エレベーター","Lift","Лифт"),
+  sign_exit:L6("출구","Exit","出口","出口","Chiqish","Выход"),
+  el_title:L6("이동할 층을 고르세요","Choose a floor","请选择楼层","行き先の階を選んでください","Qavatni tanlang","Выберите этаж"),
+  el_now:L6("현재 층","Current floor","当前楼层","現在の階","Hozirgi qavat","Текущий этаж"),
+  el_locked:L6("접근 금지 구역","Restricted area","禁止进入区域","立入禁止区域","Kirish taqiqlangan hudud","Запретная зона"),
+  el_locked_msg:L6("{f} — 접근 금지 구역입니다.","{f} — restricted area. Access denied.","{f}——禁止进入区域。","{f}は立入禁止区域です。","{f} — kirish taqiqlangan hudud.","{f} — запретная зона. Доступ закрыт."),
+  el_moving:L6("{f} 이동 중…","Heading to {f}…","正在前往 {f}…","{f}へ移動中…","{f} ga ketmoqda…","Едем: {f}…"),
+  el_arrive:L6("{f} 도착","Arrived: {f}","已到达 {f}","{f}に到着","{f} ga yetib keldik","Прибыли: {f}"),
+  core_sign:L6("서버 코어","Server core","服务器核心","サーバーコア","Server yadrosi","Ядро серверов"),
+  core_h:L6("서버 코어 · 전체 랙","Server core · all racks","服务器核心 · 全部机架","サーバーコア・全ラック","Server yadrosi · barcha javonlar","Ядро · все стойки"),
+  core_desc:L6("지금까지의 분석과 포트폴리오 결과가 10개의 랙에 나뉘어 저장돼 있다. 랙을 눌러 내용을 확인해라.","All analyses and portfolio results so far are stored across 10 racks. Tap a rack to look inside.","迄今为止的分析与作品成果分存在 10 个机架里。点击机架查看内容。","これまでの分析とポートフォリオの成果が10台のラックに分けて保存されている。ラックを押して中身を確かめろ。","Shu paytgacha bo'lgan tahlillar va portfolio natijalari 10 ta javonda saqlangan. Ichini ko'rish uchun javonni bosing.","Все анализы и результаты портфолио хранятся в 10 стойках. Нажмите на стойку, чтобы заглянуть внутрь."),
+  rack:L6("랙","Rack","机架","ラック","Javon","Стойка"),
+  rack_empty:L6("빈 랙","Empty rack","空机架","空きラック","Bo'sh javon","Пустая стойка"),
+  rack_empty_desc:L6("아직 이 랙에 배정된 카테고리가 없다. servers.csv에 새 카테고리를 추가하면 채워진다.","No category assigned yet. Add a new category to servers.csv to fill it.","这个机架还没有分配类别。在 servers.csv 中添加新类别即可填充。","このラックにはまだカテゴリーがない。servers.csvに新しいカテゴリーを追加すると埋まる。","Bu javonga hali toifa biriktirilmagan. servers.csv ga yangi toifa qo'shsangiz, to'ladi.","Категория пока не назначена. Добавьте новую категорию в servers.csv, и стойка заполнится."),
+  items_n:L6("{n}건","{n} items","{n} 项","{n}件","{n} ta","{n} шт."),
+  total_n:L6("전체 {n}건","{n} items in total","共 {n} 项","全{n}件","Jami {n} ta","Всего {n} шт."),
+  created:L6("생성일","Created","创建日期","作成日","Yaratilgan","Создано"),
+  srv_src:L6("데이터: servers.csv","Data: servers.csv","数据：servers.csv","データ：servers.csv","Ma'lumot: servers.csv","Данные: servers.csv"),
+  srv_err:L6("서버실 데이터를 읽지 못해 내장된 예시를 보여준다.","Couldn't read the server-room data; showing the built-in sample.","无法读取服务器机房数据，显示内置示例。","サーバールームのデータを読めなかったため、内蔵の例を表示している。","Server xonasi ma'lumotlari o'qilmadi, ichki namuna ko'rsatilmoqda.","Не удалось прочитать данные серверной, показан встроенный пример."),
+  portal_sign:L6("이세계 던전","Otherworld Dungeon","异世界地下城","異世界ダンジョン","Boshqa dunyo zindoni","Подземелье иного мира"),
+  portal_h:L6("이세계 던전 입구","Otherworld Dungeon entrance","异世界地下城入口","異世界ダンジョン入口","Boshqa dunyo zindoni kirish joyi","Вход в Подземелье иного мира"),
+  portal_msg:L6("접근 불가. 차원 게이트가 봉인되어 있다.","Access denied. The dimensional gate is sealed.","无法进入。次元之门已被封印。","アクセス不可。次元ゲートは封印されている。","Kirish mumkin emas. O'lchovlar darvozasi muhrlangan.","Доступ закрыт. Пространственные врата запечатаны."),
+  denied:L6("접근 불가","Access denied","无法进入","アクセス不可","Kirish mumkin emas","Доступ закрыт"),
+  con_f1:L6("실험은 1층 연구실에서만 할 수 있다. 엘리베이터로 올라가라.","Experiments only run in the 1F lab. Take the elevator up.","实验只能在 1 楼研究室进行。请乘电梯上去。","実験は1階の研究室でしかできない。エレベーターで上がれ。","Tajribalar faqat 1-qavatdagi laboratoriyada. Lift bilan chiqing.","Эксперименты проводятся только в лаборатории на 1-м этаже. Поднимитесь на лифте.")
+});
+const FLOORS=[
+  {id:"RF",code:"RF",name:L6("옥상","Rooftop","屋顶","屋上","Tom","Крыша")},
+  {id:"F3",code:"3F",name:L6("3층","3rd floor","3楼","3階","3-qavat","3-й этаж")},
+  {id:"F2",code:"2F",name:L6("2층","2nd floor","2楼","2階","2-qavat","2-й этаж")},
+  {id:"F1",code:"1F",name:L6("1층 · 연구실","1st floor · Laboratory","1楼 · 研究室","1階・研究室","1-qavat · Laboratoriya","1-й этаж · Лаборатория"),open:true},
+  {id:"B1",code:"B1",name:L6("지하 1층 · 서버실","Basement 1 · Server room","地下1层 · 服务器机房","地下1階・サーバールーム","Yerto'la 1 · Server xonasi","Подвал 1 · Серверная"),open:true},
+  {id:"B2",code:"B2",name:L6("지하 2층","Basement 2","地下2层","地下2階","Yerto'la 2","Подвал 2")},
+  {id:"B3",code:"B3",name:L6("지하 3층","Basement 3","地下3层","地下3階","Yerto'la 3","Подвал 3")},
+  {id:"B4",code:"B4",name:L6("지하 4층","Basement 4","地下4层","地下4階","Yerto'la 4","Подвал 4")}
+];
+TALK.doc.splice(5,0,["doc_data",L6("엘리베이터를 타면 지하 1층 서버실로 내려갈 수 있습니다. 그동안의 결과물이 모두 그곳에 있습니다.","Take the elevator down to the B1 server room. Every result we've produced is stored there.","乘电梯可以下到地下1层的服务器机房，至今所有成果都在那里。","エレベーターで地下1階のサーバールームへ行けます。これまでの成果物はすべてそこにあります。","Lift bilan yerto'la 1-qavatdagi server xonasiga tushishingiz mumkin. Barcha natijalar o'sha yerda.","На лифте можно спуститься в серверную на подвальном этаже. Там хранятся все наши результаты.")]);
+TALK.robo.splice(4,0,["robo_lock",L6("이세계 던전 입구는 봉인 중입니다. 박사님 허가 없이는 접근 불가입니다.","The Otherworld Dungeon gate is sealed. No access without the Doctor's permission.","异世界地下城入口已封印。没有博士的许可无法进入。","異世界ダンジョンの入口は封印中です。博士の許可なしでは立ち入れません。","Boshqa dunyo zindoni darvozasi muhrlangan. Doktorning ruxsatisiz kirish mumkin emas.","Врата Подземелья иного мира запечатаны. Без разрешения Доктора вход закрыт.")]);
+Object.assign(UI,{
+  ost_on:L6("♪ OST 켜기","♪ Play OST","♪ 播放 OST","♪ OSTを再生","♪ OST yoqish","♪ Включить OST"),
+  ost_off:L6("♪ OST 끄기","♪ Stop OST","♪ 关闭 OST","♪ OSTを停止","♪ OST o'chirish","♪ Выключить OST"),
+  ost_next:L6("다음 곡","Next track","下一首","次の曲","Keyingi qo'shiq","Следующий трек"),
+  ost_none:L6("이 공간에는 등록된 곡이 없다","No tracks for this space","此空间没有登记曲目","この空間には曲が登録されていない","Bu joy uchun qo'shiq yo'q","Для этого места треков нет"),
+  ost_vol:L6("음량","Volume","音量","音量","Ovoz balandligi","Громкость"),
+  ost_now:L6("지금 재생: {t}","Now playing: {t}","正在播放：{t}","再生中：{t}","Hozir: {t}","Сейчас играет: {t}")
+});
+Object.assign(UI,{
+  expr_btn:L6("😀 표정 24종","😀 24 expressions","😀 24 种表情","😀 表情24種","😀 24 ta ifoda","😀 24 эмоции"),
+  expr_h:L6("{n}의 표정 24종","{n}: 24 expressions","{n} 的 24 种表情","{n}の表情24種","{n}: 24 ta ifoda","{n}: 24 эмоции"),
+  expr_hint:L6("표정을 누르면 그 표정으로 말한다. 연구원을 빠르게 세 번 누르면 반응이 달라진다.","Tap an expression to hear that line. Tap a researcher three times fast for a special reaction.","点表情就会用那个表情说话。快速连点研究员三下会有不同反应。","表情を押すとその表情でしゃべる。研究員を素早く3回押すと反応が変わる。","Ifodani bossangiz, o'sha ifoda bilan gapiradi. Tadqiqotchini tez-tez uch marta bossangiz, boshqacha javob beradi.","Нажмите на эмоцию — персонаж скажет реплику. Три быстрых нажатия на исследователя вызовут особую реакцию.")
+});
+CREW_T.asst.name=L6("조수 하루","Haru (Assistant)","助手 Haru","助手ハル","Yordamchi Haru","Ассистент Хару");
+TALK.asst[0][1]=L6("안녕하세요! 저는 조수 하루예요. 처음 오셨나요?","Hi! I'm Haru, the Assistant. Is this your first visit?","你好！我是助手 Haru。你是第一次来吗？","こんにちは！助手のハルです。はじめてですか？","Salom! Men yordamchi Haru. Birinchi marta keldingizmi?","Привет! Я Хару, ассистент. Вы здесь впервые?");
+
+/* ---------- projects.csv → project list (shared by Lab Town and the project page) ---------- */
+// Accepts Excel CSV in UTF-8 or Korean ANSI (CP949/EUC-KR); Korean or English headers.
+const PJ_HEAD={
+  status:["상태","status"], category:["카테고리","분류","category"], name:["프로젝트명","이름","name","project"],
+  link:["프로젝트링크","링크","link","url"], start:["시작일","시작","start"], end:["완료일","마감일","종료일","end","due"],
+  owner:["담당","담당자","owner"], progress:["진행률","progress"], note:["비고","메모","note","notes"]
+};
+const PJ_LANGS=["en","zh","ja","uz","ru"];
+function pjDecode(buf){
+  const u8=new Uint8Array(buf);
+  try{ return new TextDecoder("utf-8",{fatal:true}).decode(u8).replace(/^﻿/,""); }
+  catch(e){ try{ return new TextDecoder("euc-kr").decode(u8); }catch(e2){ return new TextDecoder().decode(u8); } }
+}
+function pjParseCSV(text){
+  const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){ f+='"'; i++; } else q=false; } else f+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(f); f=""; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(f); rows.push(row); row=[]; f=""; }
+    else f+=c;
+  }
+  if(f!==""||row.length){ row.push(f); rows.push(row); }
+  return rows.filter(r=>r.some(c=>c.trim()!==""));
+}
+function pjDate(s){
+  s=String(s||"").trim(); if(!s) return null;
+  const m=s.match(/^(\d{4})[-./년\s]*(\d{1,2})[-./월\s]*(\d{1,2})/); if(!m) return null;
+  const d=new Date(+m[1],+m[2]-1,+m[3]); return isNaN(d)?null:d;
+}
+const pjISO=d=>d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`:"";
+function pjOwner(s){
+  s=String(s||"").trim().toLowerCase();
+  if(/조수|조교|asst|assistant/.test(s)) return "asst";
+  if(/초파리|fly/.test(s)) return "fly";
+  if(/robo|로보|money/.test(s)) return "robo";
+  return "doc";
+}
+function pjStatus(s){
+  s=String(s||"").replace(/\s/g,"").toLowerCase();
+  if(/완료|done|complete|finished/.test(s)) return "done";
+  if(/진행|doing|progress|wip/.test(s)) return "doing";
+  if(/예정|todo|plan|schedul|준비/.test(s)) return "todo";
+  return "";
+}
+function pjBuild(text){
+  const rows=pjParseCSV(text); if(rows.length<2) return [];
+  const head=rows[0].map(h=>h.trim().toLowerCase());
+  const col={}; for(const k in PJ_HEAD) col[k]=head.findIndex(h=>PJ_HEAD[k].some(a=>a.toLowerCase()===h));
+  const tr={}; PJ_LANGS.forEach(l=>{ tr[l]=head.findIndex(h=>h==="프로젝트명_"+l||h==="name_"+l); });
+  const today=new Date(); today.setHours(0,0,0,0);
+  const out=[];
+  rows.slice(1).forEach((r,i)=>{
+    const g=k=>col[k]>=0?String(r[col[k]]??"").trim():"";
+    const name=g("name"); if(!name) return;
+    const start=pjDate(g("start")), end=pjDate(g("end"));
+    let status=pjStatus(g("status"));
+    if(!status){ status = end&&end<today ? "done" : start&&start>today ? "todo" : (start||end) ? "doing" : "todo"; }
+    let progress=g("progress")!==""? Math.max(0,Math.min(100,parseFloat(g("progress"))||0)) : null;
+    if(progress==null){
+      if(status==="done") progress=100;
+      else if(status==="doing"&&start&&end&&end>start) progress=Math.round(Math.max(0,Math.min(1,(today-start)/(end-start)))*100);
+    }
+    const i18n={}; PJ_LANGS.forEach(l=>{ if(tr[l]>=0&&String(r[tr[l]]||"").trim()) i18n[l]={title:String(r[tr[l]]).trim()}; });
+    out.push({id:"p"+(i+1),status,category:g("category"),title:name,link:g("link"),start,end,owner:pjOwner(g("owner")),ownerRaw:g("owner"),progress,note:g("note"),i18n});
+  });
+  return out;
+}
+async function pjLoad(url,fallback){
+  try{ const r=await fetch(url,{cache:"no-store"}); if(r.ok){ const list=pjBuild(pjDecode(await r.arrayBuffer())); if(list.length) return {list,ok:true}; } }catch(e){}
+  return {list:pjBuild(fallback),ok:false};
+}
+const PJ_CAT={
+  "강의 콘텐츠":{en:"Course content",zh:"课程内容",ja:"講義コンテンツ",uz:"Kurs kontenti",ru:"Учебные материалы"},
+  "웹·자동화":{en:"Web & automation",zh:"网页·自动化",ja:"Web・自動化",uz:"Veb va avtomatlashtirish",ru:"Веб и автоматизация"},
+  "연구 리뷰":{en:"Research review",zh:"研究综述",ja:"研究レビュー",uz:"Tadqiqot sharhi",ru:"Обзор исследований"},
+  "비즈니스":{en:"Business",zh:"商业",ja:"ビジネス",uz:"Biznes",ru:"Бизнес"},
+  "연구":{en:"Research",zh:"研究",ja:"研究",uz:"Tadqiqot",ru:"Исследования"},
+  "포트폴리오":{en:"Portfolio",zh:"作品集",ja:"ポートフォリオ",uz:"Portfolio",ru:"Портфолио"}
+};
+
+const PUI={
+  back:L6("← 랩타운으로","← Back to Lab Town","← 返回 Lab Town","← ラボタウンへ","← Lab Town'ga qaytish","← В Lab Town"),
+  p_eyebrow:L6("연구소 작업 보드","Lab work board","研究所工作看板","研究所ワークボード","Laboratoriya ish taxtasi","Рабочая доска лаборатории"),
+  p_h1:L6("작업 진행 현황","Project progress","工作进度","作業進行状況","Loyihalar holati","Ход проектов"),
+  p_lead:L6("연구소에서 만들고 있는 것, 만들 것, 이미 만든 것을 한곳에 모았다. 날짜는 예정일 기준이다.","Everything the lab is building, will build, and has built — in one place. Dates are planned dates.","研究所正在做的、将要做的、已经做完的，都汇集在这里。日期为计划日期。","研究所で作っているもの、これから作るもの、作り終えたものを一か所にまとめた。日付は予定日だ。","Laboratoriya hozir yaratayotgan, yaratadigan va yaratib bo'lgan ishlar bir joyda. Sanalar rejadagi sanalar.","Всё, что лаборатория делает, сделает и уже сделала, — в одном месте. Даты плановые."),
+  p_doing:L6("진행 중","In progress","进行中","進行中","Jarayonda","В работе"),
+  p_todo:L6("예정","Planned","计划中","予定","Rejada","Запланировано"),
+  p_done:L6("완료","Done","已完成","完了","Tayyor","Завершено"),
+  p_due30:L6("30일 안에 마감","Due within 30 days","30 天内截止","30日以内に締切","30 kun ichida muddati tugaydi","Срок в ближайшие 30 дней"),
+  p_all:L6("전체","All","全部","すべて","Hammasi","Все"),
+  p_search:L6("프로젝트 검색","Search projects","搜索项目","プロジェクト検索","Loyihalarni qidirish","Поиск проектов"),
+  p_timeline:L6("일정 타임라인","Timeline","日程时间线","スケジュール","Jadval","Хронология"),
+  p_today:L6("오늘","Today","今天","今日","Bugun","Сегодня"),
+  p_over:L6("{n}일 지남","{n} days over","逾期 {n} 天","{n}日超過","{n} kun kechikdi","просрочено на {n} дн."),
+  p_in:L6("{n}일 뒤 시작","starts in {n} days","{n} 天后开始","{n}日後に開始","{n} kundan keyin boshlanadi","старт через {n} дн."),
+  p_open:L6("열기 ↗","Open ↗","打开 ↗","開く ↗","Ochish ↗","Открыть ↗"),
+  p_empty:L6("해당하는 프로젝트가 없다.","No matching projects.","没有符合的项目。","該当するプロジェクトはない。","Mos loyiha yo'q.","Подходящих проектов нет."),
+  p_nodate:L6("날짜 미정","No dates yet","日期未定","日程未定","Sana belgilanmagan","Даты не назначены"),
+  p_csv_err:L6("projects.csv를 읽지 못해 내장된 예시 목록을 보여준다.","Couldn't read projects.csv, showing the built-in sample list.","无法读取 projects.csv，显示内置示例列表。","projects.csvを読めなかったため、内蔵の例を表示している。","projects.csv o'qilmadi, ichki namunaviy ro'yxat ko'rsatilmoqda.","Не удалось прочитать projects.csv, показан встроенный пример."),
+  p_source:L6("데이터: projects.csv","Data: projects.csv","数据：projects.csv","データ：projects.csv","Ma'lumot: projects.csv","Данные: projects.csv")
+};
+Object.assign(UI,PUI);
+let lang="ko";
+try{ const h=location.hash.slice(1), s=localStorage.getItem("alt_lang"); if(LANGS.some(l=>l[0]===h)) lang=h; else if(s&&LANGS.some(l=>l[0]===s)) lang=s; }catch(e){}
+const L=o=>o==null?"":(typeof o==="object"&&!Array.isArray(o)?(o[lang]??o.ko):o);
+const T=(k,v)=>{ let s=L(UI[k]); if(v) for(const x in v) s=s.split("{"+x+"}").join(v[x]); return s; };
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const FALLBACK_CSV="상태,카테고리,프로젝트명,프로젝트링크,시작일,완료일,담당,진행률,비고,프로젝트명_en,프로젝트명_zh,프로젝트명_ja,프로젝트명_uz,프로젝트명_ru\n진행중,강의 콘텐츠,AI 이미지 분류 심화편,,2026-10-01,2026-11-30,박사,60,예시 일정,AI Image Classification: Advanced,AI 图像分类·进阶篇,AI画像分類・発展編,AI tasvir tasnifi: chuqurlashtirilgan,Классификация изображений ИИ: продвинутый курс\n진행중,웹·자동화,연구실 현황판 (Ahn Lab Town),,2026-10-24,2026-11-15,조수,,예시 일정,Lab Status Board (Ahn Lab Town),研究室状态看板 (Ahn Lab Town),研究室ステータスボード (Ahn Lab Town),Laboratoriya holati paneli (Ahn Lab Town),Табло состояния лаборатории (Ahn Lab Town)\n진행중,연구 리뷰,초파리 뇌 연구 Review 2편,,2026-10-10,2026-12-10,초파리 연구원,40,예시 일정,\"Fruit-Fly Brain Research Review, Part 2\",果蝇大脑研究综述 第2篇,ショウジョウバエ脳研究レビュー 第2回,\"Meva pashshasi miyasi tadqiqoti sharhi, 2-qism\",\"Обзор исследований мозга дрозофилы, часть 2\"\n진행중,비즈니스,Global Business 새 글,https://ahnboat.xyz/global_business/,2026-10-20,2026-11-10,Money-Robo,20,예시 일정,New Global Business post,Global Business 新文章,Global Business 新記事,Global Business uchun yangi maqola,Новая статья Global Business\n예정,웹·자동화,텔레그램 조교 봇,,2026-11-01,2026-12-31,조수,,준비 중,Telegram assistant bot,Telegram 助教机器人,Telegram 助手ボット,Telegram yordamchi boti,Telegram-бот ассистента\n예정,강의 콘텐츠,스틱맨이 특징이 되는 과정,,2026-11-15,2026-12-20,박사,,예시 일정,How a Stickman Becomes Features,火柴人如何变成特征,棒人間が特徴量になるまで,Chiziqcha odam qanday qilib belgilarga aylanadi,Как человечек-палочка становится признаками\n예정,강의 콘텐츠,초파리와 함께하는 딥러닝 다음 편,,2026-11-20,2027-01-10,초파리 연구원,,예시 일정,Deep Learning with the Fruit Fly: next episode,与果蝇一起学深度学习 下一篇,ショウジョウバエと学ぶディープラーニング 次回,Meva pashshasi bilan chuqur o'rganish: keyingi qism,Глубокое обучение с дрозофилой: следующий выпуск\n예정,강의 콘텐츠,알고리즘 패밀리 4편,,2026-12-01,2027-01-31,조수,,예시 일정,\"Algorithm Family, Part 4\",算法家族 第4篇,アルゴリズム・ファミリー 第4回,\"Algoritmlar oilasi, 4-qism\",\"Семейство алгоритмов, часть 4\"\n예정,웹·자동화,뉴스 자동 요약 로봇,,2027-01-05,2027-03-31,Money-Robo,,예시 일정,Automatic news-summary robot,新闻自动摘要机器人,ニュース自動要約ロボット,Yangiliklarni avtomatik qisqartiruvchi robot,Робот для автоматических сводок новостей\n완료,강의 콘텐츠,Fish Market Data로 쉽게 배우는 머신러닝,https://adminmrobo.github.io/Fish_Market_Data_Machine_Learning/,,,박사,100,,Easy Machine Learning with Fish Market Data,用鱼市数据轻松学机器学习,Fish Market Dataで楽しく学ぶ機械学習,Fish Market Data bilan oson mashinaviy o'rganish,Машинное обучение на данных рыбного рынка\n완료,강의 콘텐츠,신경망 모델의 이해: 퍼셉트론 vs 함수모형,https://adminmrobo.github.io/deep_learning_00_neural_net_learns/,,,박사,100,,Understanding Neural Nets: Perceptron vs Function Model,理解神经网络：感知机 vs 函数模型,ニューラルネットの理解：パーセプトロン vs 関数モデル,Neyron tarmoqlarni tushunish: perseptron va funksiya modeli,Понимание нейросетей: перцептрон и функциональная модель\n완료,강의 콘텐츠,초파리 연구실의 딥러닝 A to Z,https://adminmrobo.github.io/AI_Model_Review/#map,,,초파리 연구원,100,,Deep Learning A to Z in the Fruit-Fly Lab,果蝇研究室的深度学习 A to Z,ショウジョウバエ研究室のディープラーニング A to Z,Meva pashshasi laboratoriyasida chuqur o'rganish A dan Z gacha,Глубокое обучение от А до Я в лаборатории дрозофилы\n완료,연구 리뷰,초파리(Fruit-Fly) 뇌 연구 Review,https://adminmrobo.github.io/AI_Model_Review_Fruit_fly_special/,,,초파리 연구원,100,,Fruit-Fly Brain Research Review,果蝇大脑研究综述,ショウジョウバエ脳研究レビュー,Meva pashshasi miyasi tadqiqoti sharhi,Обзор исследований мозга дрозофилы\n완료,강의 콘텐츠,AI는 이미지를 어떻게 구분할까?,https://adminmrobo.github.io/AI_image_classification/,,,박사,100,,How Does AI Tell Images Apart?,AI 如何区分图像？,AIは画像をどう見分ける？,AI tasvirlarni qanday farqlaydi?,Как ИИ различает изображения?\n완료,강의 콘텐츠,AI는 동작을 어떻게 알아보고 만들까?,https://adminmrobo.github.io/motion_ai_series_01/,,,박사,100,,How Does AI Recognize and Create Motion?,AI 如何识别并生成动作？,AIは動きをどう認識し、つくる？,AI harakatni qanday taniydi va yaratadi?,Как ИИ распознаёт и создаёт движения?\n완료,강의 콘텐츠,인공지능 알고리즘 패밀리 3부작,https://adminmrobo.github.io/ML_00_Algorithm-family-build_01/,,,조수,100,,AI Algorithm Family trilogy,人工智能算法家族三部曲,人工知能アルゴリズム・ファミリー三部作,Sun'iy intellekt algoritmlari oilasi: uch qism,Трилогия «Семейство алгоритмов ИИ»\n완료,포트폴리오,Money-Robo: 로봇저널리즘 프로젝트,http://www.money-robo.com,,,Money-Robo,100,,Money-Robo: Robot Journalism Project,Money-Robo：机器人新闻项目,Money-Robo：ロボットジャーナリズム・プロジェクト,Money-Robo: robot jurnalistikasi loyihasi,Money-Robo: проект роботизированной журналистики\n";
+const AV={doc:"doc_write",asst:"asst_type",fly:"fly_scan",robo:"robo_search"};
+const DONE_AV={doc:"doc_ok",asst:"asst_cheer",fly:"fly_idea",robo:"robo_dance"};
+let LIST=[], cat="", q="", CFG={TELEGRAM_BOT_URL:""};
+const today=new Date(); today.setHours(0,0,0,0);
+const DAY=864e5;
+const title=p=>(p.i18n[lang]&&p.i18n[lang].title)||p.title;
+const catL=c=>(PJ_CAT[c]&&PJ_CAT[c][lang])||c||"";
+const owner=p=>L(CREW_T[p.owner].name);
+const pass=p=>(!cat||p.category===cat)&&(!q||(title(p)+" "+p.title+" "+p.category+" "+p.note).toLowerCase().includes(q));
+const days=(a,b)=>Math.round((a-b)/DAY);
+
+function render(){
+  const all=LIST, vis=all.filter(pass);
+  const by=s=>vis.filter(p=>p.status===s);
+  document.getElementById("nDoing").textContent=all.filter(p=>p.status==="doing").length;
+  document.getElementById("nTodo").textContent=all.filter(p=>p.status==="todo").length;
+  document.getElementById("nDone").textContent=all.filter(p=>p.status==="done").length;
+  document.getElementById("nDue").textContent=all.filter(p=>p.status!=="done"&&p.end&&days(p.end,today)>=0&&days(p.end,today)<=30).length;
+  // categories
+  const cats=[...new Set(all.map(p=>p.category).filter(Boolean))];
+  document.getElementById("cats").innerHTML=[["",T("p_all"),all.length]].concat(cats.map(c=>[c,catL(c),all.filter(p=>p.category===c).length])).map(([v,l,n])=>`<button class="chip" data-c="${esc(v)}" aria-pressed="${cat===v}">${esc(l)}<span class="n">${n}</span></button>`).join("");
+  // lists
+  const doing=by("doing").sort((a,b)=>(a.end||9e15)-(b.end||9e15)), todo=by("todo").sort((a,b)=>(a.start||9e15)-(b.start||9e15)), done=by("done").sort((a,b)=>(b.end||0)-(a.end||0));
+  document.getElementById("cDoing").textContent=doing.length; document.getElementById("cTodo").textContent=todo.length; document.getElementById("cDone").textContent=done.length;
+  document.getElementById("lDoing").innerHTML=doing.length? doing.map(card).join("") : `<p class="empty">${esc(T("p_empty"))}</p>`;
+  document.getElementById("lTodo").innerHTML=todo.length? todo.map(card).join("") : `<p class="empty">${esc(T("p_empty"))}</p>`;
+  document.getElementById("lDone").innerHTML=done.length? done.map(p=>`<li><img src="assets/pose/${DONE_AV[p.owner]}.webp" alt=""><div class="t">${p.link?`<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(title(p))}</a>`:esc(title(p))}<small>${esc([owner(p),catL(p.category),p.end?pjISO(p.end):"",p.note].filter(Boolean).join(" · "))}</small></div></li>`).join("") : `<li class="empty" style="background:none;border:0">${esc(T("p_empty"))}</li>`;
+  timeline(doing.concat(todo).filter(p=>p.start||p.end));
+}
+function card(p){
+  const dates = p.start||p.end ? `${p.start?pjISO(p.start):"…"} → ${p.end?pjISO(p.end):"…"}` : T("p_nodate");
+  let dd="";
+  if(p.status==="doing"&&p.end){ const n=days(p.end,today); dd = n<0? `<span class="dd over">${esc(T("p_over",{n:-n}))}</span>` : `<span class="dd">${n===0?"D-day":"D-"+n}</span>`; }
+  if(p.status==="todo"&&p.start){ const n=days(p.start,today); if(n>0) dd=`<span class="dd">${esc(T("p_in",{n}))}</span>`; }
+  const t=title(p);
+  return `<article class="card ${p.status}"><img class="av" src="assets/pose/${AV[p.owner]}.webp" alt="${esc(owner(p))}"><div style="min-width:0">
+    <h3>${p.link?`<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}</h3>
+    <div class="meta">${p.category?`<span class="cat">${esc(catL(p.category))}</span>`:""}<span>${esc(owner(p))}</span><span>${esc(dates)}</span>${dd}</div>
+    ${p.status==="doing"&&p.progress!=null?`<div class="prog" role="progressbar" aria-valuenow="${p.progress}" aria-valuemin="0" aria-valuemax="100"><i style="width:${p.progress}%"></i></div><div class="meta">${esc(T("prog",{p:p.progress}))}</div>`:""}
+    ${p.note?`<div class="note">${esc(p.note)}</div>`:""}
+  </div></article>`;
+}
+function timeline(items){
+  const el=document.getElementById("tl");
+  if(!items.length){ el.innerHTML=`<p class="empty">${esc(T("p_empty"))}</p>`; return; }
+  const s=items.map(p=>p.start||p.end), e=items.map(p=>p.end||p.start);
+  let min=new Date(Math.min(today,...s)), max=new Date(Math.max(today,...e));
+  min=new Date(min.getFullYear(),min.getMonth(),1); max=new Date(max.getFullYear(),max.getMonth()+1,1);
+  const months=[]; for(let d=new Date(min); d<max; d=new Date(d.getFullYear(),d.getMonth()+1,1)) months.push(new Date(d));
+  const span=max-min, pos=d=>((d-min)/span*100);
+  const lw=window.innerWidth<640?"150px":"240px";
+  const fmtM=d=>lang==="ko"||lang==="zh"||lang==="ja"? `${d.getFullYear()}.${d.getMonth()+1}` : d.toLocaleDateString(lang==="uz"?"uz-Latn":lang,{year:"2-digit",month:"short"});
+  const mcols=months.map(m=>{ const n=new Date(m.getFullYear(),m.getMonth()+1,1); return (n-m)/span*100; });
+  el.style.setProperty("--lw",lw);
+  el.innerHTML=`<div class="months" style="grid-template-columns:${mcols.map(w=>w+"fr").join(" ")}">${months.map(m=>`<span>${esc(fmtM(m))}</span>`).join("")}</div>`+
+    items.map(p=>{ const a=p.start||p.end, b=p.end||p.start; const l=pos(a), w=Math.max(.8,pos(b)-l);
+      return `<div class="row"><div class="nm" title="${esc(title(p))}"><img src="assets/pose/${AV[p.owner]}.webp" alt="">${esc(title(p))}</div><div class="track">
+        ${months.map(m=>`<span class="grid" style="left:${pos(m)}%"></span>`).join("")}
+        <span class="bar ${p.status}" style="left:${l}%;width:${w}%;--p:${p.progress??0}%" title="${esc(title(p))} · ${pjISO(a)} → ${pjISO(b)}"></span>
+        <span class="today" style="left:${pos(today)}%"></span></div></div>`; }).join("")+
+    `<div class="row"><div></div><div class="track" style="height:18px"><span class="today" style="left:${pos(today)}%"><b>${esc(T("p_today"))}</b></span></div></div>`;
+}
+document.getElementById("cats").addEventListener("click",e=>{ const b=e.target.closest(".chip"); if(!b) return; cat=b.dataset.c; render(); });
+const qi=document.getElementById("q"); qi.addEventListener("input",()=>{ q=qi.value.trim().toLowerCase(); render(); });
+const sels=[document.getElementById("langTop"),document.getElementById("langBottom")];
+sels.forEach(s=>{ s.innerHTML=LANGS.map(([c,n])=>`<option value="${c}">${n}</option>`).join(""); s.addEventListener("change",()=>{ lang=s.value; try{localStorage.setItem("alt_lang",lang)}catch(e){} applyLang(); }); });
+function tg(){
+  const a=document.getElementById("tgAct"); document.getElementById("tgSoon").hidden=!!CFG.TELEGRAM_BOT_URL;
+  a.innerHTML=CFG.TELEGRAM_BOT_URL? `<a class="btn pri" href="${esc(CFG.TELEGRAM_BOT_URL)}" target="_blank" rel="noopener">✈ ${esc(T("tg_open"))}</a>` : `<span class="btn" aria-disabled="true">✈ ${esc(T("tg_open"))}</span>`;
+}
+function applyLang(){
+  document.documentElement.lang=lang==="zh"?"zh-Hans":lang; sels.forEach(s=>s.value=lang);
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=T(el.dataset.i18n));
+  qi.placeholder=T("p_search"); qi.setAttribute("aria-label",T("p_search"));
+  document.querySelectorAll('a[href^="index.html"]').forEach(a=>a.href="index.html"+(lang!=="ko"?"#"+lang:""));
+  tg(); render();
+}
+(async()=>{
+  const [pj,cfg]=await Promise.all([pjLoad("projects.csv",FALLBACK_CSV),fetch("config.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)]);
+  if(cfg) Object.assign(CFG,cfg);
+  LIST=pj.list; document.getElementById("warn").hidden=pj.ok;
+  applyLang();
+  let rt; window.addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(render,150); });
+})();
+</script>
+</body>
+</html>

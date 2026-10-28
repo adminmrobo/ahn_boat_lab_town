@@ -13,25 +13,28 @@ function doGet(e) {
   const props = PropertiesService.getScriptProperties();
   if (p.action === 'hit') {
     const ev = EVENTS.indexOf(p.event) >= 0 ? p.event : 'e?';
-    const acc = p.accident === '1';
+    const result = p.result || (p.accident === '1' ? 'accident' : 'ok');
+    const acc = result === 'accident', jack = result === 'jackpot';
     const lvl = Math.max(1, Math.min(5, parseInt(p.level, 10) || 1));
     const lock = LockService.getScriptLock();
     lock.waitLock(5000);
     try {
       const clicks = Number(props.getProperty('clicks') || 0) + 1;
       const accidents = Number(props.getProperty('accidents') || 0) + (acc ? 1 : 0);
-      props.setProperties({ clicks: String(clicks), accidents: String(accidents) });
+      const jackpots = Number(props.getProperty('jackpots') || 0) + (jack ? 1 : 0);
+      props.setProperties({ clicks: String(clicks), accidents: String(accidents), jackpots: String(jackpots) });
       const ss = SpreadsheetApp.getActiveSpreadsheet();
       const sh = ss.getSheetByName('log') || ss.insertSheet('log');
-      if (sh.getLastRow() === 0) sh.appendRow(['시각', '이벤트', '출력 레벨', '사고 여부']);
-      sh.appendRow([new Date(), ev, lvl, acc ? '사고' : '성공']);
+      if (sh.getLastRow() === 0) sh.appendRow(['시각', '이벤트', '출력 레벨', '결과']);
+      sh.appendRow([new Date(), ev, lvl, acc ? '사고' : (jack ? '대박' : '성공')]);
     } finally {
       lock.releaseLock();
     }
   }
   const out = {
     clicks: Number(props.getProperty('clicks') || 0),
-    accidents: Number(props.getProperty('accidents') || 0)
+    accidents: Number(props.getProperty('accidents') || 0),
+    jackpots: Number(props.getProperty('jackpots') || 0)
   };
   return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
 }
