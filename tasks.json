@@ -16,6 +16,6 @@
     {"id":"c5","status":"done","owner":"doc","kind":"creature","title":"AI는 이미지를 어떻게 구분할까?","link":"https://adminmrobo.github.io/AI_image_classification/"},
     {"id":"c6","status":"done","owner":"doc","kind":"creature","title":"AI는 동작을 어떻게 알아보고 만들까?","link":"https://adminmrobo.github.io/motion_ai_series_01/"},
     {"id":"c7","status":"done","owner":"asst","kind":"creature","title":"인공지능 알고리즘 패밀리 3부작","link":"https://adminmrobo.github.io/ML_00_Algorithm-family-build_01/"},
-    {"id":"c8","status":"done","owner":"robo","kind":"robot","title":"Money-Robo: 로봇저널리즘 프로젝트","link":"http://www.money-robo.com"}
+    {"id":"c8","status":"done","owner":"doc","kind":"robot","title":"Money-Robo: 로봇저널리즘 프로젝트","link":"http://www.money-robo.com"}
   ]
 }
