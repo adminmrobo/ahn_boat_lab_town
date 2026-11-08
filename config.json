@@ -4,6 +4,6 @@
  "PROFILE_MASCOT_URL": "https://adminmrobo.github.io/who_am_i/who_am_i.html",
  "PROFILE_RESUME_URL": "https://ahnboat.xyz/my_profile/",
  "TELEGRAM_BOT_URL": "",
- "SERVER_CSV_URL": "https://raw.githubusercontent.com/adminmrobo/ahnboat_lab_town_floor_b01/main/servers.csv",
+ "SERVER_CSV_URL": "https://raw.githubusercontent.com/adminmrobo/ahnboat_lab_cover_status/main/data/servers.csv",
  "OST_PLAYLIST_URL": "ost/ost.csv"
 }

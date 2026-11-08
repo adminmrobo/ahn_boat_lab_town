@@ -5,7 +5,7 @@
 - `projects.csv` — 완료 / 진행중 / 예정 작업 목록 (엑셀로 수정)
 - `projects.html` — 작업 진행 페이지
 - `ost/` — 공간별 OST 음악과 순서표 `ost/ost.csv`
-- `servers.csv` — 지하 1층 서버실 랙 내용 (별도 repo 주소를 넣으면 그쪽 파일을 우선 읽음)
+- `servers.csv` — 지하 1층 서버실 랙 내용 (별도 repo 주소를 넣으면 그쪽 파일을 우선 읽음). 지금은 콘텐츠 현황판(ahnboat_lab_cover_status)의 `data/servers.csv`를 읽는다. 랙 = 현황판 대분류. 예전 목록은 ahnboat_lab_town_floor_b01에 그대로 있어 config.json 주소만 되돌리면 복구된다.
 - `research.json` — 박사 연구실적 (GitHub 페이지, 논문, 특허, 저서)
 - `config.json` — 공유 카운터 주소, 텔레그램 봇 주소, 박사 소개 링크 2개
 - `assets/` — 맵, 캐릭터 포즈(27종), 사고 컷, 표정 96장(`assets/expr/`, fruitfly-lab-expressions 저장소 기준)
