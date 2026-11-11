@@ -1,5 +1,5 @@
 /**
- * Ahn Lab Town 공유 카운터 (Google Apps Script)
+ * Ahn-boat Lab Town 공유 카운터 (Google Apps Script)
  * 1) 구글 시트를 새로 만들고 [확장 프로그램] → [Apps Script]를 연다.
  * 2) 이 코드를 붙여넣고 저장한다.
  * 3) [배포] → [새 배포] → 유형: 웹 앱, 실행 사용자: 나, 액세스: 모든 사용자 → 배포.
