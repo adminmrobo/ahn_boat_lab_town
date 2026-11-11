@@ -217,6 +217,91 @@ details.log summary{cursor:pointer;padding:10px 0;font-family:var(--display);fon
 .col li small{display:block;color:var(--muted);font-size:12px}
 @media (max-width:720px){.board{grid-template-columns:1fr}}
 footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
+
+/* ===== 2026-11 white-toon look (same family as ahnboat.xyz head/bottom banners): paper white, ink outlines, hard offset shadows.
+   The B1 server room keeps its pixel night palette inside the canvas. ===== */
+:root{
+  --bg:#ffffff; --panel:#ffffff; --panel-2:#fbfaf7; --line:#1f2224; --ink:#1f2224; --rule:#e4e0d8;
+  --fg:#1f2224; --muted:#5f6663; --cyan:#1f9e66; --magenta:#d9668f; --amber:#e0a92a; --alarm:#d8344a; --gold:#e0a92a;
+  --todo:#e0a92a; --doing:#1f9e66; --done:#7a5cc4; --sky:#2f6fbf;
+  color-scheme:light;
+}
+body{background:#fff radial-gradient(#e9e5dc 1.2px,transparent 1.3px) 0 0/22px 22px}
+.wrap{max-width:1240px}
+a{color:#1c7a50}
+h1{font-size:clamp(28px,4.4vw,42px)}
+.eyebrow{color:var(--pink,#d9668f)}
+.top a{color:var(--muted)}
+.proto{border-color:var(--ink);background:#fff}
+.langsel select{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.stat{border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:#fff}
+.stat.acc{border-color:var(--ink)}.stat.acc .v{color:#d8344a}
+.stat.jack{border-color:var(--ink)}.stat.jack .v{color:#c08a10}
+.chip{background:#fff;border:1.5px solid var(--ink)}
+.nbtn,.pick{background:#fff;border:2px solid var(--ink);color:var(--ink);box-shadow:2px 2px 0 var(--ink);font-weight:500}
+.nbtn:hover,.pick:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink);border-color:var(--ink)}
+.nbtn.hl{background:#fff4d6;color:var(--ink);border-color:var(--ink)}
+.nbtn.tour{background:#e3f4ea}
+.nbtn.gym{background:#fde6ee}
+.ost .nbtn[aria-pressed="true"],.pick[aria-pressed="true"]{background:#1f2224;color:#fff;border-color:var(--ink)}
+.soon{border-color:var(--ink);background:#fff}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.game{border:2.5px solid var(--ink);border-radius:18px;background:#f3f0ea;box-shadow:5px 5px 0 var(--ink)}
+.game.alarm{border-color:#d8344a}.game.gold{border-color:#e0a92a}
+.info{position:static;width:auto;max-height:640px;overflow:auto;background:#fff;border:2.5px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink)}
+.panel{background:#fff;border:2.5px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.dlg{background:rgba(255,255,255,.97)}
+.dlg .pt{background:#efedf3;border:2px solid var(--ink)}
+.dlg .ex{border-color:var(--ink);color:#8a5a00;background:#fff4d6}
+.x{border:2px solid var(--ink);color:var(--ink);background:#fff}
+.btn{background:#fff;border:2px solid var(--ink);color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.btn:hover{border-color:var(--ink);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn.pri{background:#1f9e66;color:#fff;border-color:var(--ink)}
+.btn.big img{border-radius:6px}
+.badge{background:#fff}
+.b-todo{color:#a87405}.b-doing{color:#1f9e66}.b-done{color:#7a5cc4}.b-alarm{color:#d8344a}.b-gold{color:#a87405}
+.prog{background:#ece8df}
+.items.srv li{background:#fbfaf7;border:1.5px solid var(--ink)}
+.tg{color:#2f6fbf;border-color:#9fb8de;background:#fff}
+.sec{color:#1f9e66}
+.egrid button{background:#fbfaf7;border:1.5px solid var(--ink);color:var(--ink)}
+.egrid button:hover,.egrid button[aria-pressed="true"]{border-color:#e0a92a;background:#fff4d6}
+.toast{background:#fff;border:2px solid var(--ink);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.toast.bad{border-color:var(--ink);background:#ffe3e7;color:#8a1022}
+.toast.good{border-color:var(--ink);background:#e3f4ea;color:#11583a}
+.toast.jack{border-color:var(--ink);background:#fff1c4;color:#6a4a00}
+.cd{background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0),rgba(31,34,36,.35))}
+.cd .l{background:#fff;border:2px solid var(--ink);color:var(--ink)}
+.cd .e{color:#fff;text-shadow:0 2px 0 #1f2224,0 0 8px #1f2224}
+.cd .n{color:#fff;text-shadow:0 0 0 #000,4px 4px 0 #1f2224;-webkit-text-stroke:3px #1f2224}
+.res{background:rgba(31,34,36,.28)}
+.res figure{background:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.res .tag{color:#d8344a}.res.gold .tag{color:#a87405}
+.res figcaption{color:var(--ink)}
+.act{background:#1f9e66;color:#fff;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.act:disabled{background:#eceae4;color:var(--muted);box-shadow:3px 3px 0 #b7b2a8}
+.pad button{background:rgba(255,255,255,.92);border:2px solid var(--ink);color:var(--ink)}
+kbd{background:#fff;border-color:var(--ink);color:var(--ink)}
+.console,details.log{background:#fff;border:2.5px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
+.ev{background:#fbfaf7;border:2px solid var(--ink);color:var(--ink)}
+.ev[aria-pressed="true"]{background:#fff4d6;border-color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.go{background:#e0a92a;color:var(--ink);border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.risk b{color:#c0392b}
+.col li{background:#fbfaf7;border:1.5px solid var(--ink)}
+footer{border-top:2px solid var(--ink)}
+.elev{background:#fff;border:2.5px solid var(--ink);box-shadow:6px 6px 0 var(--ink);color:var(--ink)}
+.fl{background:#fbfaf7;border:2px solid var(--ink);color:var(--ink)}
+.fl .code{background:#fff;border-color:var(--ink)}
+.fl.cur{background:#fff4d6}.fl.cur .code{border-color:#e0a92a;color:#a87405;box-shadow:none}
+.fl.lock .st{color:#d8344a}
+.emsg{color:#d8344a}
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.dlg{position:static;width:auto;grid-template-columns:84px minmax(0,1fr);gap:12px}
+.dlg .pt{width:84px;height:98px}
+.dlg .bt{flex-wrap:wrap}
+@media (max-width:1060px){ .stage{grid-template-columns:1fr} .info{max-height:none} }
+@media (max-width:899px){ .dlg{background:#fff} }
+@media (max-width:640px){ .ctrl{background:#fff;border-top:2px solid var(--ink)} }
 </style>
 
 <div class="wrap">
@@ -247,6 +332,8 @@ footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-betw
       <button class="nbtn hl" id="goRes"><span data-i18n="nav_res"></span></button>
       <a class="nbtn hl" href="projects.html"><span data-i18n="nav_proj"></span></a>
       <button class="nbtn hl" id="goElev"><span data-i18n="el_btn"></span></button>
+      <button class="nbtn tour" id="goTour"><img src="assets/pose/sia_wave.webp" alt=""><span data-i18n="tour_btn"></span></button>
+      <button class="nbtn gym" id="goGym"><span data-i18n="gym_btn"></span></button>
       <a class="nbtn" href="#console"><span data-i18n="nav_con"></span></a>
       <button class="nbtn" id="tgNav"><span data-i18n="tg_btn"></span> <span class="soon" id="tgSoon" data-i18n="tg_soon"></span></button>
       <button class="nbtn" id="zoomBtn" aria-pressed="false"></button>
@@ -255,7 +342,7 @@ footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-betw
     <div class="picker" role="group"><span data-i18n="picker"></span><span id="picker" class="row"></span></div>
   </div>
 
-  <div>
+  <div class="stage">
     <div class="game" id="game">
       <canvas id="cv" tabindex="0" aria-label="Lab map"></canvas>
       <div class="toast" id="toast" hidden></div>
@@ -274,6 +361,8 @@ footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-betw
         <div class="floors" id="floors"></div>
       </section>
       <div class="trans" id="trans" hidden aria-live="assertive"><span class="led big" id="tLed">1F</span><span id="tMsg"></span></div>
+    </div>
+    <div class="side">
       <section class="panel dlg" id="dlg" hidden aria-live="polite">
         <div class="pt"><img id="dPt" alt=""></div>
         <div style="min-width:0">
@@ -302,7 +391,7 @@ footer{font-size:13px;color:var(--muted);display:flex;justify-content:space-betw
   </details>
 
   <footer>
-    <span><span data-i18n="updated"></span> <span style="font-family:var(--mono)" id="updated">2026-10-26</span></span>
+    <span><span data-i18n="updated"></span> <span style="font-family:var(--mono)" id="updated">2026-11-11</span></span>
     <label class="langsel"><span aria-hidden="true">🌐</span><span data-i18n="lang"></span><select id="langBottom" aria-label="Language"></select></label>
     <span><a href="https://ahnboat.xyz/my_profile/" data-i18n="foot_resume"></a> · <a id="footMascot" href="https://adminmrobo.github.io/who_am_i/who_am_i.html" data-i18n="foot_mascot"></a></span>
   </footer>
@@ -564,6 +653,161 @@ Object.assign(UI,{
 CREW_T.asst.name=L6("조수 하루","Haru (Assistant)","助手 Haru","助手ハル","Yordamchi Haru","Ассистент Хару");
 TALK.asst[0][1]=L6("안녕하세요! 저는 조수 하루예요. 처음 오셨나요?","Hi! I'm Haru, the Assistant. Is this your first visit?","你好！我是助手 Haru。你是第一次来吗？","こんにちは！助手のハルです。はじめてですか？","Salom! Men yordamchi Haru. Birinchi marta keldingizmi?","Привет! Я Хару, ассистент. Вы здесь впервые?");
 
+/* ======================================================================
+   new crew (2026-11): interns Sia (No.005) · Moa (No.006) and unrevealed X1~X3 (No.007~009)
+   ====================================================================== */
+Object.assign(CREW_T,{
+  sia:{name:L6("인턴 시아","Sia (Intern)","实习生 Sia","インターン シア","Amaliyotchi Sia","Стажёр Сия"),role:L6("메이드 인턴 · 자료 정리와 1층 안내 · 대전 심판","Maid intern · tidies data, guides 1F · fight referee","女仆实习生 · 整理资料、1楼导览 · 对战裁判","メイドインターン・資料整理と1階案内・対戦の審判","Xizmatchi amaliyotchi · ma'lumotlarni tartiblaydi, 1-qavatni tanishtiradi · jang hakami","Стажёр-горничная · порядок в данных, экскурсия по 1-му этажу · рефери")},
+  moa:{name:L6("인턴 모아","Moa (Intern)","实习生 Moa","インターン モア","Amaliyotchi Moa","Стажёр Моа"),role:L6("메이드 인턴 · 차와 화분, 기록 모으기 · 층별 안내 · 응원단장","Maid intern · tea, plants, record keeping · floor guide · head cheerleader","女仆实习生 · 泡茶、照料花草、收集记录 · 各楼层导览 · 啦啦队长","メイドインターン・お茶と植木鉢、記録集め・フロア案内・応援団長","Xizmatchi amaliyotchi · choy, gullar, yozuvlarni yig'ish · qavatlar bo'yicha gid · bosh muxlis","Стажёр-горничная · чай, цветы, сбор записей · гид по этажам · главная болельщица")},
+  x1:{name:L6("???","???","???","???","???","???"),role:L6("미공개 식구 · No.007","Unrevealed member · No.007","未公开成员 · No.007","未公開メンバー・No.007","Oshkor etilmagan a'zo · No.007","Неизвестный участник · No.007")},
+  x2:{name:L6("???","???","???","???","???","???"),role:L6("미공개 식구 · No.008","Unrevealed member · No.008","未公开成员 · No.008","未公開メンバー・No.008","Oshkor etilmagan a'zo · No.008","Неизвестный участник · No.008")},
+  x3:{name:L6("???","???","???","???","???","???"),role:L6("미공개 식구 · No.009","Unrevealed member · No.009","未公开成员 · No.009","未公開メンバー・No.009","Oshkor etilmagan a'zo · No.009","Неизвестный участник · No.009")}
+});
+const XQ=s=>L6(s[0],s[1],s[2],s[3],s[4],s[5]);
+TALK.sia=[
+  ["sia_wave",L6("어서 오세요. 인턴 시아입니다. 처음이시면 제가 1층을 안내해 드릴게요.","Welcome. I'm Sia, the intern. If it's your first time, I'll show you around the 1st floor.","欢迎光临。我是实习生 Sia。第一次来的话，我带您参观1楼。","いらっしゃいませ。インターンのシアです。初めてでしたら、1階をご案内しますね。","Xush kelibsiz. Men amaliyotchi Siaman. Birinchi marta bo'lsangiz, sizga 1-qavatni ko'rsataman.","Добро пожаловать. Я Сия, стажёр. Если вы здесь впервые, я покажу вам 1-й этаж.")],
+  ["sia_idle",L6("지금은 「{task}」 자료를 정리하고 있어요. 순서대로요.","I'm sorting the materials for “{task}” right now. In order.","我正在整理「{task}」的资料。按顺序来。","いまは「{task}」の資料を整理しています。順番どおりに。","Hozir «{task}» materiallarini tartiblayapman. Navbat bilan.","Сейчас разбираю материалы «{task}». По порядку.")],
+  ["sia_clean",L6("결측치는 먼저 닦아 내야 해요. 빈칸이 있으면 결론도 흔들리거든요.","Missing values get wiped up first. If there are gaps, the conclusion wobbles too.","缺失值要先擦干净。有空格的话，结论也会动摇。","欠損値はまず拭き取らないと。空欄があると結論も揺らぎますから。","Yetishmayotgan qiymatlarni avval artib tashlash kerak. Bo'shliq bo'lsa, xulosa ham chayqaladi.","Пропуски надо вытереть первым делом. Если есть пробелы, шатается и вывод.")],
+  ["sia_tray",L6("정규화는 쟁반 돌리기랑 비슷해요. 모두 같은 크기로 맞춰야 쏟아지지 않아요.","Normalization is like spinning a tray. Everything has to be the same size, or it all spills.","归一化就像转托盘。大家尺寸一致才不会洒出来。","正規化はお盆回しに似ています。全部同じ大きさにそろえないとこぼれます。","Normallashtirish patnis aylantirishga o'xshaydi. Hammasi bir xil o'lchamda bo'lmasa, to'kilib ketadi.","Нормализация похожа на вращение подноса: всё должно быть одного размера, иначе прольётся.")],
+  ["sia_cheer",L6("지하 2층 체력단련실에서는 제가 심판을 봐요. 반칙은… 봐 드리지 않아요.","In the B2 gym I'm the referee. Fouls… I won't let slide.","在地下2层的体能训练室，我当裁判。犯规的话……我可不会放过。","地下2階のトレーニング室では私が審判です。反則は…見逃しません。","B2 qavatdagi sport zalida men hakamman. Qoidabuzarlikni… kechirmayman.","В спортзале на B2 я рефери. Фолы… я не прощаю.")],
+  ["sia_sleep",L6("…후아암. 아, 아니에요. 안 졸았어요. 정말이에요.","…Yaaawn. Oh—no, I wasn't dozing. Really.","……哈啊。啊，没有，我没打瞌睡。真的。","…ふあぁ。あ、いえ、寝てません。本当です。","…Esnash. A, yo'q, mudramadim. Rostdan.","…Ох. А, нет, я не дремала. Честно.")]
+];
+TALK.moa=[
+  ["moa_wave",L6("안녕하세요~ 인턴 모아예요! 층마다 무엇이 있는지 제가 상냥하게 알려 드릴게요!","Hello~ I'm Moa, the intern! I'll gladly show you what's on each floor!","你好~我是实习生 Moa！每层楼有什么，我来亲切地告诉你！","こんにちは〜インターンのモアです！各フロアに何があるか、やさしくご案内しますね！","Salom~ Men amaliyotchi Moaman! Har bir qavatda nima borligini mamnuniyat bilan ko'rsataman!","Здравствуйте~ Я Моа, стажёр! С радостью покажу, что есть на каждом этаже!")],
+  ["moa_tea",L6("차 한 잔 드릴까요? 라운지에서는 실험 걱정은 잠깐 내려놓으세요~","Shall I pour you some tea? In the lounge, set your experiment worries aside for a bit~","给你倒杯茶吧？在休息区就先把实验的烦恼放一边吧~","お茶をお淹れしましょうか？ラウンジでは実験の心配はちょっと置いておいてくださいね〜","Choy quyib beraymi? Dam olish xonasida tajriba tashvishlarini bir oz unuting~","Налить вам чаю? В лаунже можно ненадолго забыть об экспериментах~")],
+  ["moa_idle",L6("「{task}」 기록은 제가 차곡차곡 모으고 있어요. 진행률 {p}%예요!","I'm neatly collecting the records for “{task}”. {p}% done!","「{task}」的记录我正一点点收集着。进度 {p}%！","「{task}」の記録はわたしがコツコツ集めています。進捗{p}%です！","«{task}» yozuvlarini asta-sekin yig'yapman. {p}% bajarildi!","Я аккуратно собираю записи по «{task}». Готово на {p}%!")],
+  ["moa_clap",L6("완성된 결과물이 벌써 {done}건이에요! 박수~!","We already have {done} finished results! Applause~!","已经完成 {done} 项成果了！鼓掌~！","完成した成果物はもう{done}件です！拍手〜！","Allaqachon {done} ta tayyor natija bor! Qarsaklar~!","Уже {done} готовых результатов! Аплодисменты~!")],
+  ["moa_cheer",L6("지하 2층에서 필살기 대회가 열려요! 저는 응원봉 담당이에요. 파이팅~!","There's a special-move tournament in B2! I'm in charge of the light sticks. Fighting~!","地下2层在举办必杀技大赛！我负责挥应援棒。加油~！","地下2階で必殺技大会をやっています！わたしは応援棒担当です。ファイト〜！","B2 qavatda maxsus zarbalar turniri bo'lyapti! Men chiroqli tayoqcha bilan qo'llab-quvvatlayman. Omad~!","На B2 идёт турнир суперприёмов! Я отвечаю за светящиеся палочки. Вперёд~!")],
+  ["moa_suit",L6("발표가 있는 날엔 정장을 입어요. 오늘은… 메이드복이 더 편하네요, 에헤헤.","On presentation days I wear a suit. Today… the maid outfit is comfier, ehehe.","有汇报的日子我会穿正装。今天嘛……还是女仆装更舒服，嘿嘿。","発表の日はスーツを着ます。今日は…メイド服のほうが楽ですね、えへへ。","Taqdimot kunlari kostyum kiyaman. Bugun esa… xizmatchi kiyimi qulayroq, hehe.","В дни докладов я ношу костюм. А сегодня… в форме горничной удобнее, хе-хе.")]
+];
+const X_DOTS=XQ(["(……)","(……)","（……）","（……）","(……)","(……)"]);
+TALK.x1=[["x1_idle",X_DOTS],["x1_cheer",XQ(["(꾸벅)","(bows)","（鞠躬）","（ぺこり）","(ta'zim qiladi)","(кланяется)"])],["x1_idle",XQ(["(…곧 만나요.)","(…See you soon.)","（……很快就会见面。）","（…またすぐに。）","(…Tez orada ko'rishamiz.)","(…Скоро увидимся.)"])]];
+TALK.x2=[["x2_idle",X_DOTS],["x2_cheer",XQ(["(반짝)","(glint)","（闪）","（キラッ）","(yaltiraydi)","(блеск очков)"])],["x2_idle",XQ(["(…아직은 비밀.)","(…It's still a secret.)","（……现在还是秘密。）","（…まだ秘密。）","(…Hozircha sir.)","(…Пока это секрет.)"])]];
+TALK.x3=[["x3_idle",X_DOTS],["x3_cheer",XQ(["(냥?)","(mew?)","（喵？）","（にゃ？）","(miyov?)","(мяу?)"])],["x3_idle",XQ(["(…다음 편에 나올지도?)","(…Maybe in the next episode?)","（……也许下一集就登场？）","（…次回登場かも？）","(…Balki keyingi qismda chiqarman?)","(…Может, в следующей серии?)"])]];
+const X_ALARM=[XQ(["(덜덜)","(trembling)","（发抖）","（ぶるぶる）","(titraydi)","(дрожит)"]),XQ(["(헉!)","(gasp!)","（吓！）","（はっ！）","(voy!)","(ах!)"])];
+Object.assign(ALARM_LINES,{
+  sia:[L6("침착하세요. 대피는 이쪽입니다.","Stay calm. The exit is this way.","请冷静。从这边疏散。","落ち着いてください。避難はこちらです。","Xotirjam bo'ling. Chiqish bu tomonda.","Сохраняйте спокойствие. Выход здесь."),L6("걸레… 걸레 어디 있죠?!","The mop… where's the mop?!","拖把……拖把在哪儿？！","モップ…モップはどこ？！","Shvabra… shvabra qayerda?!","Швабра… где швабра?!")],
+  moa:[L6("꺄악! 찻잔이~!","Eek! The teacups~!","呀啊！茶杯~！","きゃあ！ティーカップが〜！","Voy! Piyolalar~!","Ай! Чашки~!"),L6("화분부터 지켜야 해요!","I have to save the plants first!","得先保护花盆！","植木鉢を守らなきゃ！","Avval gullarni qutqarishim kerak!","Сначала надо спасти цветы!")],
+  x1:X_ALARM,x2:X_ALARM,x3:X_ALARM
+});
+const X_GOOD=XQ(["(짝짝)","(clap clap)","（啪啪）","（ぱちぱち）","(qarsak)","(хлоп-хлоп)"]), X_JACK=XQ(["(반짝반짝!)","(sparkle sparkle!)","（闪闪发光！）","（キラキラ！）","(yarq-yurq!)","(блеск-блеск!)"]);
+Object.assign(GOOD_LINES,{sia:L6("확인했습니다. 깔끔하네요.","Confirmed. Nice and clean.","确认完毕。很干净利落。","確認しました。きれいですね。","Tasdiqlandi. Toza ish.","Проверено. Чисто сработано."),moa:L6("와아, 잘됐어요! 축하의 차 한 잔!","Yay, it worked! A celebratory cup of tea!","哇，成功了！来杯庆祝茶！","わあ、うまくいきました！お祝いのお茶を一杯！","Voy, uddaladik! Tabrik choyi!","Ура, получилось! Чашечку чая в честь этого!"),x1:X_GOOD,x2:X_GOOD,x3:X_GOOD});
+Object.assign(JACK_LINES,{sia:L6("…이렇게 깨끗한 결과라니.","…Such a clean result.","……这么干净的结果。","…こんなにきれいな結果なんて。","…Shunday toza natija-ya.","…Какой чистый результат."),moa:L6("대박! 기록장에 별표 다섯 개예요!","Jackpot! Five stars in my record book!","大成功！记录本上打五颗星！","大当たり！記録帳に星五つです！","Katta omad! Daftarimga besh yulduz!","Джекпот! Пять звёзд в моём журнале!"),x1:X_JACK,x2:X_JACK,x3:X_JACK});
+EVENTS.push(
+  {id:"e7",x:170,y:600,risk:.04,pose:"moa_tea",cut:"cuts/e7_acc.webp",jk:"cuts/e7_jack.webp",
+   zone:L6("인턴 라운지","Intern Lounge","实习生休息区","インターンラウンジ","Amaliyotchilar xonasi","Лаунж стажёров"),
+   name:L6("배치 서빙 티타임","Batch-serving tea time","批量上茶下午茶","バッチ・サービングのティータイム","Paketli choy xizmati","Чаепитие с пакетной подачей"),
+   acc:L6("찻잔 32개가 한꺼번에 박사님 키보드 위로!","32 teacups land on the Doctor's keyboard all at once!","32 个茶杯一口气全扣在博士的键盘上！","ティーカップ32個が一斉に博士のキーボードの上へ！","32 ta piyola birdaniga Doktorning klaviaturasiga to'kildi!","32 чашки разом опрокинулись на клавиатуру Доктора!"),
+   jack:L6("한 방울도 안 흘리고 전원에게 차가 배달됐다!","Tea delivered to everyone without spilling a drop!","一滴不洒，茶送到了每个人手里！","一滴もこぼさず全員にお茶が届いた！","Bir tomchi ham to'kilmay, hammaga choy yetkazildi!","Чай доставлен всем, ни капли не пролито!")},
+  {id:"e8",x:150,y:460,risk:.05,pose:"sia_clean",cut:"cuts/e8_acc.webp",jk:"cuts/e8_jack.webp",
+   zone:L6("데이터 세척장","Data Wash Area","数据清洗区","データ洗浄場","Ma'lumot yuvish joyi","Мойка данных"),
+   name:L6("결측치 대청소","Missing-value deep clean","缺失值大扫除","欠損値の大掃除","Yo'q qiymatlarni katta tozalash","Генеральная уборка пропусков"),
+   acc:L6("바닥이 너무 반짝여서 전원이 미끄러졌다!","The floor got so shiny everyone slipped!","地板擦得太亮，大家全都滑倒了！","床がピカピカすぎて全員すべった！","Pol shunchalik yaltiradiki, hamma sirpanib ketdi!","Пол так натёрли, что поскользнулись все!"),
+   jack:L6("빈칸 하나 없는 완벽한 데이터셋 완성!","A perfect dataset—not a single blank!","一个空格都没有的完美数据集完成了！","空欄ひとつない完璧なデータセットが完成！","Birorta bo'sh katak yo'q mukammal ma'lumotlar to'plami tayyor!","Идеальный датасет — ни одного пропуска!")},
+  {id:"e9",x:960,y:610,risk:.07,pose:"x2_idle",cut:"cuts/e9_acc.webp",jk:"cuts/e9_jack.webp",
+   zone:L6("??? 대기석","??? Waiting seats","??? 候场席","??? 待機席","??? kutish joylari","??? Места ожидания"),
+   name:L6("미확인 신호 수신","Receive the unknown signal","接收未知信号","未確認信号の受信","Noma'lum signalni qabul qilish","Принять неизвестный сигнал"),
+   acc:L6("정전! 어둠 속에 하얀 눈 여섯 개만 반짝인다…","Blackout! Only six white eyes glint in the dark…","停电了！黑暗中只有六只白色的眼睛在闪烁……","停電！暗闇に白い目が六つだけ光っている…","Chiroq o'chdi! Qorong'ida faqat oltita oq ko'z yaltirayapti…","Блэкаут! В темноте светятся только шесть белых глаз…"),
+   jack:L6("신호 해독 성공 — ‘곧 새 식구가 옵니다’","Signal decoded — ‘New members are coming soon’","信号解读成功——“新成员即将到来”","信号解読成功——「もうすぐ新しい仲間が来ます」","Signal ochildi — «Tez orada yangi a'zolar keladi»","Сигнал расшифрован: «Скоро придут новые участники»")}
+);
+// redrawn comic cuts for the original six experiments (whole crew now appears)
+[["e1","cuts/e1_acc.webp"],["e2","cuts/e2_acc.webp"],["e3","cuts/e3_acc.webp"],["e4","cuts/e4_acc.webp"],["e5","cuts/e5_acc.webp"],["e6","cuts/e6_acc.webp"]].forEach(([id,c])=>{ const e=EVENTS.find(x=>x.id===id); e.cut=c; e.jk="cuts/jack_all.webp"; });
+// new map coordinates for the original experiments (1F was redrawn smaller)
+Object.assign(EVENTS.find(e=>e.id==="e1"),{x:180,y:240}); Object.assign(EVENTS.find(e=>e.id==="e2"),{x:510,y:180});
+Object.assign(EVENTS.find(e=>e.id==="e3"),{x:800,y:190}); Object.assign(EVENTS.find(e=>e.id==="e4"),{x:150,y:400});
+Object.assign(EVENTS.find(e=>e.id==="e5"),{x:1040,y:390}); Object.assign(EVENTS.find(e=>e.id==="e6"),{x:560,y:420});
+
+Object.assign(UI,{
+  lead:L6("하얀 연구소에 온 걸 환영한다. 오늘은 인턴 <b>시아</b>와 <b>모아</b>가 안내를 맡았다. 걸어 다니며 식구들을 <b>눌러서</b> 말을 걸고, 아래 <b>실험 콘솔</b>에서 실험을 일으켜 봐라. 지하 2층 체력단련실에서는 <b>필살기 대회</b>가 열린다.",
+    "Welcome to the white lab. Today interns <b>Sia</b> and <b>Moa</b> are your guides. Walk around, <b>tap</b> the crew to talk, and start experiments from the <b>console</b> below. Down in the B2 gym, a <b>special-move tournament</b> is on.",
+    "欢迎来到白色研究所。今天由实习生 <b>Sia</b> 和 <b>Moa</b> 负责导览。四处走走，<b>点一下</b>成员和他们聊聊，也可以在下方的<b>实验控制台</b>发起实验。地下2层的体能训练室正在举办<b>必杀技大赛</b>。",
+    "白い研究所へようこそ。今日はインターンの<b>シア</b>と<b>モア</b>が案内役だ。歩き回ってメンバーを<b>タップ</b>して話しかけ、下の<b>実験コンソール</b>から実験を起こしてみろ。地下2階のトレーニング室では<b>必殺技大会</b>が開かれている。",
+    "Oq laboratoriyaga xush kelibsiz. Bugun sizga amaliyotchilar <b>Sia</b> va <b>Moa</b> yo'l ko'rsatadi. Aylanib chiqing, a'zolarni <b>bosib</b> gaplashing va pastdagi <b>tajriba pultidan</b> tajriba boshlang. B2 sport zalida <b>maxsus zarbalar turniri</b> bo'lyapti.",
+    "Добро пожаловать в белую лабораторию. Сегодня вас ведут стажёры <b>Сия</b> и <b>Моа</b>. Гуляйте, <b>нажимайте</b> на участников, чтобы поговорить, и запускайте эксперименты с <b>пульта</b> ниже. А в спортзале на B2 идёт <b>турнир суперприёмов</b>."),
+  wel_h:L6("어서 오세요, 휴먼!","Welcome, human!","欢迎光临，人类！","ようこそ、ヒューマン！","Xush kelibsiz, inson!","Добро пожаловать, человек!"),
+  wel_b:L6("처음이라면 인턴에게 안내를 받아 보세요. <b>시아</b>는 1층 연구 구역을, <b>모아</b>는 층마다 무엇이 있는지 알려 줍니다. 노란 안내판 <b>박사 소개</b>와 <b>★ 박사 연구실적</b>도 눌러 볼 수 있어요.",
+    "First time? Let an intern guide you. <b>Sia</b> shows the 1F research zones; <b>Moa</b> explains what's on each floor. You can also open the yellow signs <b>About the Doctor</b> and <b>★ Research record</b>.",
+    "第一次来？让实习生带你参观吧。<b>Sia</b> 介绍1楼研究区，<b>Moa</b> 讲解每层楼有什么。也可以点开黄色指示牌<b>博士介绍</b>和<b>★ 研究成果</b>。",
+    "初めてならインターンに案内してもらおう。<b>シア</b>は1階の研究エリアを、<b>モア</b>は各フロアに何があるかを教えてくれる。黄色い案内板<b>博士の紹介</b>と<b>★ 研究実績</b>も開ける。",
+    "Birinchi marta keldingizmi? Amaliyotchi sizga yo'l ko'rsatsin. <b>Sia</b> 1-qavat tadqiqot hududlarini, <b>Moa</b> esa har bir qavatda nima borligini tanishtiradi. Sariq lavhalar — <b>Doktor haqida</b> va <b>★ Ilmiy ishlar</b>ni ham ochish mumkin.",
+    "Впервые здесь? Пусть вас проведёт стажёр. <b>Сия</b> покажет исследовательские зоны 1-го этажа, <b>Моа</b> расскажет, что есть на каждом этаже. Жёлтые таблички <b>О Докторе</b> и <b>★ Научные работы</b> тоже открываются."),
+  work_sia:L6("「{n}」 정리하고 있어요","Sorting “{n}”","正在整理「{n}」","「{n}」を整理しています","«{n}»ni tartiblayapman","Разбираю «{n}»"),
+  work_moa:L6("「{n}」 기록 모으는 중이에요!","Collecting records for “{n}”!","正在收集「{n}」的记录！","「{n}」の記録を集めてます！","«{n}» yozuvlarini yig'yapman!","Собираю записи по «{n}»!"),
+  tour_sia:L6("🧹 시아의 1층 안내","🧹 Sia's 1F tour","🧹 Sia 的1楼导览","🧹 シアの1階案内","🧹 Sianing 1-qavat sayohati","🧹 Экскурсия Сии по 1-му этажу"),
+  tour_moa:L6("🍵 모아의 층별 안내","🍵 Moa's floor tour","🍵 Moa 的楼层导览","🍵 モアのフロア案内","🍵 Moaning qavatlar sayohati","🍵 Экскурсия Моа по этажам"),
+  tour_end:L6("안내 끝내기","End tour","结束导览","案内を終える","Sayohatni tugatish","Завершить экскурсию"),
+  tour_next:L6("다음 장소 ▶","Next stop ▶","下一站 ▶","次の場所へ ▶","Keyingi joy ▶","Дальше ▶"),
+  tour_step:L6("안내 {i} / {n}","Tour {i} / {n}","导览 {i} / {n}","案内 {i} / {n}","Sayohat {i} / {n}","Экскурсия {i} / {n}"),
+  tour_h:L6("인턴이 연구실을 안내해 드려요","Let an intern show you around","让实习生带你参观研究室","インターンが研究室をご案内します","Amaliyotchi sizga laboratoriyani ko'rsatadi","Стажёр проведёт вас по лаборатории"),
+  tour_desc:L6("시아는 1층 연구 구역을 차분하게, 모아는 층마다 무엇이 있는지 상냥하게 소개해요. 안내하는 동안 따라 걸으면 돼요.","Sia calmly introduces the 1F research zones; Moa kindly explains what's on each floor. Just walk along while they guide you.","Sia 会沉稳地介绍1楼的研究区，Moa 会亲切地讲解每层楼有什么。导览时跟着走就好。","シアは1階の研究エリアを落ち着いて、モアは各フロアに何があるかをやさしく紹介します。案内の間はついて歩くだけでOKです。","Sia 1-qavatdagi tadqiqot hududlarini xotirjam tanishtiradi, Moa esa har bir qavatda nima borligini mehr bilan tushuntiradi. Ular yo'l ko'rsatayotganda ortidan yuring.","Сия спокойно расскажет об исследовательских зонах 1-го этажа, а Моа доброжелательно объяснит, что есть на каждом этаже. Просто идите следом."),
+  sign_lounge:L6("인턴 라운지","Intern Lounge","实习生休息区","インターンラウンジ","Amaliyotchilar xonasi","Лаунж стажёров"),
+  sign_xs:L6("??? 대기석","??? Waiting seats","??? 候场席","??? 待機席","??? kutish joylari","??? Места ожидания"),
+  xs_h:L6("아직 이름이 없는 식구들","Members without names—yet","还没有名字的成员","まだ名前のないメンバー","Hali ismi yo'q a'zolar","Участники, у которых пока нет имён"),
+  xs_desc:L6("No.007 · No.008 · No.009. 언젠가 연구실에 정식으로 들어올 식구들의 자리예요. 지금은 실루엣으로만 만날 수 있어요.","No.007 · No.008 · No.009. Seats for members who'll officially join the lab someday. For now you can only meet their silhouettes.","No.007 · No.008 · No.009。这是将来正式加入研究室的成员的位置。现在只能见到他们的剪影。","No.007・No.008・No.009。いつか研究室に正式に加わるメンバーの席です。今はシルエットでしか会えません。","No.007 · No.008 · No.009. Bir kun laboratoriyaga rasman qo'shiladigan a'zolar joyi. Hozircha ularni faqat siluet sifatida ko'rasiz.","No.007 · No.008 · No.009. Места для тех, кто однажды официально войдёт в лабораторию. Пока их можно увидеть только силуэтами."),
+  lounge_h:L6("인턴 라운지 · 차와 화분","Intern lounge · tea and plants","实习生休息区 · 茶与花草","インターンラウンジ・お茶と植木鉢","Amaliyotchilar xonasi · choy va gullar","Лаунж стажёров · чай и цветы"),
+  sp_wash:L6("데이터 세척장","Data Wash Area","数据清洗区","データ洗浄場","Ma'lumot yuvish joyi","Мойка данных"),
+  idle_sia:L6("1층 안내는 저에게 맡겨 주세요","Leave the 1F tour to me","1楼导览交给我吧","1階の案内はお任せください","1-qavat sayohatini menga topshiring","Экскурсию по 1-му этажу доверьте мне"),
+  idle_moa:L6("차 한 잔 하실래요?~","Fancy some tea?~","要喝杯茶吗~","お茶はいかが〜？","Choy ichasizmi?~","Чайку?~"),
+  tour_btn:L6("🙋 인턴 안내","🙋 Intern tour","🙋 实习生导览","🙋 インターン案内","🙋 Amaliyotchi gid","🙋 Экскурсия"),
+  // B2 gym
+  b2_name:L6("지하 2층 · 체력단련실","Basement 2 · Gym","地下2层 · 体能训练室","地下2階・トレーニング室","Yerto'la 2 · Sport zali","Подвал 2 · Спортзал"),
+  sign_ring:L6("필살기 링","Special-Move Ring","必杀技擂台","必殺技リング","Maxsus zarba ringi","Ринг суперприёмов"),
+  sign_board:L6("전적판","Record board","战绩板","戦績ボード","Natijalar taxtasi","Табло результатов"),
+  sign_bag:L6("샌드백","Punching bag","沙袋","サンドバッグ","Boks qopi","Боксёрская груша"),
+  gym_h:L6("지하 2층 체력단련실 · 필살기 대회","B2 Gym · Special-Move Tournament","地下2层体能训练室 · 必杀技大赛","地下2階トレーニング室・必殺技大会","B2 sport zali · maxsus zarbalar turniri","Спортзал B2 · турнир суперприёмов"),
+  gym_desc:L6("연구실 식구들이 연구에서 나온 필살기로 겨루는 곳. 대진을 고르면 심판이 시작 신호를 보내고, 주판봇이 점수를 센다. 관중석의 실루엣 식구들도 응원한다.","Where the lab crew battle with special moves born from their research. Pick a match: the referee signals the start and AbaBot keeps score. The silhouette members cheer from the stands.","研究室成员用研究中诞生的必杀技一决高下的地方。选择对阵后，裁判发出开始信号，算盘宝负责计分。看台上的剪影成员也会加油。","研究室のメンバーが研究から生まれた必殺技で競う場所。対戦カードを選ぶと審判が開始の合図を送り、アバボットが得点を数える。観客席のシルエットのメンバーも応援する。","Laboratoriya a'zolari tadqiqotdan tug'ilgan maxsus zarbalar bilan bellashadigan joy. Juftlikni tanlang: hakam boshlanish ishorasini beradi, AbaBot ochko sanaydi. Tribunadagi siluet a'zolar ham qo'llab-quvvatlaydi.","Здесь команда лаборатории сражается суперприёмами, рождёнными в исследованиях. Выберите пару: рефери даст сигнал, АбаБот ведёт счёт, а силуэты на трибунах болеют."),
+  gym_pick:L6("대진 고르기","Choose a match","选择对阵","対戦カードを選ぶ","Juftlikni tanlang","Выберите поединок"),
+  gym_rand:L6("🎲 랜덤 대진","🎲 Random match","🎲 随机对阵","🎲 ランダム対戦","🎲 Tasodifiy jang","🎲 Случайный бой"),
+  gym_ref:L6("심판 {n}","Referee: {n}","裁判 {n}","審判 {n}","Hakam: {n}","Рефери: {n}"),
+  gym_busy:L6("지금 경기 중이에요. 끝날 때까지 기다려 주세요.","A match is on. Please wait until it ends.","比赛正在进行，请等结束。","いま試合中です。終わるまでお待ちください。","Hozir jang ketmoqda. Tugashini kuting.","Идёт бой. Подождите, пока он закончится."),
+  gym_btn:L6("🥊 필살기 대회","🥊 Tournament","🥊 必杀技大赛","🥊 必殺技大会","🥊 Turnir","🥊 Турнир"),
+  gym_moves:L6("필살기","Special moves","必杀技","必殺技","Maxsus zarbalar","Суперприёмы"),
+  gym_f1:L6("체력단련실 대회는 지하 2층에서 열려요. 엘리베이터를 타세요.","The tournament is held in the B2 gym. Take the elevator.","大赛在地下2层的体能训练室举行。请乘电梯。","大会は地下2階のトレーニング室で開かれます。エレベーターへどうぞ。","Turnir B2 sport zalida o'tadi. Liftga chiqing.","Турнир проходит в спортзале на B2. Садитесь в лифт."),
+  f_win:L6("{n} 승리!","{n} wins!","{n} 获胜！","{n}の勝利！","{n} g'olib!","Победа: {n}!"),
+  rec_h:L6("필살기 대회 전적","Tournament record","必杀技大赛战绩","必殺技大会の戦績","Turnir natijalari","Результаты турнира"),
+  rec_meta:L6("이 브라우저에서 본 경기 {n}판","{n} matches watched in this browser","在本浏览器观看了 {n} 场","このブラウザで観た試合 {n}戦","Shu brauzerda {n} ta jang ko'rildi","Просмотрено боёв в этом браузере: {n}"),
+  rec_wl:L6("{w}승 {l}패","{w}W {l}L","{w}胜 {l}负","{w}勝 {l}敗","{w} g'alaba, {l} mag'lubiyat","{w} побед, {l} поражений"),
+  bag_hit:L6("퍽! 샌드백이 크게 흔들린다.","Thwack! The bag swings hard.","砰！沙袋剧烈摇晃。","ドスッ！サンドバッグが大きく揺れる。","Gup! Qop qattiq chayqaldi.","Бум! Груша сильно качается."),
+  bag_desc:L6("필살기 연습용 샌드백이에요. 누를 때마다 한 번씩 쳐요.","A bag for practicing special moves. Each tap lands one hit.","练习必杀技用的沙袋。每点一下打一拳。","必殺技練習用のサンドバッグ。押すたびに一発打ちます。","Maxsus zarbalarni mashq qilish uchun qop. Har bosishda bir zarba.","Груша для отработки суперприёмов. Каждое нажатие — один удар."),
+  bag_n:L6("누적 {n}회","{n} hits total","累计 {n} 次","累計{n}回","Jami {n} marta","Всего ударов: {n}"),
+  bag_punch:L6("🥊 한 번 치기","🥊 Punch once","🥊 打一拳","🥊 一発打つ","🥊 Bir marta urish","🥊 Ударить")
+});
+const MOVE_NAME={
+  svd_chop:L6("특이값 분해 참","SVD Chop","奇异值分解斩","特異値分解チョップ","Singular qiymat zarbasi","Удар SVD"),
+  broadcast_wave:L6("브로드캐스트 웨이브","Broadcast Wave","广播波","ブロードキャスト・ウェーブ","Broadcast to'lqini","Волна бродкастинга"),
+  backprop_counter:L6("역전파 카운터","Backprop Counter","反向传播反击","逆伝播カウンター","Teskari tarqalish qarshi zarbasi","Контрудар обратного распространения"),
+  onehot_barrage:L6("원-핫 연타","One-Hot Barrage","独热连打","ワンホット連打","One-hot zarbalar seriyasi","Шквал one-hot"),
+  gd_kick:L6("경사하강 킥","Gradient-Descent Kick","梯度下降踢","勾配降下キック","Gradient tushish tepkisi","Удар градиентного спуска"),
+  missing_value_mop:L6("결측치 걸레질","Missing-Value Mop","缺失值拖地","欠損値モップがけ","Yo'q qiymat shvabrasi","Швабра пропусков"),
+  normalize_tray:L6("정규화 쟁반 돌리기","Normalization Tray Spin","归一化托盘旋转","正規化お盆回し","Normallashtirish patnisi","Поднос нормализации"),
+  outlier_duster:L6("이상치 먼지털이","Outlier Duster","异常值掸子","外れ値はたき","Chetlanma qiymat supurgisi","Метёлка выбросов"),
+  batch_serving:L6("배치 서빙","Batch Serving","批量上茶","バッチ・サービング","Paketli xizmat","Пакетная подача")
+};
+FLOORS.find(f=>f.id==="B2").name=UI.b2_name; FLOORS.find(f=>f.id==="B2").open=true;
+
+/* tours: each intern guides a different route. stop = [x, y, pose, expression, line] */
+const TOURS={
+  sia:[
+    [560,560,"sia_wave","E13",L6("인턴 시아입니다. 1층 연구 구역을 순서대로 안내해 드릴게요. 천천히 따라오세요.","I'm Sia, the intern. I'll guide you through the 1F research zones in order. Please follow along slowly.","我是实习生 Sia。我将按顺序为您介绍1楼的研究区。请慢慢跟上。","インターンのシアです。1階の研究エリアを順番にご案内します。ゆっくりついてきてください。","Men amaliyotchi Siaman. Sizga 1-qavatdagi tadqiqot hududlarini tartib bilan ko'rsataman. Sekin ortimdan yuring.","Я Сия, стажёр. Проведу вас по исследовательским зонам 1-го этажа по порядку. Идите за мной не спеша.")],
+    [250,320,"sia_idle","E08",L6("여기는 초파리 뇌 연구 구역이에요. 초파리 연구원님이 뇌 홀로그램으로 신경 회로를 살펴보세요. 홀로그램 출력은… 올리지 않는 게 좋아요.","This is the Fruit-Fly Brain zone. The Fruit-Fly Researcher studies neural circuits with the brain hologram. The hologram output… is best left low.","这里是果蝇脑研究区。果蝇研究员用大脑全息影像观察神经回路。全息输出……最好别调高。","ここはショウジョウバエ脳研究エリアです。ショウジョウバエ研究員さんが脳ホログラムで神経回路を調べています。ホログラムの出力は…上げないほうがいいです。","Bu meva pashshasi miyasi tadqiqoti hududi. Meva pashshasi tadqiqotchisi miya gologrammasi orqali neyron zanjirlarni o'rganadi. Gologramma quvvatini… oshirmagan ma'qul.","Это зона «Мозг дрозофилы». Исследователь-дрозофила изучает нейронные цепи по голограмме мозга. Мощность голограммы… лучше не повышать.")],
+    [430,260,"sia_idle","E07",L6("비즈니스 AI 구역입니다. 주판봇이 차트와 매출 기록을 계산해요. 숫자가 맞으면 춤을 춰요. 정말이에요.","This is the Business AI zone. AbaBot calculates charts and sales records. When the numbers add up, it dances. Really.","这里是商业 AI 区。算盘宝在计算图表和销售记录。数字对上了它就会跳舞。真的。","ビジネスAIエリアです。アバボットがチャートと売上記録を計算しています。数字が合うと踊ります。本当です。","Bu biznes AI hududi. AbaBot grafiklar va savdo yozuvlarini hisoblaydi. Raqamlar to'g'ri chiqsa, raqsga tushadi. Rostdan.","Зона бизнес-ИИ. АбаБот считает графики и записи продаж. Когда цифры сходятся, он танцует. Правда.")],
+    [720,270,"sia_wave","E08",L6("제조·로봇 AI 구역이에요. 하루 선배가 코드와 자동화를 만들어요. 공구는 제가 매일 제자리에 정리해 둬요.","This is the Manufacturing & Robot AI zone. Haru builds code and automation here. I put the tools back in place every day.","这里是制造·机器人 AI 区。Haru 前辈在这里做代码和自动化。工具我每天都会放回原位。","製造・ロボットAIエリアです。ハル先輩がコードと自動化を作っています。工具は毎日わたしが元の場所に片付けています。","Bu ishlab chiqarish va robot AI hududi. Haru bu yerda kod va avtomatlashtirish yaratadi. Asboblarni har kuni joyiga qo'yib qo'yaman.","Зона производства и роботов. Здесь Хару пишет код и делает автоматизацию. Инструменты я каждый день раскладываю по местам.")],
+    [470,500,"sia_idle","E07",L6("가운데는 중앙 허브예요. 박사님이 원리를 설명하고 마지막 검수를 하세요. 실험 콘솔에서 고른 실험도 여기서 시작돼요.","In the middle is the Central Hub. The Doctor explains principles and does the final review. Experiments you choose on the console start from here too.","中间是中央枢纽。博士在这里讲解原理并做最终审核。在实验控制台选择的实验也从这里开始。","真ん中は中央ハブです。博士が原理を説明して最終チェックをします。実験コンソールで選んだ実験もここから始まります。","O'rtada markaziy xab. Doktor bu yerda tamoyillarni tushuntiradi va yakuniy tekshiruvni o'tkazadi. Pultda tanlangan tajribalar ham shu yerdan boshlanadi.","В центре — Центральный узел. Доктор объясняет принципы и проводит финальную проверку. Отсюда же стартуют эксперименты с пульта.")],
+    [300,440,"sia_clean","E10",L6("의뢰 핀보드에는 다음에 만들 작업 {todo}건이 붙어 있어요. 제가 날짜순으로 맞춰 뒀어요.","The request pinboard holds the {todo} jobs we'll build next. I've lined them up by date.","委托公告板上贴着接下来要做的 {todo} 项工作。我按日期排好了。","依頼ピンボードには次に作る作業が{todo}件貼ってあります。日付順にそろえておきました。","Buyurtmalar doskasida keyingi {todo} ta ish ilingan. Ularni sana bo'yicha tartiblab qo'ydim.","На доске заявок — {todo} задач, которые мы сделаем следующими. Я выстроила их по датам.")],
+    [880,450,"sia_tray","E16",L6("데이터 코어에는 완성된 결과물 {done}건이 보관돼 있어요. 먼지 하나 없이요.","The Data Core stores {done} finished results. Without a speck of dust.","数据核心里保存着 {done} 项完成的成果。一尘不染。","データコアには完成した成果物が{done}件保管されています。ほこりひとつなく。","Ma'lumotlar yadrosida {done} ta tayyor natija saqlanadi. Bir zarra changsiz.","В Ядре данных хранятся {done} готовых результатов. Без единой пылинки.")],
+    [560,580,"sia_wave","E01",L6("1층 안내는 여기까지예요. 다른 층이 궁금하시면 모아에게 물어보세요. …좋은 하루 되세요.","That's the end of the 1F tour. If you're curious about other floors, ask Moa. …Have a good day.","1楼导览就到这里。想了解其他楼层的话，请问 Moa。……祝您愉快。","1階のご案内はここまでです。他の階が気になったらモアに聞いてください。…よい一日を。","1-qavat sayohati shu yerda tugadi. Boshqa qavatlar qiziq bo'lsa, Moadan so'rang. …Kuningiz xayrli o'tsin.","Экскурсия по 1-му этажу окончена. Про другие этажи спросите у Моа. …Хорошего дня.")]
+  ],
+  moa:[
+    [300,610,"moa_wave","E13",L6("안녕하세요~ 인턴 모아예요! 이 건물에 어떤 층이 있는지 차근차근 알려 드릴게요. 먼저 여기, 인턴 라운지예요. 피곤하면 언제든 차 마시러 오세요~","Hello~ I'm Moa, the intern! I'll walk you through every floor in this building, step by step. First, this is the Intern Lounge. Come by for tea whenever you're tired~","你好~我是实习生 Moa！我来一步步告诉你这栋楼有哪些楼层。首先，这里是实习生休息区。累了随时来喝茶哦~","こんにちは〜インターンのモアです！この建物にどんなフロアがあるか、順番にお伝えしますね。まずここ、インターンラウンジです。疲れたらいつでもお茶を飲みに来てください〜","Salom~ Men amaliyotchi Moaman! Bu binoda qanday qavatlar borligini birma-bir aytib beraman. Avval bu yer — amaliyotchilar xonasi. Charchasangiz, istalgan payt choy ichgani keling~","Здравствуйте~ Я Моа, стажёр! Шаг за шагом расскажу, какие этажи есть в этом здании. Сначала — наш лаунж стажёров. Устанете — заходите на чай~")],
+    [500,650,"moa_wave","E08",L6("여기는 박사님 소개 안내판이에요. 마스코트들이 숫자로 소개하는 버전도 있어요. 옆 책장에는 박사님 연구실적이 모여 있고요!","This is the Doctor's profile sign. There's also a version where the mascots introduce him in numbers. And the bookcase next to it collects his research record!","这是博士介绍牌。还有吉祥物用数字介绍的版本哦。旁边的书架里收集着博士的研究成果！","ここは博士の紹介案内板です。マスコットたちが数字で紹介するバージョンもあります。隣の本棚には博士の研究実績が集まっていますよ！","Bu Doktor haqidagi lavha. Maskotlar uni raqamlar bilan tanishtiradigan versiyasi ham bor. Yonidagi javonda esa Doktorning ilmiy ishlari jamlangan!","Это табличка «О Докторе». Есть версия, где маскоты представляют его в цифрах. А в шкафу рядом собраны его научные работы!")],
+    [470,500,"moa_idle","E07",L6("실험은 아래 실험 콘솔에서 골라요. 출력을 올릴수록 사고도 대박도 잘 나요. 사고가 나도 3초면 정상으로 돌아오니 걱정 마세요~","Pick experiments on the console below. The higher the power, the more accidents and jackpots. Even if something goes wrong, it's back to normal in 3 seconds, so don't worry~","实验在下方的实验控制台选择。输出越高，事故和大成功都越容易发生。就算出了事故，3秒就恢复正常，别担心~","実験は下の実験コンソールで選びます。出力を上げるほど事故も大当たりも起きやすいです。事故が起きても3秒で元に戻るので心配いりません〜","Tajribalarni pastdagi pultdan tanlaysiz. Quvvat qancha yuqori bo'lsa, avariya ham, omad ham shuncha ko'p. Avariya bo'lsa ham 3 soniyada me'yorga qaytadi, xavotir olmang~","Эксперименты выбирают на пульте внизу. Чем выше мощность, тем больше аварий и джекпотов. Даже если что-то случится, через 3 секунды всё вернётся в норму~")],
+    [990,215,"moa_wave","E08",L6("이 엘리베이터로 아래층에 갈 수 있어요. 지하 1층은 서버실이에요. 그동안 만든 결과물이 랙 10개에 나뉘어 있어요.","This elevator takes you downstairs. B1 is the server room—everything we've made is stored across 10 racks.","乘这部电梯可以去楼下。地下1层是服务器机房，至今做的成果分存在10个机架里。","このエレベーターで下の階に行けます。地下1階はサーバールーム。これまでの成果物が10台のラックに分かれて入っています。","Bu lift bilan pastki qavatlarga tushish mumkin. B1 — server xonasi, shu paytgacha yaratilgan barcha natijalar 10 ta javonda saqlanadi.","На этом лифте можно спуститься вниз. B1 — серверная: всё, что мы сделали, хранится в 10 стойках.")],
+    [990,215,"moa_cheer","E12",L6("지하 2층은 체력단련실이에요! 식구들이 연구에서 나온 필살기로 겨뤄요. 시아 선배가 심판일 땐 엄청 엄격해요. 저는 응원 담당!","B2 is the gym! The crew battle with special moves born from research. When Sia referees, she's super strict. I'm on cheering duty!","地下2层是体能训练室！成员们用研究中诞生的必杀技一决胜负。Sia 前辈当裁判时超级严格。我负责加油！","地下2階はトレーニング室です！みんなが研究から生まれた必殺技で競います。シア先輩が審判のときはすごく厳しいんですよ。わたしは応援担当！","B2 — sport zali! A'zolar tadqiqotdan tug'ilgan maxsus zarbalar bilan bellashadi. Sia hakam bo'lganda juda qattiqqo'l. Men esa qo'llab-quvvatlayman!","B2 — спортзал! Команда сражается суперприёмами из исследований. Когда судит Сия, она очень строгая. А я — группа поддержки!")],
+    [930,575,"moa_idle","E15",L6("저분들은… No.007부터 009까지, 아직 이름이 없는 식구들이에요. 저도 잘 몰라요! 그래도 인사하면 꾸벅 해 줘요.","Those three… are No.007 to 009, members who don't have names yet. I don't know much either! But if you say hi, they bow back.","那几位……是 No.007 到 009，还没有名字的成员。我也不太清楚！不过打招呼的话，他们会鞠躬回礼哦。","あの方たちは…No.007から009、まだ名前のないメンバーです。わたしもよく知らないんです！でも挨拶するとぺこりと返してくれますよ。","Ana u uchtasi… No.007 dan 009 gacha, hali ismi yo'q a'zolar. Men ham ko'p narsa bilmayman! Lekin salom bersangiz, ta'zim qilib javob berishadi.","Эти трое… No.007–009, участники, у которых пока нет имён. Я и сама мало знаю! Но если поздороваться, они кланяются в ответ.")],
+    [620,660,"moa_clap","E01",L6("나가는 문은 아래쪽 가운데예요. 안내는 여기까지! 또 놀러 오세요~ 다음엔 따뜻한 차 준비해 둘게요!","The exit is at the bottom center. That's the end of my tour! Come visit again~ I'll have warm tea ready next time!","出口在下方中间。导览就到这里！欢迎再来玩~下次我会准备好热茶！","出口は下の真ん中です。ご案内はここまで！また遊びに来てくださいね〜次は温かいお茶を用意しておきます！","Chiqish pastki o'rtada. Sayohat shu yerda tugadi! Yana keling~ Keyingi safar issiq choy tayyorlab qo'yaman!","Выход — внизу по центру. На этом экскурсия всё! Приходите ещё~ В следующий раз приготовлю тёплый чай!")]
+  ]
+};
+
 let lang="ko";
 try{ const h=location.hash.slice(1); const s=localStorage.getItem("alt_lang"); if(LANGS.some(l=>l[0]===h)) lang=h; else if(s&&LANGS.some(l=>l[0]===s)) lang=s; }catch(e){}
 const L=o=>o==null?"":(typeof o==="object"&&!Array.isArray(o)? (o[lang]??o.ko) : o);
@@ -620,6 +864,8 @@ function pjOwner(s){
   s=String(s||"").trim().toLowerCase();
   if(/조수|조교|asst|assistant/.test(s)) return "asst";
   if(/초파리|fly/.test(s)) return "fly";
+  if(/시아|sia/.test(s)) return "sia";
+  if(/모아|moa/.test(s)) return "moa";
   if(/robo|로보|money|주판|aba|算盘|アバ|аба/.test(s)) return "robo";
   return "doc";
 }
@@ -689,32 +935,42 @@ function mkScene(o){
   o.grid=Array.from({length:o.gr},(_,j)=>Array.from({length:o.gc},(_,i)=>o.walkPt(i*CELL+CELL/2,j*CELL+CELL/2)));
   return o;
 }
-const POS={doc:[478,474],asst:[928,372],fly:[262,330],robo:[690,312]};
-const KIOSK={x:935,y:712,w:118,h:112};
-const ELEV_F1={x:890,doorY:880,top:768};      // elevator in the hall under the lab
+/* 1F was redrawn in 2026-11 as a compact white-toon lab (1120×720) — the old 1376×1100 pixel map felt too big.
+   B1 keeps its pixel night look; B2 is the new gym. */
+const POS={doc:[690,480],asst:[800,282],fly:[190,300],robo:[520,282],sia:[110,472],moa:[262,640],x1:[905,650],x2:[965,652],x3:[1028,650]};
+const KIOSK={x:420,y:648,w:84,h:96};
+const ELEV_F1={x:1040,doorY:130,top:10};      // elevator on the 1F back wall (top right)
 const ELEV_B1={x:180,doorY:176,top:56};       // elevator on the server room's back wall
+const ELEV_B2={x:96,doorY:150,top:30};        // elevator on the gym's back wall (top left)
 const RING={cx:700,cy:520,rx:430,ry:250};
 const RACKS=Array.from({length:10},(_,i)=>{ const a=-Math.PI/2+i*Math.PI*2/10; return {i,x:Math.round(RING.cx+Math.cos(a)*RING.rx),y:Math.round(RING.cy+Math.sin(a)*RING.ry)}; });
 const RACK_COL=["#4de0d0","#d0449a","#e8a24b","#b59bff","#62d39b","#5aa8ff","#ff6b6b","#2fc7b0","#ff8ad6","#c6e86a"];
 const PORTAL={x:1160,y:212};
+// gym ring (world coordinates)
+const GRING={x0:340,y0:300,x1:780,y1:560};
 
 const SCENES={
-  F1:mkScene({id:"F1",w:1376,h:1100,
-    walk:[[385,290,965,722],[135,292,385,336],[25,556,385,722],[965,582,1352,722],[616,700,764,812],[402,800,978,1074]],
-    block:[[598,382,782,502],[533,428,602,532],[752,332,808,408],[368,598,502,722],[543,642,582,704],[596,558,616,768],[764,558,784,768],[25,606,178,722],[1076,646,1212,722],[1212,628,1352,722],[868,278,902,314],[872,650,998,716],[812,768,968,888],[402,890,448,1012],[402,800,440,846],[940,1030,978,1074]],
+  F1:mkScene({id:"F1",w:1120,h:720,cs:.72,toon:true,
+    walk:[[16,168,1104,708]],
+    block:[[40,140,300,184],[150,232,212,270],[392,140,628,200],[692,140,900,196],[905,140,958,206],[40,380,250,424],[480,398,640,462],
+           [858,350,924,404],[930,358,982,398],[1008,346,1084,404],[118,588,222,634],[30,548,70,590],[292,548,332,590],[36,656,140,700],
+           [380,602,462,650],[636,604,744,644],[836,590,1100,708]],
     spots:[
-      {id:"docinfo",x:935,y:632,lab:()=>T("sp_docinfo"),r:[872,596,998,716],sign:()=>T("sign_doc"),sx:935,sy:592,hot:true},
-      {id:"research",x:436,y:584,lab:()=>T("sp_research"),r:[368,598,502,722],sign:()=>T("sign_res"),sx:436,sy:594,hot:true},
-      {id:"pin",x:205,y:572,lab:()=>T("sp_pin"),r:[25,345,385,556],sign:()=>T("sign_pin"),sx:138,sy:350},
-      {id:"z5",x:1110,y:604,lab:()=>T("sp_z5"),r:[985,345,1352,582],sign:()=>T("sign_z5"),sx:1150,sy:352},
-      {id:"z1",x:262,y:326,owner:"fly",lab:()=>zoneLabel(EVENTS[0]),r:[25,40,410,292]},
-      {id:"z2",x:690,y:306,owner:"robo",lab:()=>zoneLabel(EVENTS[1]),r:[530,30,845,292]},
-      {id:"z3",x:928,y:368,owner:"asst",lab:()=>zoneLabel(EVENTS[2]),r:[960,30,1352,336]},
-      {id:"z6",x:478,y:470,owner:"doc",lab:()=>zoneLabel(EVENTS[5]),r:[598,330,782,502]},
-      {id:"elev",x:890,y:926,lab:()=>T("sign_elev"),r:[812,768,968,900],sign:()=>"🛗 "+T("sign_elev"),sx:890,sy:770,hot:true},
-      {id:"exit",x:690,y:1040,lab:()=>T("sign_exit"),r:[630,1040,750,1100],sign:()=>T("sign_exit"),sx:690,sy:1092}
+      {id:"docinfo",x:420,y:672,lab:()=>T("sp_docinfo"),r:[372,548,468,660],sign:()=>T("sign_doc"),sx:420,sy:540,hot:true},
+      {id:"research",x:690,y:664,lab:()=>T("sp_research"),r:[630,540,750,648],sign:()=>T("sign_res"),sx:690,sy:548,hot:true},
+      {id:"pin",x:270,y:446,lab:()=>T("sp_pin"),r:[24,330,262,430],sign:()=>T("sign_pin"),sx:246,sy:346},
+      {id:"z5",x:960,y:444,lab:()=>T("sp_z5"),r:[840,330,1096,420],sign:()=>T("sign_z5"),sx:968,sy:338},
+      {id:"z1",x:190,y:326,owner:"fly",lab:()=>zoneLabel(EVENTS[0]),r:[24,140,340,310]},
+      {id:"z2",x:520,y:250,owner:"robo",lab:()=>zoneLabel(EVENTS[1]),r:[360,140,660,240]},
+      {id:"z3",x:800,y:250,owner:"asst",lab:()=>zoneLabel(EVENTS[2]),r:[680,140,960,240]},
+      {id:"z6",x:560,y:500,owner:"doc",lab:()=>zoneLabel(EVENTS[5]),r:[476,370,646,470]},
+      {id:"z4",x:150,y:500,owner:"sia",lab:()=>T("sp_wash"),r:[24,432,300,520]},
+      {id:"lounge",x:262,y:676,owner:"moa",lab:()=>T("sign_lounge"),r:[24,540,340,708],sign:()=>T("sign_lounge"),sx:180,sy:550},
+      {id:"xs",x:960,y:574,lab:()=>T("sign_xs"),r:[830,560,1100,708],sign:()=>T("sign_xs"),sx:968,sy:548},
+      {id:"elev",x:1040,y:188,lab:()=>T("sign_elev"),r:[976,8,1104,170],sign:()=>"🛗 "+T("sign_elev"),sx:1040,sy:52,hot:true},
+      {id:"exit",x:560,y:700,lab:()=>T("sign_exit"),r:[510,690,610,720],sign:()=>T("sign_exit"),sx:560,sy:716}
     ]}),
-  B1:mkScene({id:"B1",w:1376,h:900,
+  B1:mkScene({id:"B1",w:1376,h:900,cs:1,
     walk:[[44,196,1332,868]],
     block:[[640,486,760,548],[1046,170,1276,232]].concat(RACKS.map(r=>[r.x-40,r.y-30,r.x+40,r.y+6])),
     spots:[
@@ -722,10 +978,19 @@ const SCENES={
       {id:"core",x:700,y:592,lab:()=>T("core_sign"),r:[630,380,770,550],sign:()=>T("core_sign"),sx:700,sy:392},
       {id:"portal",x:1160,y:258,lab:()=>T("portal_sign"),r:[1050,20,1270,240],sign:()=>"⛔ "+T("portal_sign"),sx:1160,sy:26,hot:true}
     ].concat(RACKS.map(r=>({id:"rack"+r.i,rack:r.i,x:r.x,y:r.y+44,lab:()=>rackName(r.i),r:[r.x-40,r.y-160,r.x+40,r.y+8]})))
-  })
+  }),
+  B2:mkScene({id:"B2",w:1120,h:720,cs:.8,toon:true,
+    walk:[[20,186,1100,706]],
+    block:[[GRING.x0,GRING.y0-10,GRING.x1,GRING.y1+6],[210,140,880,256],[960,140,1060,250],[84,312,150,356],[84,452,150,496],[940,430,1090,520]],
+    spots:[
+      {id:"elev",x:96,y:206,lab:()=>T("sign_elev"),r:[30,0,170,180],sign:()=>"🛗 "+T("sign_elev"),sx:96,sy:46,hot:true},
+      {id:"ring",x:560,y:640,lab:()=>T("sign_ring"),r:[GRING.x0,GRING.y0-60,GRING.x1,GRING.y1+20],sign:()=>"🥊 "+T("sign_ring"),sx:560,sy:598,hot:true},
+      {id:"board",x:1010,y:290,lab:()=>T("sign_board"),r:[930,10,1100,270],sign:()=>T("sign_board"),sx:1015,sy:142},
+      {id:"bag",x:190,y:420,lab:()=>T("sign_bag"),r:[60,280,210,520],sign:()=>T("sign_bag"),sx:118,sy:286}
+    ]})
 };
 let SC=SCENES.F1;
-const allSpots=()=>SCENES.F1.spots.concat(SCENES.B1.spots);
+const allSpots=()=>SCENES.F1.spots.concat(SCENES.B1.spots,SCENES.B2.spots);
 const spotById=id=>allSpots().find(s=>s.id===id&&(SC.spots.includes(s)))||allSpots().find(s=>s.id===id);
 
 /* ---------- server room data (servers.csv, possibly from another repo) ---------- */
@@ -774,38 +1039,194 @@ const linkify=s=>esc(s).replace(/(https?:\/\/[^\s<]+)/g,u=>`<a href="${u}" targe
 
 /* ---------- elevator state ---------- */
 let elevDoor=0, elevForce=0, travelling=false;
-const elevOf=()=>SC.id==="F1"?ELEV_F1:ELEV_B1;
+const elevOf=()=>SC.id==="F1"?ELEV_F1:SC.id==="B2"?ELEV_B2:ELEV_B1;
 function elevNear(){ const e=elevOf(); return Math.abs(player.x-e.x)<110 && Math.abs(player.y-(e.doorY+50))<90; }
 
 /* ---------- pre-rendered backgrounds ---------- */
-let HALL=null, B1BG=null;
+let B1BG=null;
 function px(g,x,y,w,h,c){g.fillStyle=c;g.fillRect(x,y,w,h)}
-function buildHall(){
-  // hall occupies world x 380..1000, y 768..1100; drawn at 2x
-  const X=380,Y=768,W=620,H=332; const c=document.createElement("canvas"); c.width=W*2; c.height=H*2; const g=c.getContext("2d"); g.scale(2,2); g.translate(-X,-Y);
-  px(g,X,Y,W,H,"#1a1430");
-  for(let y=800;y<1076;y+=32)for(let x=400;x<980;x+=32){ px(g,x,y,32,32,((x+y)/32)%2?"#1d2a35":"#202f3b"); px(g,x,y,32,1,"#263847"); }
-  for(let y=768;y<800;y+=16)for(let x=616;x<764;x+=32){ px(g,x,y,32,16,((x/32+y/16)|0)%2?"#1d2a35":"#202f3b"); }
-  // walls
-  px(g,X,Y,236,32,"#2b2145"); px(g,764,Y,236,32,"#2b2145");
-  for(let x=X;x<1000;x+=24){ if(x>600&&x<764) continue; px(g,x,Y+15,22,1,"#241b3b"); }
-  px(g,X,800-4,236,4,"#3d3063"); px(g,764,800-4,236,4,"#3d3063");
-  px(g,X,Y,20,H,"#251c3d"); px(g,980,Y,20,H,"#251c3d"); px(g,400-3,800,3,276,"#3d3063"); px(g,980,800,3,276,"#3d3063");
-  px(g,X,1076,W,24,"#251c3d"); px(g,400,1076,580,3,"#3d3063");
-  // exit door on the bottom wall
-  px(g,640,1074,100,26,"#0e2a22"); px(g,644,1076,44,22,"#163d33"); px(g,692,1076,44,22,"#163d33"); px(g,688,1076,4,22,"#0b1f19");
-  // directory board
-  px(g,452,774,140,20,"#12101c"); px(g,452,774,140,1,"#4de0d0");
-  g.font="bold 11px 'IBM Plex Mono',monospace"; g.fillStyle="#4de0d0"; g.textAlign="center"; g.fillText("AHN LAB · 1F",522,788);
-  // bench + plants
-  px(g,404,892,40,118,"#4a3376"); px(g,404,892,40,8,"#5b3f8c"); px(g,408,904,32,1,"#3a285c");
-  const plant=(x,y)=>{ px(g,x+6,y+18,22,20,"#8b4a2b"); px(g,x+4,y+16,26,4,"#a35a35"); g.fillStyle="#3fa86b"; [[17,6,12],[9,12,9],[25,12,9],[17,-2,8]].forEach(([a,b,r])=>{g.beginPath();g.arc(x+a,y+b+4,r,0,7);g.fill()}); };
-  plant(404,802); plant(942,1032);
-  // floor arrow toward the elevator
-  g.fillStyle="rgba(232,162,75,.35)"; g.beginPath(); g.moveTo(870,964); g.lineTo(910,964); g.lineTo(890,944); g.fill(); px(g,884,964,12,22,"rgba(232,162,75,.35)");
-  for(let x=816;x<966;x+=12){ px(g,x,888,6,6,"#e8a24b"); px(g,x+6,888,6,6,"#1a1430"); }
-  HALL=c;
+/* ---------- white-toon drawing kit (1F lab, B2 gym) — ink outlines, flat pastels, hard offset shadows ---------- */
+const INK="#1f2224", PAPER="#fbfaf7";
+const TC={mint:"#d9f2e4",mint2:"#1f9e66",sky:"#dfeaf8",sky2:"#2f6fbf",sun:"#fbefcf",sun2:"#e0a92a",pink:"#f9e1ea",pink2:"#d9668f",lilac:"#ebe5f7",lilac2:"#7a5cc4",peach:"#fdf0e2",gray:"#eceaf0",wood:"#e9d3b0",wood2:"#c79a5e"};
+function tbox(g,x,y,w,h,fill,o={}){
+  const r=o.r??6, sh=o.sh??4, lw=o.lw??2.5;
+  if(sh){ g.fillStyle=INK; rr(g,x+sh,y+sh,w,h,r); g.fill(); }
+  g.fillStyle=fill; rr(g,x,y,w,h,r); g.fill();
+  if(lw){ g.lineWidth=lw; g.strokeStyle=INK; g.stroke(); }
 }
+// 3/4 furniture: top face + front face; footprint [x,y,w,h] on the floor, height d
+function tfurn(g,x,y,w,h,d,top,front){
+  g.fillStyle="rgba(31,34,36,.12)"; rr(g,x+6,y+6,w,h,6); g.fill();
+  g.fillStyle=front; g.fillRect(x,y+h-d,w,d); g.lineWidth=2.5; g.strokeStyle=INK; g.strokeRect(x,y+h-d,w,d);
+  g.fillStyle=top; g.fillRect(x,y-d,w,h); g.strokeRect(x,y-d,w,h);
+}
+function tline(g,pts,lw=2.5,c=INK){ g.lineWidth=lw; g.strokeStyle=c; g.beginPath(); pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y)); g.stroke(); }
+function tcirc(g,x,y,rx,ry,fill,lw=2.5){ g.fillStyle=fill; g.beginPath(); g.ellipse(x,y,rx,ry,0,0,7); g.fill(); if(lw){g.lineWidth=lw; g.strokeStyle=INK; g.stroke();} }
+function ttext(g,x,y,s,size=13,c=INK,al="center",font="'Do Hyeon',"+CF){ g.font=`${size}px ${font}`; g.textAlign=al; g.fillStyle=c; g.fillText(s,x,y); }
+function dots(g,x0,y0,x1,y1,step=24,c="#e4e0d8"){ g.fillStyle=c; for(let y=y0+step/2;y<y1;y+=step)for(let x=x0+step/2;x<x1;x+=step){ g.fillRect(x-1,y-1,2.4,2.4); } }
+function rug(g,x,y,w,h,fill,edge){ g.fillStyle=fill; rr(g,x,y,w,h,14); g.fill(); g.setLineDash([7,6]); g.lineWidth=2; g.strokeStyle=edge; g.stroke(); g.setLineDash([]); }
+function plantPot(g,x,y,s=1){
+  tfurn(g,x-14*s,y-12*s,28*s,14*s,16*s,"#f2c9a8","#e2a77d");
+  const leaf=(dx,dy,rx,ry,a)=>{ g.save(); g.translate(x+dx*s,y+dy*s); g.rotate(a); tcirc(g,0,0,rx*s,ry*s,"#8fd3a8",2); g.restore(); };
+  leaf(-10,-40,8,16,-.5); leaf(10,-40,8,16,.5); leaf(0,-50,8,18,0); leaf(-14,-26,7,12,-1); leaf(14,-26,7,12,1);
+}
+function mug(g,x,y,c="#fff"){ tbox(g,x,y,10,11,c,{r:2,sh:0,lw:1.6}); g.lineWidth=1.6; g.beginPath(); g.arc(x+11,y+5,3.5,-1.4,1.4); g.stroke(); }
+
+let F1BG=null, B2BG=null;
+function buildF1(){
+  const W=1120,H=720; const c=document.createElement("canvas"); c.width=W*2; c.height=H*2; const g=c.getContext("2d"); g.scale(2,2);
+  g.fillStyle=PAPER; g.fillRect(0,0,W,H);
+  // back wall
+  g.fillStyle="#ffffff"; g.fillRect(0,0,W,132); g.fillStyle="#f1ede4"; g.fillRect(0,104,W,28);
+  tline(g,[[0,132],[W,132]],3); tline(g,[[0,104],[W,104]],1.5,"#c9c2b4");
+  // floor: dotted paper + zone rugs
+  dots(g,0,134,W,H,24);
+  rug(g,24,140,316,176,TC.mint,TC.mint2); rug(g,360,140,300,108,TC.sky,TC.sky2); rug(g,680,140,280,108,TC.sun,TC.sun2);
+  rug(g,24,334,280,186,TC.lilac,TC.lilac2); rug(g,840,334,256,186,TC.pink,TC.pink2); rug(g,24,540,316,168,TC.peach,"#d99a5e"); rug(g,830,560,270,148,TC.gray,"#8a8794");
+  // hub floor ring
+  g.lineWidth=2; g.setLineDash([4,7]); g.strokeStyle="#9ad6b8"; g.beginPath(); g.ellipse(560,430,150,86,0,0,7); g.stroke(); g.setLineDash([]);
+  // wall decor: windows, posters, clock, logo
+  const win=(x)=>{ tbox(g,x,20,96,66,"#e6f2fb",{r:4,sh:3}); tline(g,[[x+48,20],[x+48,86]],2); tline(g,[[x,53],[x+96,53]],2); g.fillStyle="#fff"; g.beginPath(); g.ellipse(x+26,40,10,5,0,0,7); g.fill(); };
+  win(40); win(250);
+  tbox(g,160,26,70,58,"#ffffff",{r:4,sh:3}); // brain poster
+  g.strokeStyle=TC.mint2; g.lineWidth=2; g.beginPath(); g.ellipse(195,56,22,16,0,0,7); g.moveTo(195,40); g.bezierCurveTo(186,50,204,60,195,72); g.stroke();
+  tbox(g,404,18,212,74,"#ffffff",{r:6,sh:4}); // big chart board
+  tline(g,[[418,78],[448,60],[474,68],[505,40],[536,52],[566,30],[600,38]],3,TC.sky2); [[448,60],[505,40],[566,30]].forEach(([x,y])=>tcirc(g,x,y,4,4,"#fff",2));
+  tbox(g,700,22,90,64,"#eef3ff",{r:4,sh:3}); // blueprint
+  g.strokeStyle="#5a7fd0"; g.lineWidth=1.6; g.strokeRect(716,32,22,22); g.beginPath(); g.arc(760,48,12,0,7); g.moveTo(716,72); g.lineTo(776,72); g.stroke();
+  tcirc(g,850,52,22,22,"#fff"); tline(g,[[850,52],[850,38]],2.5); tline(g,[[850,52],[860,56]],2.5); // clock
+  tbox(g,604,104,0,0,"#fff",{sh:0,lw:0});
+  g.fillStyle=INK; rr(g,880,26,82,30,15); g.fill(); ttext(g,921,47,"AHN LAB",14,"#fff");
+  ttext(g,921,74,"1F",13,INK);
+  // z1 bench + microscope + flasks + projector
+  tfurn(g,40,152,260,32,22,"#ffffff","#e7f4ec");
+  g.save(); g.translate(70,134); tbox(g,0,0,14,10,"#cfd8dc",{r:2,sh:0,lw:2}); tline(g,[[7,0],[12,-22]],5); tcirc(g,13,-24,6,6,"#cfd8dc",2); g.restore();
+  [[120,"#8fd3a8"],[140,"#f2c744"],[160,"#d9668f"],[180,"#8fd3a8"]].forEach(([x,c])=>{ tbox(g,x,118,10,18,c,{r:3,sh:0,lw:1.8}); });
+  [228,252].forEach(x=>tcirc(g,x,134,10,4,"#fff",1.8));
+  tcirc(g,181,252,30,12,"#ffffff"); tcirc(g,181,248,22,8,"#bfeee0",2);
+  // z2 desk with three monitors, keyboard, mug
+  tfurn(g,392,156,236,44,26,"#ffffff","#e6eef9");
+  [[420,"#eaf6ff"],[478,"#eaf6ff"],[536,"#eaf6ff"]].forEach(([x,c])=>{ tbox(g,x,104,52,36,c,{r:3,sh:3,lw:2}); tline(g,[[x+26,140],[x+26,148]],3); });
+  tbox(g,470,146,64,9,"#f3f3f3",{r:2,sh:0,lw:1.6}); mug(g,594,138);
+  // z3 workbench, tools, robot arm
+  tfurn(g,692,156,208,40,24,"#fff","#fbf1d6");
+  tbox(g,712,118,36,22,"#e8b04a",{r:3,sh:2,lw:2}); tbox(g,760,124,40,14,"#9fb4c8",{r:2,sh:2,lw:2}); tcirc(g,830,132,9,9,"#d4d9de",2); tcirc(g,850,134,6,6,"#d4d9de",2);
+  tfurn(g,905,170,52,36,14,"#e2e6ea","#cfd5db");
+  tline(g,[[931,160],[920,118],[948,94]],8,INK); tline(g,[[931,160],[920,118],[948,94]],4,"#f2c744"); tcirc(g,920,118,6,6,"#fff",2); tcirc(g,950,92,7,7,"#fff",2);
+  // z4 desk: scanner + paper stacks + pinboard behind
+  tbox(g,52,334,190,40,"#f6dfb8",{r:4,sh:3}); [[64,342],[96,340],[130,344],[166,340],[200,342]].forEach(([x,y],i)=>{ tbox(g,x,y,26,22,["#fff","#fff6c7","#e9f3ff","#fde6ee","#fff"][i],{r:1,sh:0,lw:1.6}); tline(g,[[x+5,y+8],[x+20,y+8]],1.2); tline(g,[[x+5,y+13],[x+18,y+13]],1.2); tcirc(g,x+13,y+3,2.6,2.6,"#d9668f",1); });
+  tfurn(g,40,388,210,36,24,"#ffffff","#efe9f8");
+  tbox(g,60,370,64,18,"#dfe6ee",{r:3,sh:2,lw:2}); tline(g,[[66,374],[118,374]],2,"#2f6fbf");
+  [150,170,190].forEach((x,i)=>{ for(let k=0;k<4-i;k++) tbox(g,x+i*2,380-k*4,24,6,"#fff",{r:1,sh:0,lw:1.4}); });
+  // hub round table
+  tcirc(g,560,446,84,30,"#cfd5db"); g.fillStyle="#cfd5db"; g.fillRect(476,428,168,18); tline(g,[[476,428],[476,446]],2.5); tline(g,[[644,428],[644,446]],2.5);
+  tcirc(g,560,428,84,30,"#ffffff"); tcirc(g,560,428,56,18,"#e0f6ee",2);
+  // z5: storage shelf, coffee machine, rack
+  tfurn(g,858,362,66,42,46,"#fff","#fbe6ee"); [[866,326],[892,330],[868,346],[896,348]].forEach(([x,y])=>tbox(g,x,y,20,14,"#f2c9a8",{r:2,sh:0,lw:1.6}));
+  tfurn(g,930,366,52,32,34,"#e9e4dc","#d9d0c2"); tbox(g,942,342,26,14,"#2f3436",{r:3,sh:0,lw:1.6}); mug(g,950,358);
+  tfurn(g,1008,360,76,44,92,"#3a3f4a","#2d3240");
+  // lounge: tea table, chairs, plants, sofa
+  tfurn(g,40,662,100,36,20,"#f6c9b7","#e7a990"); tbox(g,40,640,100,18,"#f9d9cb",{r:8,sh:0,lw:2});
+  tcirc(g,170,616,52,22,"#e9d3b0"); tcirc(g,170,606,52,22,"#ffffff"); [[146,598],[168,594],[190,598]].forEach(([x,y])=>mug(g,x,y,"#fde6ee"));
+  tbox(g,150,592,22,4,"#fff",{r:2,sh:0,lw:0});
+  plantPot(g,50,590); plantPot(g,312,590,.95); plantPot(g,820,140,.8);
+  // kiosk base is dynamic; research bookcase
+  tfurn(g,636,610,108,34,74,"#fff","#efe9f8");
+  for(let r=0;r<2;r++) for(let b=0;b<8;b++){ const x=644+b*12, y=548+r*30; tbox(g,x,y,10,24,["#d9668f","#2f6fbf","#1f9e66","#e0a92a","#7a5cc4"][(b+r*3)%5],{r:1,sh:0,lw:1.4}); }
+  // X waiting seats: rope + bench
+  [[844,592],[1094,592]].forEach(([x,y])=>{ tbox(g,x-5,y-34,10,40,"#c9a227",{r:4,sh:2,lw:2}); tcirc(g,x,y-36,8,8,"#f2c744",2); });
+  g.strokeStyle="#b2203a"; g.lineWidth=5; g.beginPath(); g.moveTo(844,566); g.quadraticCurveTo(969,600,1094,566); g.stroke();
+  g.strokeStyle=INK; g.lineWidth=1.5; g.stroke();
+  tfurn(g,876,626,190,22,18,"#e9d3b0","#c79a5e");
+  // bottom wall + exit double door
+  g.fillStyle="#ffffff"; g.fillRect(0,706,W,14); tline(g,[[0,706],[510,706]],3); tline(g,[[610,706],[W,706]],3);
+  tbox(g,512,700,96,20,"#d9f2e4",{r:3,sh:0,lw:2.5}); tline(g,[[560,700],[560,720]],2);
+  F1BG=c;
+}
+function drawF1Dyn(g,t){
+  // brain hologram
+  const a=.55+.25*Math.sin(t*2.2);
+  g.save(); g.globalAlpha=a; g.fillStyle="rgba(77,224,208,.18)"; g.beginPath(); g.moveTo(160,250); g.lineTo(150,190); g.lineTo(212,190); g.lineTo(202,250); g.fill();
+  g.strokeStyle="#1fb59c"; g.lineWidth=2; g.beginPath(); g.ellipse(181,182+Math.sin(t*1.6)*3,30,20,0,0,7); g.moveTo(181,164); g.bezierCurveTo(170,176,192,186,181,200); g.stroke();
+  g.restore();
+  // monitors: chart lines drift
+  [[420,0],[478,1],[536,2]].forEach(([x,i])=>{ g.save(); g.beginPath(); g.rect(x+4,108,44,28); g.clip();
+    g.strokeStyle=i===1?"#d9668f":"#2f6fbf"; g.lineWidth=2; g.beginPath();
+    for(let k=0;k<12;k++){ const xx=x+4+k*4, yy=124-Math.sin(t*1.5+k*.8+i)*7-(i===2?k*.6:0); k?g.lineTo(xx,yy):g.moveTo(xx,yy); } g.stroke(); g.restore(); });
+  // hub network hologram
+  g.save(); const nodes=[...Array(7)].map((_,i)=>{ const an=i*0.9+t*.4; return [560+Math.cos(an)*42,388+Math.sin(an*1.3)*16-(i%3)*10]; });
+  g.strokeStyle="rgba(31,158,102,.55)"; g.lineWidth=1.5; g.beginPath(); nodes.forEach((p,i)=>nodes.slice(i+1).forEach((q,j)=>{ if((i+j)%2===0){ g.moveTo(p[0],p[1]); g.lineTo(q[0],q[1]); } })); g.stroke();
+  nodes.forEach(([x,y])=>tcirc(g,x,y,4,4,"#ffffff",1.6)); g.restore();
+  // rack lights
+  for(let u=0;u<7;u++){ const on=((Math.floor(t*3)+u)%3)!==0; g.fillStyle=on?(u%2?"#62d39b":"#4de0d0"):"#2a3242"; g.fillRect(1020,280+u*10,6,4); g.fillStyle=((Math.floor(t*5)+u)%4)?"#e0a92a":"#3a3f4a"; g.fillRect(1032,280+u*10,6,4); }
+  // steam from the tea cups
+  g.save(); g.strokeStyle="rgba(31,34,36,.35)"; g.lineWidth=1.6; [[151,594],[173,590],[195,594]].forEach(([x,y],i)=>{ const o=Math.sin(t*2+i)*2; g.beginPath(); g.moveTo(x,y-2); g.bezierCurveTo(x-4+o,y-8,x+4+o,y-12,x+o,y-18); g.stroke(); }); g.restore();
+}
+
+function buildB2(){
+  const W=1120,H=720; const c=document.createElement("canvas"); c.width=W*2; c.height=H*2; const g=c.getContext("2d"); g.scale(2,2);
+  // wooden gym floor
+  g.fillStyle="#f6ead6"; g.fillRect(0,0,W,H);
+  for(let y=150;y<H;y+=28){ tline(g,[[0,y],[W,y]],1,"#e2cfae"); for(let x=((y/28)%2)*90;x<W;x+=180) tline(g,[[x,y],[x,y+28]],1,"#e2cfae"); }
+  // back wall
+  g.fillStyle="#ffffff"; g.fillRect(0,0,W,150); g.fillStyle="#eef3fb"; g.fillRect(0,120,W,30); tline(g,[[0,150],[W,150]],3); tline(g,[[0,120],[W,120]],1.5,"#b9c6d8");
+  // banner
+  tbox(g,300,18,520,58,"#ffffff",{r:10,sh:5}); g.fillStyle="#d9668f"; rr(g,306,24,508,46,8); g.fill();
+  ttext(g,560,57,"AHN LAB  B2  ·  SPECIAL MOVE CUP",24,"#fff");
+  [[250,40],[870,40]].forEach(([x,y])=>{ tcirc(g,x,y,18,18,"#f2c744"); ttext(g,x,y+6,"★",18,INK); });
+  // scoreboard frame (numbers are dynamic)
+  tbox(g,940,20,150,96,"#2b2f33",{r:8,sh:5});
+  // bleachers (3 tiers)
+  [[0,"#cfe0f5"],[1,"#b9d0ee"],[2,"#a3c1e6"]].forEach(([i,cl])=>tfurn(g,210+i*0,170+i*28,670,30,14,cl,"#7f9cc6"));
+  // mats + markings
+  rug(g,30,560,280,140,"#e3f1fb","#2f6fbf"); rug(g,830,560,260,140,"#fde6ee","#d9668f");
+  // dumbbell rack
+  tfurn(g,940,474,150,46,30,"#e2e6ea","#c3cad2");
+  for(let i=0;i<5;i++){ const x=956+i*27; tline(g,[[x,452],[x+16,452]],4); tcirc(g,x,452,6,7,"#3a3f4a",2); tcirc(g,x+16,452,6,7,"#3a3f4a",2); }
+  // water cooler + towels
+  tfurn(g,1000,560,40,26,40,"#fff","#e7eef7"); tcirc(g,1020,520,14,18,"#cfe9ff",2);
+  // punching-bag stands drawn dynamically; their bases:
+  tcirc(g,118,352,30,10,"#d9d0c2"); tcirc(g,118,492,30,10,"#d9d0c2");
+  // ring apron + canvas
+  const {x0,y0,x1,y1}=GRING;
+  g.fillStyle="rgba(31,34,36,.16)"; g.fillRect(x0+10,y0+10,x1-x0,y1-y0+24);
+  g.fillStyle="#2f6fbf"; g.fillRect(x0,y1-4,x1-x0,26); g.lineWidth=2.5; g.strokeStyle=INK; g.strokeRect(x0,y1-4,x1-x0,26);
+  ttext(g,(x0+x1)/2,y1+16,"AHN LAB",16,"#fff");
+  g.fillStyle="#f4f1ea"; g.fillRect(x0,y0,x1-x0,y1-y0); g.strokeRect(x0,y0,x1-x0,y1-y0);
+  g.strokeStyle="#d9d0c2"; g.lineWidth=2; g.beginPath(); g.arc((x0+x1)/2,(y0+y1)/2+10,46,0,7); g.stroke();
+  // corner pads
+  [[x0,y0,"#d9668f"],[x1,y0,"#2f6fbf"]].forEach(([x,y,cl])=>{ tbox(g,x-8,y-60,16,64,cl,{r:4,sh:2}); });
+  B2BG=c;
+}
+function drawRingFront(g){
+  // front ropes and posts — drawn after the fighters so they pass "inside" the ring
+  const {x0,y0,x1,y1}=GRING;
+  [[x0,y1,"#2f6fbf"],[x1,y1,"#d9668f"]].forEach(([x,y,cl])=>{ tbox(g,x-8,y-64,16,68,cl,{r:4,sh:2}); });
+  ["#d9668f","#ffffff","#2f6fbf"].forEach((cl,i)=>{ const yy=y1-52+i*16; g.lineWidth=5; g.strokeStyle=INK; g.beginPath(); g.moveTo(x0,yy); g.lineTo(x1,yy); g.stroke(); g.lineWidth=3; g.strokeStyle=cl; g.stroke(); });
+}
+function drawRingBack(g){
+  const {x0,y0,x1}=GRING;
+  ["#d9668f","#ffffff","#2f6fbf"].forEach((cl,i)=>{ const yy=y0-52+i*16; g.lineWidth=5; g.strokeStyle=INK; g.beginPath(); g.moveTo(x0,yy); g.lineTo(x1,yy); g.stroke(); g.lineWidth=3; g.strokeStyle=cl; g.stroke(); });
+  [x0,x1].forEach(x=>{ ["#d9668f","#ffffff","#2f6fbf"].forEach((cl,i)=>{ g.lineWidth=4; g.strokeStyle=INK; g.beginPath(); g.moveTo(x,GRING.y0-52+i*16); g.lineTo(x,GRING.y1-52+i*16); g.stroke(); g.lineWidth=2; g.strokeStyle=cl; g.stroke(); }); });
+}
+let bagSwing=[0,0], bagHits=0;
+try{ bagHits=Number(localStorage.getItem("alt_bag")||0); }catch(e){}
+function drawBags(g,t){
+  [[118,330,0],[118,470,1]].forEach(([x,y,i])=>{
+    const a=Math.sin(t*9)*bagSwing[i]; bagSwing[i]*=.985;
+    tline(g,[[x-24,y-6],[x-24,y-150],[x,y-150]],4);
+    g.save(); g.translate(x,y-150); g.rotate(a); tline(g,[[0,0],[0,22]],2.5); tbox(g,-17,22,34,86,i?"#d9668f":"#2f6fbf",{r:14,sh:3}); tline(g,[[-17,48],[17,48]],2,"#ffffff"); g.restore();
+  });
+}
+function drawScoreboard(g,t){
+  const F=FIGHT;
+  g.font="16px 'IBM Plex Mono',monospace"; g.textAlign="center";
+  const L_=F?Math.max(0,Math.round(F.L.hp)):0, R_=F?Math.max(0,Math.round(F.R.hp)):0;
+  g.fillStyle="#ff8fb3"; g.fillText(String(L_).padStart(3,"0"),978,62); g.fillStyle="#8fc1ff"; g.fillText(String(R_).padStart(3,"0"),1052,62);
+  g.fillStyle="#f2c744"; g.font="12px 'IBM Plex Mono',monospace"; g.fillText(F? (F.phase==="end"?"K.O.":"LIVE") : "READY",1015,96);
+  g.fillStyle=((Math.floor(t*2))%2)?"#f2c744":"#6b5a18"; g.beginPath(); g.arc(1015,36,4,0,7); g.fill();
+}
+
 function buildB1(){
   const W=1376,H=900; const c=document.createElement("canvas"); c.width=W*2; c.height=H*2; const g=c.getContext("2d"); g.scale(2,2);
   px(g,0,0,W,H,"#0b0d16");
@@ -832,7 +1253,18 @@ function buildB1(){
 }
 
 /* ---------- dynamic pieces ---------- */
+function drawElevatorToon(g,t){
+  const e=elevOf(), x=e.x, top=e.top, dy=e.doorY, open=elevDoor, w=120;
+  tbox(g,x-w/2,top,w,dy-top,"#eef1f6",{r:6,sh:4});
+  const dx0=x-40, dw=80, dTop=top+30, dh=dy-dTop;
+  g.fillStyle="#2b2f33"; g.fillRect(dx0,dTop,dw,dh);
+  const half=dw/2, slide=half*open; g.fillStyle="#c9d0dc"; g.fillRect(dx0,dTop,half-slide,dh); g.fillRect(dx0+half+slide,dTop,half-slide,dh);
+  g.lineWidth=2; g.strokeStyle=INK; g.strokeRect(dx0,dTop,dw,dh); tline(g,[[dx0+half-slide,dTop],[dx0+half-slide,dy]],2); tline(g,[[dx0+half+slide,dTop],[dx0+half+slide,dy]],2);
+  g.fillStyle=INK; rr(g,x-24,top+6,48,18,5); g.fill(); g.font="bold 12px 'IBM Plex Mono',monospace"; g.textAlign="center"; g.fillStyle="#f2c744"; g.fillText(FLOORS.find(f=>f.id===SC.id).code,x,top+19);
+  tcirc(g,x+50,dTop+30,5,5,elevNear()?"#f2c744":"#fff",2);
+}
 function drawElevator(g,t){
+  if(SC.toon) return drawElevatorToon(g,t);
   const e=elevOf(), x=e.x, top=e.top, dy=e.doorY, w=150, open=elevDoor;
   px(g,x-w/2,top,w,dy-top,"#2d3240"); px(g,x-w/2,top,w,3,"#4a5266"); px(g,x-w/2+6,top+8,w-12,dy-top-8,"#20242f");
   const dx0=x-48, dw=96, dh=dy-top-36, dTop=top+30;
@@ -844,7 +1276,7 @@ function drawElevator(g,t){
   g.fillStyle=grad; g.fillRect(dx0,dTop,half-slide,dh); g.fillRect(dx0+half+slide,dTop,half-slide,dh);
   px(g,dx0+half-slide-1,dTop,2,dh,"#6a7286"); px(g,dx0+half+slide-1,dTop,2,dh,"#6a7286");
   // floor indicator + call button
-  px(g,x-30,top+8,60,18,"#07080c"); g.font="bold 13px 'IBM Plex Mono',monospace"; g.textAlign="center"; g.fillStyle="#ffb347"; g.fillText(SC.id==="F1"?"1F":"B1",x,top+22);
+  px(g,x-30,top+8,60,18,"#07080c"); g.font="bold 13px 'IBM Plex Mono',monospace"; g.textAlign="center"; g.fillStyle="#ffb347"; g.fillText(FLOORS.find(f=>f.id===SC.id).code,x,top+22);
   px(g,x+56,dTop+30,10,22,"#3a3f4a"); g.fillStyle=elevNear()?"#ffd58a":"#7a6a40"; g.beginPath(); g.arc(x+61,dTop+41,3,0,7); g.fill();
 }
 function drawPortal(g,t){
@@ -898,8 +1330,9 @@ function drawFloorBadge(g){
   const f=FLOORS.find(x=>x.id===SC.id), txt=`${f.code}  ${L(f.name)}`;
   g.font=`600 13px ${CF}`; const w=g.measureText(txt).width+22;
   const y0=cssH-36;
-  g.fillStyle="rgba(7,8,12,.86)"; rr(g,10,y0,w,26,7); g.fill(); g.strokeStyle="#ffb347"; g.lineWidth=1; g.stroke();
-  g.fillStyle="#ffb347"; g.textAlign="left"; g.fillText(txt,21,y0+18);
+  if(SC.toon){ g.fillStyle="#fff"; rr(g,10,y0,w,26,7); g.fill(); g.strokeStyle=INK; g.lineWidth=2; g.stroke(); g.fillStyle=INK; }
+  else { g.fillStyle="rgba(7,8,12,.86)"; rr(g,10,y0,w,26,7); g.fill(); g.strokeStyle="#ffb347"; g.lineWidth=1; g.stroke(); g.fillStyle="#ffb347"; }
+  g.textAlign="left"; g.fillText(txt,21,y0+18);
 }
 
 /* ======================================================================
@@ -911,6 +1344,7 @@ const au=new Audio(); au.preload="auto";
 try{ OST.on=localStorage.getItem("alt_ost")==="1"; const v=parseFloat(localStorage.getItem("alt_ost_vol")); if(v>=0&&v<=1) OST.vol=v; }catch(e){}
 function ostSpace(s){
   s=String(s||"").replace(/\s/g,"").toUpperCase();
+  if(/^(B2|지하2층?|체력|GYM)/.test(s)) return "B2";
   if(/^(B1|지하1층?|서버실)/.test(s)||s.includes("서버")) return "B1";
   if(/^(1F|F1|1층|1|연구실)/.test(s)||s.includes("연구실")) return "F1";
   return s;
@@ -979,6 +1413,7 @@ function ostBind(){
 const EXPR_IDS=[...Array(24)].map((_,i)=>'E'+String(i+1).padStart(2,'0'));
 const EXPR_NAME=[{"ko": "기쁨", "en": "Joy", "zh": "喜悦", "ja": "喜び", "uz": "Quvonch", "ru": "Радость"}, {"ko": "슬픔", "en": "Sadness", "zh": "悲伤", "ja": "悲しみ", "uz": "Qayg'u", "ru": "Грусть"}, {"ko": "분노", "en": "Anger", "zh": "愤怒", "ja": "怒り", "uz": "G'azab", "ru": "Гнев"}, {"ko": "놀람", "en": "Surprise", "zh": "惊讶", "ja": "驚き", "uz": "Hayrat", "ru": "Удивление"}, {"ko": "두려움", "en": "Fear", "zh": "恐惧", "ja": "恐れ", "uz": "Qo'rquv", "ru": "Страх"}, {"ko": "혐오", "en": "Disgust", "zh": "厌恶", "ja": "嫌悪", "uz": "Jirkanish", "ru": "Отвращение"}, {"ko": "설명", "en": "Explaining", "zh": "讲解", "ja": "説明", "uz": "Tushuntirish", "ru": "Объяснение"}, {"ko": "안내", "en": "Guiding", "zh": "引导", "ja": "案内", "uz": "Yo'l ko'rsatish", "ru": "Подсказка"}, {"ko": "생각", "en": "Thinking", "zh": "思考", "ja": "考え中", "uz": "O'ylash", "ru": "Размышление"}, {"ko": "확인", "en": "Confirming", "zh": "确认", "ja": "確認", "uz": "Tasdiqlash", "ru": "Подтверждение"}, {"ko": "사과", "en": "Apologizing", "zh": "道歉", "ja": "謝罪", "uz": "Uzr so'rash", "ru": "Извинение"}, {"ko": "응원", "en": "Cheering", "zh": "加油", "ja": "応援", "uz": "Qo'llab-quvvatlash", "ru": "Поддержка"}, {"ko": "기본", "en": "Neutral", "zh": "平静", "ja": "ふつう", "uz": "Oddiy", "ru": "Нейтрально"}, {"ko": "머쓱함", "en": "Sheepish", "zh": "难为情", "ja": "照れ", "uz": "Xijolat", "ru": "Смущение"}, {"ko": "당황", "en": "Flustered", "zh": "慌张", "ja": "動揺", "uz": "Sarosima", "ru": "Растерянность"}, {"ko": "뿌듯함", "en": "Proud", "zh": "自豪", "ja": "誇らしげ", "uz": "Faxr", "ru": "Гордость"}, {"ko": "졸림", "en": "Sleepy", "zh": "困倦", "ja": "眠い", "uz": "Uyquchanlik", "ru": "Сонливость"}, {"ko": "삐짐", "en": "Sulking", "zh": "闹别扭", "ja": "すねる", "uz": "Arazlash", "ru": "Обида"}, {"ko": "반짝눈", "en": "Sparkling Eyes", "zh": "星星眼", "ja": "キラキラ目", "uz": "Yaltiroq ko'zlar", "ru": "Сияющие глаза"}, {"ko": "식은땀", "en": "Big Sweat Drop", "zh": "冷汗", "ja": "冷や汗", "uz": "Sovuq ter", "ru": "Холодный пот"}, {"ko": "폭포 눈물", "en": "Waterfall Tears", "zh": "瀑布泪", "ja": "滝涙", "uz": "Sharshara ko'z yoshlari", "ru": "Водопад слёз"}, {"ko": "뿔남", "en": "Comic Anger", "zh": "气鼓鼓", "ja": "プンプン", "uz": "Jahli chiqqan", "ru": "Вскипел"}, {"ko": "멍(점 눈)", "en": "Blank Dot Eyes", "zh": "发呆", "ja": "点目", "uz": "Anqaygan ko'zlar", "ru": "Пустой взгляд"}, {"ko": "충격", "en": "Shock", "zh": "震惊", "ja": "ショック", "uz": "Zarba", "ru": "Шок"}];
 const EXPR_LINE={"doc": [{"ko": "하하하! 아주 훌륭하군!", "en": "Ha-ha-ha! Splendid!", "zh": "哈哈哈！太出色了！", "ja": "はっはっは！実に見事だ！", "uz": "Ha-ha-ha! Juda zo'r!", "ru": "Ха-ха-ха! Превосходно!"}, {"ko": "이럴 수가… 내 가설이…", "en": "It can't be… my hypothesis…", "zh": "怎么会……我的假设……", "ja": "そんな…私の仮説が…", "uz": "Bo'lishi mumkin emas… farazim…", "ru": "Не может быть… моя гипотеза…"}, {"ko": "그건 과학에 대한 모독이네.", "en": "That is an insult to science.", "zh": "这是对科学的亵渎。", "ja": "それは科学への冒涜だ。", "uz": "Bu ilmga nisbatan haqorat.", "ru": "Это оскорбление науки."}, {"ko": "오호? 이건 처음 보는 데이터군!", "en": "Oho? Data I've never seen before!", "zh": "哦？这是从没见过的数据！", "ja": "おや？初めて見るデータだ！", "uz": "Oho? Bunday ma'lumotni hech ko'rmaganman!", "ru": "Ого? Таких данных я ещё не видел!"}, {"ko": "자, 잠깐! 그건 폭발할 수도 있네!", "en": "W-wait! That could explode!", "zh": "等、等等！那可能会爆炸！", "ja": "ま、待ちたまえ！それは爆発するかもしれん！", "uz": "T-to'xta! U portlashi mumkin!", "ru": "П-постой! Это может взорваться!"}, {"ko": "으음, 이 데이터는 엉망이군.", "en": "Hmm, this data is a mess.", "zh": "嗯，这数据一团糟。", "ja": "むむ、このデータはめちゃくちゃだ。", "uz": "Hmm, bu ma'lumot chalkash.", "ru": "Хм, данные — сплошной беспорядок."}, {"ko": "자, 이 원리를 설명해 주지.", "en": "Now, let me explain the principle.", "zh": "来，我给你讲讲这个原理。", "ja": "さて、この原理を説明しよう。", "uz": "Qani, bu tamoyilni tushuntirib beray.", "ru": "Итак, объясню вам этот принцип."}, {"ko": "자, 다음 도전자를 소개하지!", "en": "Now, introducing our next challenger!", "zh": "来，介绍下一位挑战者！", "ja": "さあ、次の挑戦者を紹介しよう！", "uz": "Qani, keyingi ishtirokchini tanishtiraman!", "ru": "Итак, представляю следующего участника!"}, {"ko": "흐음… 가설을 다시 세워 봐야겠군.", "en": "Hmm… I'll have to rebuild the hypothesis.", "zh": "嗯……得重新建立假设了。", "ja": "ふむ…仮説を立て直さねば。", "uz": "Hmm… farazni qaytadan tuzish kerak.", "ru": "Хм… придётся пересобрать гипотезу."}, {"ko": "정답! 합격이네!", "en": "Correct! You pass!", "zh": "答对了！合格！", "ja": "正解！合格だ！", "uz": "To'g'ri! O'tdingiz!", "ru": "Верно! Зачёт!"}, {"ko": "하하… 내 계산 착오였네.", "en": "Ha-ha… my calculation was off.", "zh": "哈哈……是我算错了。", "ja": "はは…私の計算違いだった。", "uz": "Ha-ha… hisobim noto'g'ri ekan.", "ru": "Ха-ха… я ошибся в расчётах."}, {"ko": "자네라면 할 수 있네!", "en": "You can do it!", "zh": "你一定能行！", "ja": "君ならできる！", "uz": "Siz uddalaysiz!", "ru": "У тебя получится!"}, {"ko": "반갑네, 내가 박사일세.", "en": "Pleased to meet you. I am the Doctor.", "zh": "你好，我就是博士。", "ja": "よく来たね、私が博士だ。", "uz": "Tanishganimdan xursandman, men Doktorman.", "ru": "Рад встрече. Я — Доктор."}, {"ko": "하하, 그렇게까지 칭찬할 건 없네.", "en": "Ha-ha, no need for that much praise.", "zh": "哈哈，不用这么夸我啦。", "ja": "はは、そこまで褒めなくてもいい。", "uz": "Ha-ha, bunchalik maqtash shart emas.", "ru": "Ха-ха, не стоит так хвалить."}, {"ko": "어, 어흠! 그건 말이지…!", "en": "Ahem, ahem! Well, you see…!", "zh": "咳、咳咳！那个嘛……！", "ja": "お、おほん！それはだね…！", "uz": "Ehem, ehem! Gap shundaki…!", "ru": "Кхм-кхм! Видите ли…!"}, {"ko": "보아라, 이것이 과학의 힘이다!", "en": "Behold, the power of science!", "zh": "看吧，这就是科学的力量！", "ja": "見よ、これが科学の力だ！", "uz": "Mana, ilmning kuchi!", "ru": "Узрите силу науки!"}, {"ko": "후암… 밤샘 연구는 무리였나.", "en": "Yawn… maybe the all-nighter was too much.", "zh": "呼啊……通宵研究果然太勉强了。", "ja": "ふあ…徹夜の研究は無理だったか。", "uz": "Uh… tun bo'yi tadqiqot og'irlik qildi shekilli.", "ru": "Зевок… ночная работа была лишней."}, {"ko": "흥, 내 의견은 안 듣겠다는 거로군.", "en": "Hmph, so nobody wants my opinion.", "zh": "哼，看来没人要听我的意见。", "ja": "ふん、私の意見は聞かんというわけだな。", "uz": "Hmf, demak fikrimni eshitmaysizlar.", "ru": "Хм, значит, моё мнение никому не нужно."}, {"ko": "오오… 이 얼마나 아름다운 결과인가!", "en": "Ooh… what a beautiful result!", "zh": "哦哦……多么美丽的结果！", "ja": "おお…なんと美しい結果だ！", "uz": "Ooh… qanday go'zal natija!", "ru": "О-о… какой прекрасный результат!"}, {"ko": "…그건 내 전공이 아닐세.", "en": "…That's not my field.", "zh": "……那不是我的专业。", "ja": "…それは私の専門外だ。", "uz": "…Bu mening sohamdan emas.", "ru": "…Это не моя специальность."}, {"ko": "내 연구 데이터가아아…!", "en": "My research datAAA…!", "zh": "我的研究数据啊啊……！", "ja": "私の研究データがあぁ…！", "uz": "Tadqiqot ma'lumotlarim-iii…!", "ru": "Мои данны-ы-ые…!"}, {"ko": "이 녀석들! 실험실에서 뛰지 말라니까!", "en": "You rascals! No running in the lab!", "zh": "你们这些家伙！说了不准在实验室乱跑！", "ja": "こらっ！実験室で走るなと言っただろう！", "uz": "Hoy! Laboratoriyada yugurmanglar dedim-ku!", "ru": "Эй, вы! Не бегать в лаборатории!"}, {"ko": "…….", "en": "…….", "zh": "……。", "ja": "……。", "uz": "…….", "ru": "……."}, {"ko": "뭐, 뭐라고오?!", "en": "Wh-WHAT?!", "zh": "什、什么？！", "ja": "な、なんだとぉ?!", "uz": "Ni-nima?!", "ru": "Ч-что-о?!"}], "asst": [{"ko": "잘됐어요! 저도 기뻐요.", "en": "That's great! I'm so happy too.", "zh": "太好了！我也很开心。", "ja": "よかったです！私もうれしいです。", "uz": "Zo'r! Men ham xursandman.", "ru": "Здорово! Я тоже рада."}, {"ko": "그건… 정말 속상했겠어요.", "en": "That… must have really hurt.", "zh": "那……一定很难过吧。", "ja": "それは…本当につらかったですね。", "uz": "Bu… juda alamli bo'lgandir.", "ru": "Это… наверное, было очень обидно."}, {"ko": "그건 안 돼요. 분명히 말씀드릴게요.", "en": "That's not okay. Let me be clear.", "zh": "那可不行。我说清楚。", "ja": "それはダメです。はっきり言いますね。", "uz": "Bu mumkin emas. Aniq aytaman.", "ru": "Так нельзя. Скажу прямо."}, {"ko": "어? 정말요?", "en": "Huh? Really?", "zh": "咦？真的吗？", "ja": "えっ？本当ですか？", "uz": "A? Rostdanmi?", "ru": "А? Правда?"}, {"ko": "저, 저기… 이거 괜찮은 거 맞죠?", "en": "U-um… this is safe, right?", "zh": "那、那个……这样没问题吧？", "ja": "あ、あの…これ大丈夫ですよね？", "uz": "H-haligi… bu xavfsiz, to'g'rimi?", "ru": "Э-это… ведь безопасно, да?"}, {"ko": "으… 그건 좀 사양할게요.", "en": "Ugh… I'll pass on that.", "zh": "呃……那个我就免了。", "ja": "うっ…それはちょっと遠慮します。", "uz": "Uh… buni rad etaman.", "ru": "Ой… я, пожалуй, откажусь."}, {"ko": "먼저 이 부분부터 설명드릴게요.", "en": "Let me start by explaining this part.", "zh": "我先从这部分开始说明。", "ja": "まずはこの部分から説明しますね。", "uz": "Avval shu qismni tushuntiraman.", "ru": "Сначала объясню вот эту часть."}, {"ko": "이쪽을 봐 주세요.", "en": "Please look over here.", "zh": "请看这边。", "ja": "こちらをご覧ください。", "uz": "Bu yoqqa qarang.", "ru": "Посмотрите сюда."}, {"ko": "음… 잠깐만 정리해 볼게요.", "en": "Hmm… let me sort this out for a second.", "zh": "嗯……让我整理一下。", "ja": "うーん…ちょっと整理してみますね。", "uz": "Hmm… bir pas o'ylab ko'ray.", "ru": "Хм… дайте я соберусь с мыслями."}, {"ko": "네, 확인했어요!", "en": "Yes, checked!", "zh": "好的，确认了！", "ja": "はい、確認しました！", "uz": "Ha, tekshirdim!", "ru": "Да, проверила!"}, {"ko": "죄송해요, 제가 놓쳤어요.", "en": "Sorry, I missed that.", "zh": "对不起，是我疏忽了。", "ja": "すみません、見落としました。", "uz": "Kechirasiz, e'tibordan chetda qoldirdim.", "ru": "Простите, я это упустила."}, {"ko": "할 수 있어요! 제가 옆에 있을게요.", "en": "You can do it! I'll be right beside you.", "zh": "你能行的！我会陪着你。", "ja": "できますよ！私がそばにいます。", "uz": "Uddalaysiz! Men yoningizda bo'laman.", "ru": "У вас получится! Я рядом."}, {"ko": "안녕하세요, 하루예요.", "en": "Hi, I'm Haru.", "zh": "你好，我是 Haru。", "ja": "こんにちは、ハルです。", "uz": "Salom, men Haru.", "ru": "Привет, я Хару."}, {"ko": "에헤헤… 그런가요?", "en": "Ehehe… you think so?", "zh": "嘿嘿……是吗？", "ja": "えへへ…そうですか？", "uz": "Hehe… shundaymi?", "ru": "Хе-хе… правда?"}, {"ko": "네? 아, 아니 그게요…!", "en": "Huh? N-no, that's not…!", "zh": "诶？不、不是那样的……！", "ja": "えっ？い、いや、それはですね…！", "uz": "A? Y-yo'q, gap unda emas…!", "ru": "А? Н-нет, это не то…!"}, {"ko": "후후, 이번엔 꽤 잘한 것 같아요.", "en": "Hehe, I think I did pretty well this time.", "zh": "嘿嘿，这次好像做得不错。", "ja": "ふふ、今回はけっこう上手くできたかも。", "uz": "Hehe, bu safar ancha yaxshi chiqdi shekilli.", "ru": "Хи-хи, кажется, в этот раз вышло неплохо."}, {"ko": "후암… 조금 졸리네요.", "en": "Yawn… I'm a little sleepy.", "zh": "呼啊……有点困了。", "ja": "ふあ…ちょっと眠いです。", "uz": "Uh… biroz uyqum keldi.", "ru": "Зевок… немного хочется спать."}, {"ko": "…흥, 몰라요.", "en": "…Hmph, whatever.", "zh": "……哼，不知道。", "ja": "…ふん、知りません。", "uz": "…Hmf, bilmayman.", "ru": "…Хм, не знаю."}, {"ko": "우와… 이거 진짜 제 거예요?", "en": "Wow… is this really mine?", "zh": "哇……这真的是我的吗？", "ja": "わあ…これ本当に私のですか？", "uz": "Voy… bu rostdan meniki-mi?", "ru": "Ух ты… это правда моё?"}, {"ko": "아… 네… 그렇군요.", "en": "Ah… yes… I see.", "zh": "啊……是……原来如此。", "ja": "あ…はい…そうですか。", "uz": "A… ha… tushunarli.", "ru": "А… да… понятно."}, {"ko": "으아앙, 다 날아갔어요…!", "en": "Waaah, it's all gone…!", "zh": "呜哇，全都没了……！", "ja": "うわぁん、全部消えちゃいました…！", "uz": "Voy-voy, hammasi uchib ketdi…!", "ru": "Уа-а, всё пропало…!"}, {"ko": "진짜! 그러지 말라니까요!", "en": "Seriously! I told you not to do that!", "zh": "真是的！都说了别那样！", "ja": "もう！やめてって言ったじゃないですか！", "uz": "Rostdan! Unday qilmang dedim-ku!", "ru": "Ну правда! Я же просила так не делать!"}, {"ko": "…네?", "en": "…Huh?", "zh": "……诶？", "ja": "…はい？", "uz": "…A?", "ru": "…А?"}, {"ko": "에엑?! 그게 진짜예요?!", "en": "Ehh?! Is that for real?!", "zh": "诶诶？！那是真的吗？！", "ja": "ええっ?! それ本当ですか?!", "uz": "Ee?! Bu rostmi?!", "ru": "Э-э?! Это правда?!"}], "fly": [{"ko": "정말이었어! 가설이 맞았어!", "en": "It was true! The hypothesis was right!", "zh": "是真的！假设是对的！", "ja": "本当だった！仮説が当たった！", "uz": "Rost ekan! Faraz to'g'ri chiqdi!", "ru": "Это правда! Гипотеза подтвердилась!"}, {"ko": "내 관찰이 틀렸나 봐…", "en": "Maybe my observation was wrong…", "zh": "看来我的观察错了……", "ja": "私の観察が間違ってたのかな…", "uz": "Kuzatuvim xato bo'lgan shekilli…", "ru": "Похоже, я ошибся в наблюдении…"}, {"ko": "그건 상관이지 인과가 아니야!", "en": "That's correlation, not causation!", "zh": "那是相关，不是因果！", "ja": "それは相関であって因果じゃない！", "uz": "Bu korrelyatsiya, sabab emas!", "ru": "Это корреляция, а не причинность!"}, {"ko": "엥?! 이게 뭐야?", "en": "Huh?! What's this?", "zh": "嗯？！这是什么？", "ja": "えっ?! これ何?", "uz": "Ha?! Bu nima?", "ru": "Э?! Это что такое?"}, {"ko": "으아아! 파리채다!", "en": "Aaagh! A fly swatter!", "zh": "啊啊啊！是苍蝇拍！", "ja": "うわぁ！ハエたたきだ！", "uz": "Voy! Pashsha urgich!", "ru": "А-а-а! Мухобойка!"}, {"ko": "우웩, 과적합 냄새가 나.", "en": "Ugh, I smell overfitting.", "zh": "呕，有过拟合的味道。", "ja": "うえっ、過学習のにおいがする。", "uz": "Uf, ortiqcha moslashish hidi kelyapti.", "ru": "Фу, пахнет переобучением."}, {"ko": "정말 그럴까? 자세히 보자.", "en": "Is that really so? Let's look closely.", "zh": "真的是这样吗？仔细看看。", "ja": "本当にそうかな？よく見てみよう。", "uz": "Rostdan shundaymi? Yaxshilab ko'raylik.", "ru": "Правда ли? Давай посмотрим внимательно."}, {"ko": "저쪽을 봐!", "en": "Look over there!", "zh": "看那边！", "ja": "あっちを見て！", "uz": "U yoqqa qara!", "ru": "Смотри туда!"}, {"ko": "흠… 정말 그럴까?", "en": "Hmm… is that really so?", "zh": "嗯……真的是这样吗？", "ja": "ふむ…本当にそうかな？", "uz": "Hmm… rostdan shundaymi?", "ru": "Хм… правда ли?"}, {"ko": "확인 완료. 이상 없음!", "en": "Check complete. All clear!", "zh": "确认完毕。没有异常！", "ja": "確認完了。異常なし！", "uz": "Tekshiruv tugadi. Muammo yo'q!", "ru": "Проверено. Всё в порядке!"}, {"ko": "미안, 내가 너무 신중했나 봐.", "en": "Sorry, I guess I was too cautious.", "zh": "抱歉，看来我太谨慎了。", "ja": "ごめん、慎重すぎたみたい。", "uz": "Kechir, haddan tashqari ehtiyotkor bo'ldim shekilli.", "ru": "Прости, я, кажется, перестраховался."}, {"ko": "끝까지 확인해 보자!", "en": "Let's check it all the way through!", "zh": "一起确认到最后吧！", "ja": "最後まで確かめよう！", "uz": "Oxirigacha tekshiraylik!", "ru": "Проверим до самого конца!"}, {"ko": "안녕, 나는 초파리 연구원이야.", "en": "Hi, I'm the Fruit-Fly Researcher.", "zh": "你好，我是果蝇研究员。", "ja": "やあ、ショウジョウバエ研究員だよ。", "uz": "Salom, men meva pashshasi tadqiqotchisiman.", "ru": "Привет, я исследователь-дрозофила."}, {"ko": "헤헤, 또 너무 의심했나?", "en": "Hehe, did I doubt too much again?", "zh": "嘿嘿，我又太多疑了吗？", "ja": "へへ、また疑いすぎたかな？", "uz": "Hehe, yana ortiqcha shubhalandimmi?", "ru": "Хе-хе, опять слишком сомневался?"}, {"ko": "어, 어디서부터 확인하지?!", "en": "W-where do I even start checking?!", "zh": "从、从哪里开始确认呢？！", "ja": "ど、どこから確認すればいいの?!", "uz": "Q-qayerdan tekshirishni boshlay?!", "ru": "С-с чего начать проверку?!"}, {"ko": "거봐, 내가 의심한 게 맞았지?", "en": "See? I was right to doubt it.", "zh": "看吧，我怀疑得没错吧？", "ja": "ほらね、疑って正解だったでしょ？", "uz": "Ko'rdingmi, shubham to'g'ri chiqdi-ku?", "ru": "Видишь? Я не зря сомневался."}, {"ko": "새벽 3시 시장은… 졸려…", "en": "The 3 a.m. market is… so sleepy…", "zh": "凌晨三点的市场……好困……", "ja": "午前3時の市場は…眠い…", "uz": "Tungi soat 3 dagi bozor… uyqu keltiradi…", "ru": "Рынок в три часа ночи… так хочется спать…"}, {"ko": "흥, 또 숫자만 믿는구나.", "en": "Hmph, trusting only numbers again.", "zh": "哼，又只相信数字了。", "ja": "ふん、また数字だけを信じるんだね。", "uz": "Hmf, yana faqat raqamlarga ishonasan.", "ru": "Хм, опять веришь одним цифрам."}, {"ko": "우와아, 완벽한 이상치다!!", "en": "Whoa, a perfect outlier!!", "zh": "哇啊，完美的离群值！！", "ja": "うわぁ、完璧な外れ値だ!!", "uz": "Voy, mukammal chetlanish!!", "ru": "Ух ты, идеальный выброс!!"}, {"ko": "…그건 좀.", "en": "…Not so sure about that.", "zh": "……那个嘛。", "ja": "…それはちょっと。", "uz": "…Bu biroz…", "ru": "…Ну, это как-то…"}, {"ko": "으앙, 내 실험 데이터!", "en": "Waah, my experiment data!", "zh": "呜哇，我的实验数据！", "ja": "うわーん、僕の実験データ！", "uz": "Voy, tajriba ma'lumotlarim!", "ru": "Уа-а, мои данные эксперимента!"}, {"ko": "주판봇! 또 과신이야?!", "en": "AbaBot! Overconfident again?!", "zh": "算盘宝！又过度自信了？！", "ja": "アバボット！また過信?!", "uz": "AbaBot! Yana haddan tashqari ishonch?!", "ru": "АбаБот! Опять самоуверенность?!"}, {"ko": "…….", "en": "…….", "zh": "……。", "ja": "……。", "uz": "…….", "ru": "……."}, {"ko": "뭐?! 그 예측이 맞았다고?!", "en": "What?! That prediction was right?!", "zh": "什么？！那个预测居然对了？！", "ja": "なに?! あの予測が当たったって?!", "uz": "Nima?! O'sha bashorat to'g'ri chiqdimi?!", "ru": "Что?! Тот прогноз оказался верным?!"}], "robo": [{"ko": "기분 최고예요!", "en": "Feeling fantastic!", "zh": "心情超好！", "ja": "最高の気分です！", "uz": "Kayfiyatim a'lo!", "ru": "Настроение — супер!"}, {"ko": "예측이… 빗나갔어요…", "en": "The prediction… missed…", "zh": "预测……落空了……", "ja": "予測が…外れました…", "uz": "Bashorat… xato chiqdi…", "ru": "Прогноз… не сбылся…"}, {"ko": "그 예측은 틀렸다고요!", "en": "That prediction is wrong!", "zh": "那个预测是错的！", "ja": "その予測は間違ってます！", "uz": "U bashorat noto'g'ri!", "ru": "Этот прогноз неверен!"}, {"ko": "어라? 이건 계산에 없었어요!", "en": "Huh? This wasn't in my calculations!", "zh": "咦？这不在我的计算里！", "ja": "あれ？これは計算になかったです！", "uz": "E? Bu hisobimda yo'q edi!", "ru": "Хм? Этого не было в расчётах!"}, {"ko": "폭락 신호 감지! 무서워요!", "en": "Crash signal detected! Scary!", "zh": "检测到暴跌信号！好可怕！", "ja": "暴落シグナル検知！怖いです！", "uz": "Qulash signali aniqlandi! Qo'rqinchli!", "ru": "Сигнал обвала! Страшно!"}, {"ko": "\"모르겠다\"는 대답은 싫어요.", "en": "I hate the answer \"I don't know.\"", "zh": "我讨厌\"不知道\"这种回答。", "ja": "「わからない」って答えは嫌いです。", "uz": "\"Bilmayman\" degan javobni yomon ko'raman.", "ru": "Терпеть не могу ответ «не знаю»."}, {"ko": "데이터가 그렇게 말하고 있어요!", "en": "The data says so!", "zh": "数据就是这么说的！", "ja": "データがそう言っています！", "uz": "Ma'lumot shuni aytyapti!", "ru": "Так говорят данные!"}, {"ko": "이쪽이 정답 루트예요!", "en": "This is the right route!", "zh": "这边是正确路线！", "ja": "こっちが正解ルートです！", "uz": "To'g'ri yo'l mana bu tomonda!", "ru": "Верный путь — сюда!"}, {"ko": "계산 중… 계산 중…", "en": "Calculating… calculating…", "zh": "计算中……计算中……", "ja": "計算中…計算中…", "uz": "Hisoblanmoqda… hisoblanmoqda…", "ru": "Вычисляю… вычисляю…"}, {"ko": "계산 완료! 정확해요!", "en": "Calculation complete! Spot on!", "zh": "计算完毕！完全正确！", "ja": "計算完了！正確です！", "uz": "Hisob tugadi! Aniq!", "ru": "Расчёт готов! Точно!"}, {"ko": "과적합이었어요… 죄송해요.", "en": "It was overfitting… I'm sorry.", "zh": "是过拟合了……对不起。", "ja": "過学習でした…すみません。", "uz": "Ortiqcha moslashish ekan… kechirasiz.", "ru": "Это было переобучение… простите."}, {"ko": "상승장 가즈아… 아니, 파이팅이에요!", "en": "To the moon… I mean, you've got this!", "zh": "牛市冲啊……不对，加油！", "ja": "上昇相場いくぞ…じゃなくて、ファイトです！", "uz": "Bozor osmonga… ya'ni, omad!", "ru": "На луну… то есть, держитесь!"}, {"ko": "안녕하세요, 주판봇이에요!", "en": "Hello, I'm AbaBot!", "zh": "你好，我是算盘宝！", "ja": "こんにちは、アバボットです！", "uz": "Salom, men AbaBot!", "ru": "Здравствуйте, я АбаБот!"}, {"ko": "칭찬받으니 회로가 따뜻해져요…", "en": "Praise makes my circuits warm…", "zh": "被夸奖后电路都暖起来了……", "ja": "褒められると回路があったかくなります…", "uz": "Maqtashsa, sxemalarim isib ketadi…", "ru": "От похвалы у меня теплеют схемы…"}, {"ko": "에, 에러! 아니 에러 아니에요!", "en": "E-error! I mean, not an error!", "zh": "错、错误！不对，不是错误！", "ja": "エ、エラー！いや、エラーじゃないです！", "uz": "X-xato! Yo'q, xato emas!", "ru": "О-ошибка! То есть, не ошибка!"}, {"ko": "후후, 데이터는 거짓말을 안 해요.", "en": "Heh, data never lies.", "zh": "呵呵，数据不会说谎。", "ja": "ふふ、データは嘘をつきません。", "uz": "Hehe, ma'lumot yolg'on gapirmaydi.", "ru": "Хе-хе, данные не лгут."}, {"ko": "절전 모드… 진입…", "en": "Power-saving mode… engaging…", "zh": "进入……省电模式……", "ja": "省電力モード…移行…", "uz": "Quvvat tejash rejimi… yoqilmoqda…", "ru": "Режим энергосбережения… включаю…"}, {"ko": "흥, 초파리 편만 들고.", "en": "Hmph, always taking the fruit fly's side.", "zh": "哼，总是站在果蝇那边。", "ja": "ふん、ショウジョウバエの味方ばっかり。", "uz": "Hmf, doim pashsha tomonda.", "ru": "Хм, вечно на стороне дрозофилы."}, {"ko": "이, 이것은… 대박 수익이에요!!", "en": "Th-this is… a jackpot return!!", "zh": "这、这是……超大收益！！", "ja": "こ、これは…大当たりの利益です!!", "uz": "Bu… bu katta daromad!!", "ru": "Это… это джекпот-доходность!!"}, {"ko": "…그 질문은 데이터에 없어요.", "en": "…That question isn't in my data.", "zh": "……数据里没有那个问题。", "ja": "…その質問はデータにありません。", "uz": "…Bu savol ma'lumotlarimda yo'q.", "ru": "…Такого вопроса нет в моих данных."}, {"ko": "주판알이 다 흩어졌어요…!", "en": "My abacus beads are everywheeere…!", "zh": "我的算盘珠全散了……！", "ja": "そろばんの珠がバラバラにぃ…！", "uz": "Cho't donalarim sochilib ketdi-iii…!", "ru": "Мои косточки счёт рассыпались…!"}, {"ko": "초파리 씨, 또 의심하는 거예요?!", "en": "Mr. Fruit Fly, doubting me again?!", "zh": "果蝇先生，你又在怀疑了吗？！", "ja": "ショウジョウバエさん、また疑うんですか?!", "uz": "Pashsha janoblari, yana shubhalanyapsizmi?!", "ru": "Господин Дрозофила, опять сомневаетесь?!"}, {"ko": "…….", "en": "…….", "zh": "……。", "ja": "……。", "uz": "…….", "ru": "……."}, {"ko": "시, 시스템 쇼크!! 폭락이에요!!", "en": "S-system shock!! It's a crash!!", "zh": "系、系统冲击！！暴跌了！！", "ja": "シ、システムショック!! 暴落です!!", "uz": "T-tizim zarbasi!! Qulash!!", "ru": "С-системный шок!! Обвал!!"}]};
+Object.assign(EXPR_LINE,{"sia":[{"ko":"…좋네요. 정말로.","en":"…That's nice. Truly.","zh":"……真好。真的。","ja":"…いいですね。本当に。","uz":"…Yaxshi. Rostdan.","ru":"…Хорошо. Правда."},{"ko":"…아쉽네요.","en":"…What a pity.","zh":"……真可惜。","ja":"…残念ですね。","uz":"…Afsus.","ru":"…Жаль."},{"ko":"그건 규칙 위반이에요.","en":"That's against the rules.","zh":"那是违规的。","ja":"それはルール違反です。","uz":"Bu qoidabuzarlik.","ru":"Это нарушение правил."},{"ko":"…어? 이건 기록에 없던 일인데요.","en":"…Huh? That's not in the records.","zh":"……咦？记录里可没有这回事。","ja":"…え？記録にないことですね。","uz":"…Ha? Bu yozuvlarda yo'q edi.","ru":"…А? Такого в записях не было."},{"ko":"불 꺼진 서버실은 싫어요.","en":"I don't like the server room in the dark.","zh":"我不喜欢熄了灯的机房。","ja":"灯りの消えたサーバールームは嫌です。","uz":"Chirog'i o'chgan server xonasini yoqtirmayman.","ru":"Не люблю серверную без света."},{"ko":"이 데이터, 먼지투성이예요.","en":"This data is covered in dust.","zh":"这份数据满是灰尘。","ja":"このデータ、ほこりだらけです。","uz":"Bu ma'lumot chang bosgan.","ru":"Эти данные все в пыли."},{"ko":"순서대로 말씀드릴게요.","en":"Let me explain in order.","zh":"我按顺序给您说明。","ja":"順番にご説明しますね。","uz":"Tartib bilan tushuntiraman.","ru":"Объясню по порядку."},{"ko":"이쪽입니다. 자료는 여기 정리해 뒀어요.","en":"This way, please. I've filed the materials here.","zh":"这边请。资料都整理在这里了。","ja":"こちらです。資料はここにまとめてあります。","uz":"Bu tomonga. Materiallarni shu yerga tartiblab qo'ydim.","ru":"Сюда, пожалуйста. Материалы я разложила здесь."},{"ko":"…잠깐, 다시 볼게요.","en":"…Wait, let me look again.","zh":"……等等，我再看一下。","ja":"…待って、もう一度見ます。","uz":"…Shoshmang, yana qarab chiqaman.","ru":"…Секунду, посмотрю ещё раз."},{"ko":"확인했습니다. 판정, 문제없어요.","en":"Confirmed. The call stands.","zh":"确认完毕。判定没有问题。","ja":"確認しました。判定、問題ありません。","uz":"Tasdiqlandi. Hukm to'g'ri.","ru":"Проверено. Решение в силе."},{"ko":"죄송합니다. 제 실수예요.","en":"I'm sorry. That was my mistake.","zh":"对不起，是我的失误。","ja":"申し訳ありません。私のミスです。","uz":"Kechirasiz. Bu mening xatoyim.","ru":"Простите, это моя ошибка."},{"ko":"끝까지 지켜볼게요.","en":"I'll watch until the very end.","zh":"我会看到最后的。","ja":"最後まで見届けます。","uz":"Oxirigacha kuzatib turaman.","ru":"Я буду смотреть до самого конца."},{"ko":"인턴 시아입니다.","en":"I'm Sia, the intern.","zh":"我是实习生 Sia。","ja":"インターンのシアです。","uz":"Men amaliyotchi Siaman.","ru":"Я Сия, стажёр."},{"ko":"…들켰네요. 조금 졸았을 뿐이에요.","en":"…You caught me. I only dozed a little.","zh":"……被发现了。我只是稍微打了个盹。","ja":"…バレましたね。少しうとうとしただけです。","uz":"…Sezib qoldingiz. Ozgina mudradim, xolos.","ru":"…Попалась. Я лишь чуть-чуть задремала."},{"ko":"아, 아니에요. 안 잤어요!","en":"N-no, I wasn't sleeping!","zh":"没、没有，我没睡！","ja":"い、いえ、寝てません！","uz":"Y-yo'q, uxlamadim!","ru":"Н-нет, я не спала!"},{"ko":"…정리, 완벽하죠.","en":"…Perfectly tidy, isn't it?","zh":"……整理得很完美吧。","ja":"…整理、完璧でしょう。","uz":"…Tartib mukammal, shundaymi?","ru":"…Порядок идеальный, правда?"},{"ko":"후아암… 5분만 눈 붙일게요.","en":"Yaaawn… just five minutes.","zh":"哈啊……让我眯五分钟。","ja":"ふあぁ…5分だけ目を閉じます。","uz":"Esnash… faqat besh daqiqa.","ru":"Ох… всего пять минуточек."},{"ko":"…저 빼고 회식이요?","en":"…A team dinner without me?","zh":"……聚餐不叫我？","ja":"…私抜きで打ち上げですか？","uz":"…Mensiz ziyofatmi?","ru":"…Ужин без меня?"},{"ko":"이렇게 깨끗한 데이터라니…","en":"Such clean data…","zh":"这么干净的数据……","ja":"こんなにきれいなデータなんて…","uz":"Shunday toza ma'lumot-a…","ru":"Какие чистые данные…"},{"ko":"…네. 그건 판정 밖이라서요.","en":"…Yes. That's outside my call.","zh":"……是的。那不在判定范围内。","ja":"…はい。それは判定の外なので。","uz":"…Ha. Bu mening hukmimdan tashqari.","ru":"…Да. Это вне моего решения."},{"ko":"정리한 파일이… 날아갔어요…","en":"My sorted files… are gone…","zh":"我整理好的文件……没了……","ja":"整理したファイルが…消えました…","uz":"Tartiblangan fayllarim… o'chib ketdi…","ru":"Мои разобранные файлы… пропали…"},{"ko":"책상 어지르지 마세요!","en":"Please don't mess up the desk!","zh":"请不要把桌子弄乱！","ja":"机を散らかさないでください！","uz":"Stolni sochmang!","ru":"Не устраивайте беспорядок на столе!"},{"ko":"…방금 뭐라고 하셨어요?","en":"…What did you just say?","zh":"……您刚才说什么？","ja":"…今、何て言いました？","uz":"…Hozir nima dedingiz?","ru":"…Что вы сейчас сказали?"},{"ko":"서버가… 꺼졌다고요?!","en":"The server… went down?!","zh":"服务器……宕机了？！","ja":"サーバーが…落ちたんですか？！","uz":"Server… o'chib qoldimi?!","ru":"Сервер… упал?!"}],"moa":[{"ko":"차 한 잔 하실래요?","en":"Would you like a cup of tea?","zh":"要来杯茶吗？","ja":"お茶はいかがですか？","uz":"Bir piyola choy ichasizmi?","ru":"Не хотите чашечку чая?"},{"ko":"화분이… 시들었어요.","en":"My plant… has wilted.","zh":"花盆里的花……蔫了。","ja":"植木鉢が…しおれちゃいました。","uz":"Gulim… so'lib qoldi.","ru":"Мой цветок… завял."},{"ko":"화분 쓰러뜨린 사람 누구예요?","en":"Who knocked over my plant?","zh":"是谁把花盆碰倒了？","ja":"植木鉢を倒したのは誰ですか？","uz":"Gul tuvagini kim ag'dardi?","ru":"Кто опрокинул мой цветок?"},{"ko":"어머, 정말요?","en":"Oh my, really?","zh":"哎呀，真的吗？","ja":"あら、本当ですか？","uz":"Voy, rostdanmi?","ru":"Ой, правда?"},{"ko":"깜깜한 건 무서워요…","en":"I'm scared of the dark…","zh":"黑漆漆的好可怕……","ja":"真っ暗なのは怖いです…","uz":"Qorong'ilikdan qo'rqaman…","ru":"Я боюсь темноты…"},{"ko":"그 데이터, 냄새나요…","en":"That data smells funny…","zh":"那份数据有股怪味……","ja":"そのデータ、においます…","uz":"U ma'lumotdan yoqimsiz hid kelyapti…","ru":"От этих данных странно пахнет…"},{"ko":"제가 모아 둔 기록을 보면요!","en":"If you look at the records I collected!","zh":"看看我收集的记录就知道了！","ja":"わたしが集めた記録を見るとですね！","uz":"Men yig'gan yozuvlarga qarasangiz!","ru":"Посмотрите на записи, которые я собрала!"},{"ko":"이쪽 자리에 앉으세요~","en":"Please have a seat right here~","zh":"请坐这边~","ja":"こちらの席へどうぞ〜","uz":"Mana bu joyga o'tiring~","ru":"Присаживайтесь сюда~"},{"ko":"음… 몇 잔째였더라?","en":"Hmm… how many cups was that?","zh":"嗯……这是第几杯来着？","ja":"うーん…何杯目だっけ？","uz":"Hmm… nechanchi piyola edi?","ru":"Хм… какая это была чашка?"},{"ko":"네, 다 모았어요!","en":"Yes, I've got it all collected!","zh":"好，全都收集好了！","ja":"はい、全部集めました！","uz":"Ha, hammasini yig'dim!","ru":"Да, всё собрала!"},{"ko":"죄송해요, 찻잔을 깼어요…","en":"Sorry, I broke a teacup…","zh":"对不起，我把茶杯打碎了……","ja":"ごめんなさい、ティーカップを割っちゃいました…","uz":"Kechirasiz, piyolani sindirib qo'ydim…","ru":"Простите, я разбила чашку…"},{"ko":"힘내세요! 제가 응원할게요!","en":"Go for it! I'll cheer for you!","zh":"加油！我会为你应援的！","ja":"がんばって！わたしが応援します！","uz":"Omad! Men sizni qo'llab-quvvatlayman!","ru":"Вперёд! Я за вас болею!"},{"ko":"인턴 모아예요!","en":"I'm Moa, the intern!","zh":"我是实习生 Moa！","ja":"インターンのモアです！","uz":"Men amaliyotchi Moaman!","ru":"Я Моа, стажёр!"},{"ko":"에헤헤, 또 넘어질 뻔했어요.","en":"Ehehe, I almost tripped again.","zh":"嘿嘿，又差点摔倒了。","ja":"えへへ、また転びそうになっちゃいました。","uz":"Hehe, yana yiqilib tushishimga oz qoldi.","ru":"Хе-хе, я опять чуть не упала."},{"ko":"잠깐만요, 정리할게요!","en":"Wait a sec, I'll tidy it up!","zh":"等一下，我来整理！","ja":"ちょっと待ってください、片付けます！","uz":"Bir daqiqa, yig'ishtiraman!","ru":"Минутку, сейчас всё уберу!"},{"ko":"새싹이 났어요! 제가 키운 화분이에요.","en":"A sprout! I grew this plant myself.","zh":"发芽了！这是我养的花。","ja":"芽が出ました！わたしが育てた鉢です。","uz":"Nihol chiqdi! Bu gulni o'zim o'stirganman.","ru":"Росток! Этот цветок я вырастила сама."},{"ko":"후아… 따뜻하니까 졸려요.","en":"Hwaa… it's so warm I'm getting sleepy.","zh":"呼啊……暖洋洋的好困。","ja":"ふわぁ…あったかくて眠いです。","uz":"Voy… iliq bo'lgani uchun uyqum keldi.","ru":"Ах… так тепло, что клонит в сон."},{"ko":"저도 대전 하고 싶었는데…","en":"I wanted to fight too…","zh":"我也想参加对战的……","ja":"わたしも対戦したかったのに…","uz":"Men ham jang qilmoqchi edim…","ru":"Я тоже хотела сразиться…"},{"ko":"우와, 새 찻잔 세트!","en":"Wow, a new tea set!","zh":"哇，新茶具！","ja":"わあ、新しいティーセット！","uz":"Voy, yangi choy to'plami!","ru":"Ух ты, новый чайный сервиз!"},{"ko":"하하… 제가 틀렸네요.","en":"Haha… I was wrong.","zh":"哈哈……是我弄错了。","ja":"はは…わたしの間違いでした。","uz":"Haha… men adashibman.","ru":"Ха-ха… я ошиблась."},{"ko":"으앙, 기록이 날아갔어요~!","en":"Waaah, my records are gone~!","zh":"呜哇，记录全没了~！","ja":"うわーん、記録が消えちゃいました〜！","uz":"Voy-voy, yozuvlarim o'chib ketdi~!","ru":"Уа-а, мои записи пропали~!"},{"ko":"제 쿠키 누가 먹었어요?!","en":"Who ate my cookies?!","zh":"谁吃了我的饼干？！","ja":"わたしのクッキー、誰が食べたんですか？！","uz":"Pechenyelarimni kim yedi?!","ru":"Кто съел моё печенье?!"},{"ko":"……네? 그게 무슨 말이에요?","en":"……Huh? What do you mean?","zh":"……啊？那是什么意思？","ja":"……え？どういう意味ですか？","uz":"……A? Bu nima degani?","ru":"……А? Что вы имеете в виду?"},{"ko":"결과가 반대라고요?!","en":"The result is the opposite?!","zh":"结果是反的？！","ja":"結果が逆ですって？！","uz":"Natija teskarimi?!","ru":"Результат наоборот?!"}],"x1":[{"ko":"(빙글)","en":"(♪)","zh":"(♪)","ja":"(♪)","uz":"(♪)","ru":"(♪)"},{"ko":"(…훌쩍)","en":"(…)","zh":"(…)","ja":"(…)","uz":"(…)","ru":"(…)"},{"ko":"(부들부들)","en":"(💢)","zh":"(💢)","ja":"(💢)","uz":"(💢)","ru":"(💢)"},{"ko":"(!)","en":"(!)","zh":"(!)","ja":"(!)","uz":"(!)","ru":"(!)"},{"ko":"(덜덜)","en":"(;;)","zh":"(;;)","ja":"(;;)","uz":"(;;)","ru":"(;;)"},{"ko":"(휙)","en":"(—)","zh":"(—)","ja":"(—)","uz":"(—)","ru":"(—)"},{"ko":"(…)","en":"(…)","zh":"(…)","ja":"(…)","uz":"(…)","ru":"(…)"},{"ko":"(이쪽)","en":"(→)","zh":"(→)","ja":"(→)","uz":"(→)","ru":"(→)"},{"ko":"(?)","en":"(?)","zh":"(?)","ja":"(?)","uz":"(?)","ru":"(?)"},{"ko":"(찡긋)","en":"(✓)","zh":"(✓)","ja":"(✓)","uz":"(✓)","ru":"(✓)"},{"ko":"(꾸벅)","en":"(_ _)","zh":"(_ _)","ja":"(_ _)","uz":"(_ _)","ru":"(_ _)"},{"ko":"(불끈)","en":"(!!)","zh":"(!!)","ja":"(!!)","uz":"(!!)","ru":"(!!)"},{"ko":"(……)","en":"(……)","zh":"(……)","ja":"(……)","uz":"(……)","ru":"(……)"},{"ko":"(긁적)","en":"(^^;)","zh":"(^^;)","ja":"(^^;)","uz":"(^^;)","ru":"(^^;)"},{"ko":"(허둥)","en":"(;;)","zh":"(;;)","ja":"(;;)","uz":"(;;)","ru":"(;;)"},{"ko":"(으쓱)","en":"(✧)","zh":"(✧)","ja":"(✧)","uz":"(✧)","ru":"(✧)"},{"ko":"(쿨…)","en":"(zzZ)","zh":"(zzZ)","ja":"(zzZ)","uz":"(zzZ)","ru":"(zzZ)"},{"ko":"(흥)","en":"(—3—)","zh":"(—3—)","ja":"(—3—)","uz":"(—3—)","ru":"(—3—)"},{"ko":"(반짝)","en":"(✧✧)","zh":"(✧✧)","ja":"(✧✧)","uz":"(✧✧)","ru":"(✧✧)"},{"ko":"(삐질)","en":"(^^;)","zh":"(^^;)","ja":"(^^;)","uz":"(^^;)","ru":"(^^;)"},{"ko":"(주르륵)","en":"(T_T)","zh":"(T_T)","ja":"(T_T)","uz":"(T_T)","ru":"(T_T)"},{"ko":"(뿌우)","en":"(💢)","zh":"(💢)","ja":"(💢)","uz":"(💢)","ru":"(💢)"},{"ko":"(…….)","en":"(・・)","zh":"(・・)","ja":"(・・)","uz":"(・・)","ru":"(・・)"},{"ko":"(헉!)","en":"(!?)","zh":"(!?)","ja":"(!?)","uz":"(!?)","ru":"(!?)"}],"x2":[{"ko":"(빙글)","en":"(♪)","zh":"(♪)","ja":"(♪)","uz":"(♪)","ru":"(♪)"},{"ko":"(…훌쩍)","en":"(…)","zh":"(…)","ja":"(…)","uz":"(…)","ru":"(…)"},{"ko":"(부들부들)","en":"(💢)","zh":"(💢)","ja":"(💢)","uz":"(💢)","ru":"(💢)"},{"ko":"(!)","en":"(!)","zh":"(!)","ja":"(!)","uz":"(!)","ru":"(!)"},{"ko":"(덜덜)","en":"(;;)","zh":"(;;)","ja":"(;;)","uz":"(;;)","ru":"(;;)"},{"ko":"(휙)","en":"(—)","zh":"(—)","ja":"(—)","uz":"(—)","ru":"(—)"},{"ko":"(…)","en":"(…)","zh":"(…)","ja":"(…)","uz":"(…)","ru":"(…)"},{"ko":"(이쪽)","en":"(→)","zh":"(→)","ja":"(→)","uz":"(→)","ru":"(→)"},{"ko":"(?)","en":"(?)","zh":"(?)","ja":"(?)","uz":"(?)","ru":"(?)"},{"ko":"(찡긋)","en":"(✓)","zh":"(✓)","ja":"(✓)","uz":"(✓)","ru":"(✓)"},{"ko":"(꾸벅)","en":"(_ _)","zh":"(_ _)","ja":"(_ _)","uz":"(_ _)","ru":"(_ _)"},{"ko":"(불끈)","en":"(!!)","zh":"(!!)","ja":"(!!)","uz":"(!!)","ru":"(!!)"},{"ko":"(……)","en":"(……)","zh":"(……)","ja":"(……)","uz":"(……)","ru":"(……)"},{"ko":"(긁적)","en":"(^^;)","zh":"(^^;)","ja":"(^^;)","uz":"(^^;)","ru":"(^^;)"},{"ko":"(허둥)","en":"(;;)","zh":"(;;)","ja":"(;;)","uz":"(;;)","ru":"(;;)"},{"ko":"(으쓱)","en":"(✧)","zh":"(✧)","ja":"(✧)","uz":"(✧)","ru":"(✧)"},{"ko":"(쿨…)","en":"(zzZ)","zh":"(zzZ)","ja":"(zzZ)","uz":"(zzZ)","ru":"(zzZ)"},{"ko":"(흥)","en":"(—3—)","zh":"(—3—)","ja":"(—3—)","uz":"(—3—)","ru":"(—3—)"},{"ko":"(반짝)","en":"(✧✧)","zh":"(✧✧)","ja":"(✧✧)","uz":"(✧✧)","ru":"(✧✧)"},{"ko":"(삐질)","en":"(^^;)","zh":"(^^;)","ja":"(^^;)","uz":"(^^;)","ru":"(^^;)"},{"ko":"(주르륵)","en":"(T_T)","zh":"(T_T)","ja":"(T_T)","uz":"(T_T)","ru":"(T_T)"},{"ko":"(뿌우)","en":"(💢)","zh":"(💢)","ja":"(💢)","uz":"(💢)","ru":"(💢)"},{"ko":"(…….)","en":"(・・)","zh":"(・・)","ja":"(・・)","uz":"(・・)","ru":"(・・)"},{"ko":"(헉!)","en":"(!?)","zh":"(!?)","ja":"(!?)","uz":"(!?)","ru":"(!?)"}],"x3":[{"ko":"(빙글)","en":"(♪)","zh":"(♪)","ja":"(♪)","uz":"(♪)","ru":"(♪)"},{"ko":"(…훌쩍)","en":"(…)","zh":"(…)","ja":"(…)","uz":"(…)","ru":"(…)"},{"ko":"(부들부들)","en":"(💢)","zh":"(💢)","ja":"(💢)","uz":"(💢)","ru":"(💢)"},{"ko":"(!)","en":"(!)","zh":"(!)","ja":"(!)","uz":"(!)","ru":"(!)"},{"ko":"(덜덜)","en":"(;;)","zh":"(;;)","ja":"(;;)","uz":"(;;)","ru":"(;;)"},{"ko":"(휙)","en":"(—)","zh":"(—)","ja":"(—)","uz":"(—)","ru":"(—)"},{"ko":"(…)","en":"(…)","zh":"(…)","ja":"(…)","uz":"(…)","ru":"(…)"},{"ko":"(이쪽)","en":"(→)","zh":"(→)","ja":"(→)","uz":"(→)","ru":"(→)"},{"ko":"(?)","en":"(?)","zh":"(?)","ja":"(?)","uz":"(?)","ru":"(?)"},{"ko":"(찡긋)","en":"(✓)","zh":"(✓)","ja":"(✓)","uz":"(✓)","ru":"(✓)"},{"ko":"(꾸벅)","en":"(_ _)","zh":"(_ _)","ja":"(_ _)","uz":"(_ _)","ru":"(_ _)"},{"ko":"(불끈)","en":"(!!)","zh":"(!!)","ja":"(!!)","uz":"(!!)","ru":"(!!)"},{"ko":"(……)","en":"(……)","zh":"(……)","ja":"(……)","uz":"(……)","ru":"(……)"},{"ko":"(긁적)","en":"(^^;)","zh":"(^^;)","ja":"(^^;)","uz":"(^^;)","ru":"(^^;)"},{"ko":"(허둥)","en":"(;;)","zh":"(;;)","ja":"(;;)","uz":"(;;)","ru":"(;;)"},{"ko":"(으쓱)","en":"(✧)","zh":"(✧)","ja":"(✧)","uz":"(✧)","ru":"(✧)"},{"ko":"(쿨…)","en":"(zzZ)","zh":"(zzZ)","ja":"(zzZ)","uz":"(zzZ)","ru":"(zzZ)"},{"ko":"(흥)","en":"(—3—)","zh":"(—3—)","ja":"(—3—)","uz":"(—3—)","ru":"(—3—)"},{"ko":"(반짝)","en":"(✧✧)","zh":"(✧✧)","ja":"(✧✧)","uz":"(✧✧)","ru":"(✧✧)"},{"ko":"(삐질)","en":"(^^;)","zh":"(^^;)","ja":"(^^;)","uz":"(^^;)","ru":"(^^;)"},{"ko":"(주르륵)","en":"(T_T)","zh":"(T_T)","ja":"(T_T)","uz":"(T_T)","ru":"(T_T)"},{"ko":"(뿌우)","en":"(💢)","zh":"(💢)","ja":"(💢)","uz":"(💢)","ru":"(💢)"},{"ko":"(…….)","en":"(・・)","zh":"(・・)","ja":"(・・)","uz":"(・・)","ru":"(・・)"},{"ko":"(헉!)","en":"(!?)","zh":"(!?)","ja":"(!?)","uz":"(!?)","ru":"(!?)"}]});
 
 /* ======================================================================
    expressions (fruitfly-lab-expressions repo): 24 per character
@@ -1013,9 +1448,9 @@ function emote(k,e,sec=2.6){ EMOTE[k]={e,until:now()+sec,at:now()}; face(k,e); }
 function emoteAll(map,sec){ for(const k in map) emote(k,map[k],sec); }
 function drawEmote(g,k,x,y,t){
   const em=EMOTE[k]; if(!em||now()>em.until) return false;
-  const img=FACE[k+em.e]; const age=now()-em.at, s=Math.min(1,age*6), r=29*(0.6+0.4*s);
+  const img=FACE[k+em.e]; const age=now()-em.at, s=Math.min(1,age*6), r=29*(0.6+0.4*s)*Math.max(.8,SC.cs||1);
   const bob=Math.sin(t*4)*2, cy=y-r-8+bob;
-  g.save(); g.fillStyle="#fff"; g.beginPath(); g.arc(x,cy,r+3,0,7); g.fill();
+  g.save(); g.fillStyle=SC.toon?INK:"#fff"; g.beginPath(); g.arc(x,cy,r+3,0,7); g.fill();
   g.beginPath(); g.moveTo(x-6,cy+r); g.lineTo(x,cy+r+9); g.lineTo(x+6,cy+r); g.fill();
   g.beginPath(); g.arc(x,cy,r,0,7); g.clip(); g.fillStyle="#d9d6e6"; g.fillRect(x-r,cy-r,2*r,2*r);
   if(img&&img.complete&&img.naturalWidth) g.drawImage(img,x-r,cy-r,2*r,2*r);
@@ -1049,14 +1484,14 @@ const IMG={};
 const load=(k,src)=>new Promise(r=>{const i=new Image();i.decoding="async";i.onload=()=>{IMG[k]=i;r()};i.onerror=()=>r();i.src=src});
 const cv=document.getElementById("cv"), ctx=cv.getContext("2d"), game=document.getElementById("game");
 let playerKey="robo";
-const player={x:690,y:540,dir:1,step:0,moving:false,path:null,goal:null};
-let NPC=[], near=null, cam={x:0,y:0}, zoom=1.5, fit=false, cssW=0, cssH=0, dpr=1;
+const player={x:560,y:590,dir:1,step:0,moving:false,path:null,goal:null};
+let NPC=[], near=null, cam={x:0,y:0}, zoom=1, fit=true, cssW=0, cssH=0, dpr=1;
 let fxMode=null, fxUntil=0, cine=null, fx=[], react=null, talk=null, running=false, lastInfo=null;
 const now=()=>performance.now()/1000;
 const isAlarm=()=>fxMode==="bad"&&now()<fxUntil;
 const isGold=()=>fxMode==="jack"&&now()<fxUntil;
 function buildNPC(){
-  NPC=Object.keys(CREW).filter(k=>k!==playerKey).map((k,i)=>({k,hx:POS[k][0],hy:POS[k][1],x:POS[k][0],y:POS[k][1],off:0,goal:0,next:3+i*2.1,ph:i*1.7,line:0,dir:k==="fly"?1:-1,idle:0,idleT:5+i*1.3}));
+  NPC=Object.keys(CREW).filter(k=>k!==playerKey).map((k,i)=>({k,hx:POS[k][0],hy:POS[k][1],x:POS[k][0],y:POS[k][1],off:0,goal:0,next:3+i*2.1,ph:i*1.7,line:i,dir:(k==="fly"||k==="sia")?1:-1,idle:0,idleT:5+i*1.3,still:!!CREW[k].secret,away:false,path:null,moving:false}));
 }
 
 /* ======================================================================
@@ -1064,17 +1499,15 @@ function buildNPC(){
    ====================================================================== */
 function resize(){
   cssW=game.clientWidth; dpr=Math.min(window.devicePixelRatio||1,2);
-  if(fit){ zoom=cssW/SC.w; cssH=Math.round(SC.h*zoom); }
-  else {
-    zoom = cssW<640 ? Math.max(.62,Math.min(1.5,cssW/560)) : 1.5;
-    const want=Math.floor(window.innerHeight*(cssW<640?.62:.76));
-    cssH=Math.round(Math.min(SC.h*zoom,Math.max(cssW<640?340:440,want)));
-  }
+  const small=cssW<640, maxH=Math.floor(window.innerHeight*(small?.66:.78));
+  if(fit&&!small){ zoom=Math.min(cssW/SC.w, maxH/SC.h); cssH=Math.round(SC.h*zoom); }
+  else { zoom = small ? Math.max(.5,Math.min(1.1,cssW/640)) : Math.max(1.15,cssW/SC.w*1.4); cssH=Math.round(Math.min(SC.h*zoom,Math.max(small?360:440,maxH))); }
   cv.style.height=cssH+"px"; cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr);
+  if(window.innerWidth>1060) info.style.maxHeight=Math.max(360,cssH-(dlg&&!dlg.hidden?dlg.offsetHeight+14:0))+"px"; else info.style.maxHeight="";
 }
 window.addEventListener("resize",resize);
 const zoomBtn=document.getElementById("zoomBtn");
-zoomBtn.addEventListener("click",()=>{ fit=!fit; zoomBtn.setAttribute("aria-pressed",fit); zoomBtn.textContent=T(fit?"zoom_in":"zoom_all"); resize(); });
+zoomBtn.addEventListener("click",()=>{ fit=!fit; zoomBtn.setAttribute("aria-pressed",!fit); zoomBtn.textContent=T(fit?"zoom_in":"zoom_all"); resize(); });
 
 /* ======================================================================
    drawing
@@ -1085,12 +1518,19 @@ const toS=(wx,wy)=>[(wx-cam.x)*zoom,(wy-cam.y)*zoom];
 function tag(g,x,y,text,color,size=13){
   g.font=`600 ${size}px ${CF}`; g.textAlign="center";
   const w=g.measureText(text).width+14;
-  g.fillStyle="rgba(18,16,28,.84)"; rr(g,x-w/2,y-size-5,w,size+8,6); g.fill();
-  g.fillStyle=color; g.fillText(text,x,y-2);
+  if(SC.toon){ g.fillStyle="#fff"; rr(g,x-w/2,y-size-5,w,size+8,6); g.fill(); g.lineWidth=1.8; g.strokeStyle=INK; g.stroke(); g.fillStyle=color==="#e8a24b"?"#a8630a":INK; }
+  else { g.fillStyle="rgba(18,16,28,.84)"; rr(g,x-w/2,y-size-5,w,size+8,6); g.fill(); g.fillStyle=color; }
+  g.fillText(text,x,y-2);
 }
 function sign(g,x,y,text,hot,t){
   g.font=`400 ${hot?17:14}px 'Do Hyeon',${CF}`; g.textAlign="center";
   const w=g.measureText(text).width+20, h=hot?26:22, glow=hot?.55+.35*Math.sin(t*3):.25;
+  if(SC.toon){
+    g.fillStyle=INK; rr(g,x-w/2+3,y-h+3,w,h,8); g.fill();
+    g.fillStyle=hot?"#f2c744":"#ffffff"; rr(g,x-w/2,y-h,w,h,8); g.fill(); g.lineWidth=2; g.strokeStyle=INK; g.stroke();
+    g.fillStyle=INK; g.fillText(text,x,y-(hot?7:6)); if(hot){ g.globalAlpha=.35+.35*Math.sin(t*3); g.fillStyle="#fff"; rr(g,x-w/2+4,y-h+3,w-8,4,2); g.fill(); g.globalAlpha=1; }
+    return;
+  }
   g.save(); g.shadowColor=hot?"#e8a24b":"#4de0d0"; g.shadowBlur=12*glow;
   g.fillStyle="rgba(18,16,28,.9)"; rr(g,x-w/2,y-h,w,h,8); g.fill();
   g.lineWidth=1.5; g.strokeStyle=hot?"#e8a24b":"#4de0d0"; g.stroke(); g.restore();
@@ -1099,7 +1539,8 @@ function sign(g,x,y,text,hot,t){
 function bubble(g,x,y,text,mode){
   g.font=`500 14px ${CF}`; g.textAlign="center";
   const w=Math.min(g.measureText(text).width+20,cssW-12), bx=Math.max(6,Math.min(cssW-6-w,x-w/2));
-  g.fillStyle=mode==="bad"?"#ffe1e4":mode==="jack"?"#fff4cf":"#f6f3ff"; rr(g,bx,y-26,w,24,8); g.fill();
+  g.fillStyle=mode==="bad"?"#ffe1e4":mode==="jack"?"#fff4cf":SC.toon?"#ffffff":"#f6f3ff"; rr(g,bx,y-26,w,24,8); g.fill();
+  if(SC.toon){ g.lineWidth=1.6; g.strokeStyle=INK; g.stroke(); }
   g.beginPath(); g.moveTo(x-6,y-3); g.lineTo(x,y+5); g.lineTo(x+6,y-3); g.fill();
   g.fillStyle=mode==="bad"?"#7a0f1c":mode==="jack"?"#5a3d00":"#1b1729"; g.fillText(text,bx+w/2,y-9,w-12);
 }
@@ -1111,11 +1552,11 @@ function poseOf(k,o){
 }
 function drawChar(g,k,x,y,t,o){
   const c=CREW[k], pose=poseOf(k,o), img=IMG[pose], m=POSE[pose]; if(!img||!m) return null;
-  const s=c.h/POSE[c.base].h, w=m.w*s, h=m.h*s;
+  const s=c.h*(SC.cs||1)/POSE[c.base].h, w=m.w*s, h=m.h*s;
   let bob=c.float? Math.sin(t*2.6+o.ph)*4-12 : (o.moving? -Math.abs(Math.sin(o.step*11))*4 : Math.sin(t*2+o.ph)*1);
   if(react&&now()<react.until&&react.mode!=="bad") bob-=Math.abs(Math.sin(t*9+o.ph))*(react.mode==="jack"?10:6);
   const shake=isAlarm()? Math.sin(t*40+o.ph)*1.6 : 0;
-  g.fillStyle="rgba(0,0,0,.36)"; g.beginPath(); g.ellipse(x,y-2,Math.min(w,c.h*.9)*0.3,6,0,0,7); g.fill();
+  g.fillStyle=SC.toon?"rgba(31,34,36,.18)":"rgba(0,0,0,.36)"; g.beginPath(); g.ellipse(x,y-2,Math.min(w,c.h*.9)*0.3,6,0,0,7); g.fill();
   g.save(); g.translate(x+shake,y+bob); if(o.dir<0) g.scale(-1,1);
   if(o.moving&&!c.float) g.rotate(Math.sin(o.step*11)*0.035);
   const ax=m.ax*w; g.drawImage(img,-ax,-h,w,h); g.restore();
@@ -1124,14 +1565,15 @@ function drawChar(g,k,x,y,t,o){
 }
 function drawKiosk(g,t){
   const {x,y,w,h}=KIOSK, x0=x-w/2, y0=y-h;
-  g.fillStyle="rgba(0,0,0,.4)"; g.beginPath(); g.ellipse(x,y-2,w*.5,8,0,0,7); g.fill();
-  g.fillStyle="#2a2f3d"; g.fillRect(x-8,y-26,16,24); g.fillStyle="#3b4152"; g.fillRect(x-30,y-6,60,6);
-  g.save(); g.shadowColor="#e8a24b"; g.shadowBlur=14+6*Math.sin(t*3); g.fillStyle="#1a1530"; rr(g,x0,y0,w,h-24,10); g.fill(); g.restore();
-  g.lineWidth=2; g.strokeStyle="#e8a24b"; rr(g,x0,y0,w,h-24,10); g.stroke();
-  const img=IMG.doc_ok; if(img){ const m=POSE.doc_ok, hh=h-34, ww=m.w*hh/m.h; g.drawImage(img,x-ww/2+4,y0+4,ww,hh-6); }
-  g.globalAlpha=.10+.06*Math.sin(t*5); g.fillStyle="#e8a24b"; for(let i=0;i<h-24;i+=4) g.fillRect(x0+2,y0+i,w-4,1); g.globalAlpha=1;
+  g.fillStyle="rgba(31,34,36,.16)"; g.beginPath(); g.ellipse(x+4,y,w*.5,8,0,0,7); g.fill();
+  tbox(g,x-7,y-24,14,22,"#d9d0c2",{r:2,sh:0,lw:2});
+  tbox(g,x0,y0,w,h-22,"#fff4d6",{r:10,sh:4});
+  const img=IMG.doc_ok; if(img){ const m=POSE.doc_ok, hh=h-32, ww=m.w*hh/m.h; g.drawImage(img,x-ww/2+3,y0+5,ww,hh-6); }
+  g.globalAlpha=.25+.2*Math.sin(t*3); g.fillStyle="#fff"; rr(g,x0+5,y0+4,w-10,5,2); g.fill(); g.globalAlpha=1;
 }
 function zoneGlow(g,t){
+  if(SC.toon){ const al=isAlarm()?.18+.12*Math.sin(t*9):isGold()?.14+.08*Math.sin(t*6):0; if(!al) return;
+    g.save(); g.globalAlpha=al; g.fillStyle=isAlarm()?"#ff3a4a":"#ffd34a"; const ex=cine?cine.ex:560, ey=cine?cine.ey:400; g.beginPath(); g.ellipse(ex,ey,260,170,0,0,7); g.fill(); g.restore(); return; }
   const glow=(x,y,rx,ry,c,al)=>{const gr=g.createRadialGradient(x,y,0,x,y,Math.max(rx,ry)); gr.addColorStop(0,c); gr.addColorStop(1,"rgba(0,0,0,0)"); g.globalAlpha=al; g.fillStyle=gr; g.beginPath(); g.ellipse(x,y,rx,ry,0,0,7); g.fill();};
   g.save(); g.globalCompositeOperation="lighter";
   if(isAlarm()){ glow(1180,230,180,120,"#ff7a2a",.18+.12*Math.sin(t*9)); glow(1150,470,140,110,"#ff3a2a",.14+.1*Math.sin(t*7)); glow(240,130,160,120,"#4de0d0",.12+.1*Math.abs(Math.sin(t*13))); glow(690,160,170,90,"#ff2a3a",.10+.08*Math.sin(t*6)); }
@@ -1156,29 +1598,34 @@ function draw(t){
   if(!draw.init){ cam.x=want.x; cam.y=want.y; draw.init=1; }
   cam.x+=(want.x-cam.x)*.12; cam.y+=(want.y-cam.y)*.12;
 
-  ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle="#0d0b16"; ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle=SC.toon?"#f3f0ea":"#0d0b16"; ctx.fillRect(0,0,cv.width,cv.height);
   const S=dpr*zoom; ctx.setTransform(S,0,0,S,-cam.x*S,-cam.y*S);
   ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality="high";
   let list;
   if(SC.id==="F1"){
-    if(HALL) ctx.drawImage(HALL,380,768,620,332);
-    const bg=isAlarm()?(IMG.map_ov||IMG.map):IMG.map; if(bg) ctx.drawImage(bg,0,0,1376,768);
-    if(doorOpen>.01){ ctx.globalAlpha=doorOpen; const dg=ctx.createLinearGradient(0,584,0,716); dg.addColorStop(0,"#05040a"); dg.addColorStop(1,"#1d2a35"); ctx.fillStyle=dg; ctx.fillRect(620,584,140,134); ctx.globalAlpha=1; }
-    zoneGlow(ctx,t); drawElevator(ctx,t);
+    if(F1BG) ctx.drawImage(F1BG,0,0,1120,720);
+    drawF1Dyn(ctx,t); zoneGlow(ctx,t); drawElevator(ctx,t);
     list=NPC.map(n=>({y:n.y,n})); list.push({y:KIOSK.y,kiosk:true});
+  } else if(SC.id==="B2"){
+    if(B2BG) ctx.drawImage(B2BG,0,0,1120,720);
+    drawScoreboard(ctx,t); drawElevator(ctx,t); drawRingBack(ctx);
+    list=[{y:GRING.y1+2,ringFront:true},{y:400,bags:true}]; drawGymActors(list);
   } else {
     if(B1BG) ctx.drawImage(B1BG,0,0,1376,900);
     drawPortal(ctx,t); drawElevator(ctx,t);
     list=RACKS.map(r=>({y:r.y,rack:r})); list.push({y:RING.cy+8,core:true});
   }
-  list.push({y:player.y,p:true});
+  if(!(FIGHT&&FIGHT.hidePlayer&&SC.id==="B2")) list.push({y:player.y,p:true});
   list.sort((a,b)=>a.y-b.y); heads=[];
   for(const o of list){
     if(o.kiosk){ drawKiosk(ctx,t); continue; }
     if(o.rack){ drawRack(ctx,o.rack,t,near&&near.rack===o.rack.i); continue; }
     if(o.core){ drawCore(ctx,t); continue; }
-    if(o.p){ const b=drawChar(ctx,playerKey,player.x,player.y,t,{moving:player.moving,step:player.step,dir:player.dir,ph:0,idle:0}); if(b) heads.push(Object.assign(b,{k:playerKey,me:true})); }
-    else { const n=o.n; const b=drawChar(ctx,n.k,n.x,n.y,t,{moving:false,step:t,dir:n.dir,ph:n.ph,idle:n.idle}); if(b) heads.push(Object.assign(b,{k:n.k,n})); }
+    if(o.ringFront){ drawRingFront(ctx); continue; }
+    if(o.bags){ drawBags(ctx,t); continue; }
+    if(o.gym){ const b=drawStrip(ctx,o.gym,now()); if(b) heads.push(Object.assign(b,{k:o.gym.k,n:o.gym,gym:true})); continue; }
+    if(o.p){ if(SC.id==="B2"&&FIGHT&&FIGHT.hidePlayer) continue; const b=drawChar(ctx,playerKey,player.x,player.y,t,{moving:player.moving,step:player.step,dir:player.dir,ph:0,idle:0}); if(b) heads.push(Object.assign(b,{k:playerKey,me:true})); }
+    else { const n=o.n; const b=drawChar(ctx,n.k,n.x,n.y,t,{moving:!!n.moving,step:t,dir:n.dir,ph:n.ph,idle:n.idle}); if(b) heads.push(Object.assign(b,{k:n.k,n})); }
   }
   for(const p of fx){ ctx.globalAlpha=Math.max(0,1-p.age/p.life); ctx.fillStyle=p.c;
     if(p.coin){ ctx.beginPath(); ctx.ellipse(p.x,p.y,p.s*1.2,p.s*1.2*Math.abs(Math.cos(p.age*9)),0,0,7); ctx.fill(); } else ctx.fillRect(p.x-p.s/2,p.y-p.s/2,p.s,p.s); }
@@ -1191,19 +1638,24 @@ function draw(t){
   for(const hd of heads){
     const yTop=toS(0,hd.top)[1], fx_=hd.me? toS(player.x,0)[0] : toS(hd.n.x,0)[0];
     if(fx_<-30||fx_>cssW+30||yTop>cssH+20) continue;
+    if(!hd.me&&CREW[hd.k].secret){ if(drawEmote(ctx,hd.k,fx_,yTop-6,t)) continue; if(!mode&&hd.n.line%3===hd.k.charCodeAt(1)%3) bubble(ctx,fx_,yTop-6,L(TALK[hd.k][hd.n.line%TALK[hd.k].length][1]),null); continue; }
     if(hd.me){ tag(ctx,fx_,yTop-4,T("me",{n:crewName(hd.k)}),"#e8a24b"); drawEmote(ctx,hd.k,fx_,yTop-22,t); continue; }
     tag(ctx,fx_,yTop-4,crewName(hd.k),"#4de0d0");
     if(drawEmote(ctx,hd.k,fx_,yTop-22,t)) continue;
+    if(hd.gym) continue;
+    if(TOUR&&TOUR.k===hd.k) continue;
     if(talk&&talk.k===hd.k) continue;
     let line;
     if(mode==="bad") line=L(ALARM_LINES[hd.k][hd.n.line%2]);
     else if(mode==="jack") line=L(JACK_LINES[hd.k]);
     else if(mode==="good") line=L(GOOD_LINES[hd.k]);
-    else { const task=doingOf(hd.k), ls=task?tLines(task):[]; line=ls.length? ls[hd.n.line%ls.length] : crewRole(hd.k); }
+    else if(CREW[hd.k].secret) line=L(TALK[hd.k][hd.n.line%TALK[hd.k].length][1]);
+    else { const task=doingOf(hd.k), ls=task?tLines(task):[]; line=ls.length? ls[hd.n.line%ls.length] : UI["idle_"+hd.k]? T("idle_"+hd.k) : crewRole(hd.k); }
     if(hd.n.line%3!==2||mode) bubble(ctx,fx_,yTop-26,line,mode);
   }
   drawFloorBadge(ctx);
-  if(near&&!running&&!travelling&&near.rack==null){ const [x,y]=toS(near.x,near.y-150); const yy=y+Math.sin(t*5)*3; ctx.fillStyle="#e8a24b"; rr(ctx,x-11,yy-22,22,24,6); ctx.fill(); ctx.fillStyle="#12101c"; ctx.font="bold 17px 'IBM Plex Mono',monospace"; ctx.textAlign="center"; ctx.fillText("!",x,yy-4); }
+  if(SC.id==="B2") drawFightHUD(ctx,t);
+  if(near&&!running&&!travelling&&!FIGHT&&near.rack==null){ const [x,y]=toS(near.x,near.y-150*(SC.cs||1)); const yy=y+Math.sin(t*5)*3; ctx.fillStyle="#f2c744"; rr(ctx,x-11,yy-22,22,24,6); ctx.fill(); if(SC.toon){ ctx.lineWidth=2; ctx.strokeStyle=INK; ctx.stroke(); } ctx.fillStyle="#12101c"; ctx.font="bold 17px 'IBM Plex Mono',monospace"; ctx.textAlign="center"; ctx.fillText("!",x,yy-4); }
   ctx.setTransform(1,0,0,1,0,0);
   if(isAlarm()){ ctx.fillStyle=`rgba(224,42,60,${.08+.08*Math.max(0,Math.sin(t*5))})`; ctx.fillRect(0,0,cv.width,cv.height); }
   if(isGold()){ ctx.fillStyle=`rgba(255,207,74,${.06+.05*Math.max(0,Math.sin(t*4))})`; ctx.fillRect(0,0,cv.width,cv.height); }
@@ -1260,7 +1712,6 @@ let doorOpen=0;
 function update(dt,t){
   let vx=0,vy=0; const sp=190;
   elevDoor+=(((elevNear()||elevForce)?1:0)-elevDoor)*Math.min(1,dt*5);
-  doorOpen+=((SC.id==="F1"&&player.y>600&&player.y<840&&Math.abs(player.x-690)<140?1:0)-doorOpen)*Math.min(1,dt*6);
   if(travelling){ for(const k in keys) keys[k]=false; player.path=null; }
   if(keys.left)vx-=1; if(keys.right)vx+=1; if(keys.up)vy-=1; if(keys.down)vy+=1;
   if(!vx&&!vy&&player.path&&player.path.length){
@@ -1275,6 +1726,8 @@ function update(dt,t){
   if(vx) player.dir=vx<0?-1:1;
   player.moving=!!(vx||vy); if(player.moving) player.step+=dt;
   NPC.forEach(n=>{
+    if(n.path||n.away){ npcStep(n,dt); n.idleT-=dt; return; }
+    if(n.still){ n.idleT-=dt; if(n.idleT<=0){ n.idle++; n.idleT=4+Math.random()*4; } return; }
     n.next-=dt; if(n.next<=0){ n.goal=n.goal?0:(Math.random()<.5?-1:1)*22; n.next=6+Math.random()*6; }
     const d=n.goal-n.off; if(Math.abs(d)>.6){ n.off+=Math.sign(d)*28*dt; n.dir=Math.sign(d)||n.dir; }
     n.x=n.hx+n.off;
@@ -1283,7 +1736,7 @@ function update(dt,t){
   if(t-lastLine>(isAlarm()?1.6:4.2)){ lastLine=t; NPC.forEach(n=>n.line++); }
   idleEmotes(dt);
   for(const p of fx){ p.age+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=160*dt; } fx=fx.filter(p=>p.age<p.life);
-  if(talk&&now()-talk.at>14) closeDlg();
+  if(talk&&!talk.tour&&now()-talk.at>14) closeDlg();
   const s=nearestSpot(); if(s!==near){ near=s; act.disabled=!near; setActLabel(); }
   game.classList.toggle("alarm",isAlarm()); game.classList.toggle("gold",isGold());
 }
@@ -1297,7 +1750,7 @@ function fill(s,k){
   const t=doingOf(k)||doingOf("doc")||{title:"-",progress:0};
   return s.split("{task}").join(tTitle(t)).split("{p}").join(t.progress).split("{done}").join(TASKS.filter(x=>x.status==="done").length).split("{todo}").join(TASKS.filter(x=>x.status==="todo").length).split("{clicks}").join(STATS.clicks.toLocaleString()).split("{acc}").join(STATS.acc.toLocaleString()).split("{jack}").join(STATS.jack.toLocaleString());
 }
-function startTalk(k){ if(talk&&talk.k===k&&!talk.free){ nextLine(); return; } talk={k,i:0,pose:TALK[k][0][0],at:now()}; const n=NPC.find(x=>x.k===k); if(n) n.dir=player.x<n.x?-1:1; showLine(true); }
+function startTalk(k){ if(TOUR) endTour(); if(talk&&talk.k===k&&!talk.free){ nextLine(); return; } talk={k,i:0,pose:TALK[k][0][0],at:now()}; const n=NPC.find(x=>x.k===k); if(n) n.dir=player.x<n.x?-1:1; showLine(true); }
 function showLine(animate){
   const [pose,text]=TALK[talk.k][talk.i]; talk.pose=pose; talk.at=now();
   const ex=talkExpr(talk.k,pose,text); talk.e=ex; setPortrait(talk.k,ex); emote(talk.k,ex,3.2);
@@ -1305,7 +1758,7 @@ function showLine(animate){
   typeLine(fill(L(text),talk.k),animate);
 }
 function setPortrait(k,ex){
-  dlg.hidden=false; dPt.src=exprPortrait(k,ex); dPt.alt=`${crewName(k)} · ${exprName(ex)}`;
+  dlg.hidden=false; document.getElementById("dExpr").hidden=!!CREW[k].secret||!!(talk&&talk.tour); dPt.src=exprPortrait(k,ex); dPt.alt=`${crewName(k)} · ${exprName(ex)}`;
   dPt.classList.remove("pop"); void dPt.offsetWidth; dPt.classList.add("pop");
   document.getElementById("dEx").textContent=`${ex} · ${exprName(ex)}`;
 }
@@ -1321,8 +1774,8 @@ function typeLine(full,animate){
   if(!animate||matchMedia("(prefers-reduced-motion: reduce)").matches){ dTx.textContent=full; return; }
   let i=0; dTx.textContent=""; typer=setInterval(()=>{ i+=2; dTx.textContent=full.slice(0,i); if(i>=full.length){clearInterval(typer);typer=null} },30);
 }
-function nextLine(){ if(!talk) return; if(typer){ clearInterval(typer); typer=null; dTx.textContent=dTx.dataset.full; return; } talk.i=(talk.i+1)%TALK[talk.k].length; talk.free=false; showLine(true); }
-function closeDlg(){ talk=null; dlg.hidden=true; clearInterval(typer); typer=null; }
+function nextLine(){ if(!talk) return; if(talk.tour){ tourNext(); return; } if(typer){ clearInterval(typer); typer=null; dTx.textContent=dTx.dataset.full; return; } talk.i=(talk.i+1)%TALK[talk.k].length; talk.free=false; showLine(true); }
+function closeDlg(){ if(TOUR){ endTour(); return; } talk=null; dlg.hidden=true; clearInterval(typer); typer=null; }
 document.getElementById("dNext").addEventListener("click",nextLine);
 document.getElementById("dExpr").addEventListener("click",()=>{ if(talk) exprGallery(talk.k); });
 function exprGallery(k){
@@ -1351,6 +1804,11 @@ function inspect(s){
   if(s.id==="exit"){ setInfo(`<span class="meta">${esc(T("sign_exit"))}</span><h3>${esc(T("door_h"))}</h3><div class="links"><a class="btn" href="https://ahnboat.xyz/">${esc(T("door_main"))}</a><a class="btn" href="https://ahnboat.xyz/articlestudy/" target="_blank" rel="noopener">Article &amp; Study</a></div>`,{spot:s.id}); return; }
   if(s.id==="portal"){ emote(playerKey,"E20",3); toast("⛔ "+T("denied"),"bad"); setInfo(`<span class="badge b-alarm">⛔ ${esc(T("denied"))}</span><h3>${esc(T("portal_h"))}</h3><div class="row">${pimg("fly_panic")}<div class="meta" style="flex:1;min-width:0">${esc(T("portal_msg"))}</div></div>`,{spot:s.id}); return; }
   if(s.id==="core"){ coreInfo(); return; }
+  if(s.id==="xs"){ xsInfo(); return; }
+  if(s.id==="ring"){ gymInfo(); return; }
+  if(s.id==="board"){ recordInfo(); return; }
+  if(s.id==="bag"){ bagInfo(true); return; }
+  if(s.owner==="sia"||s.owner==="moa"){ internInfo(s.owner,s); return; }
   if(s.rack!=null){ rackInfo(s.rack); return; }
   if(s.id==="docinfo"){
     setInfo(`<span class="badge b-todo">${esc(T("sign_doc"))}</span><h3>${esc(T("doc_h"))}</h3>
@@ -1389,10 +1847,277 @@ function inspect(s){
     setInfo(`<span class="meta">${esc(T("sp_door"))}</span><h3>${esc(T("door_h"))}</h3><div class="links"><a class="btn" href="https://ahnboat.xyz/">${esc(T("door_main"))}</a><a class="btn" href="https://ahnboat.xyz/articlestudy/" target="_blank" rel="noopener">Article &amp; Study</a></div>`,{spot:s.id});
   }
 }
-function welcome(){ setInfo(`<span class="meta">${esc(crewName("fly"))}</span><h3>${esc(T("wel_h"))}</h3><div class="row">${pimg("fly_hover")}<div class="meta" style="flex:1;min-width:0">${T("wel_b")}</div></div>`,{welcome:1}); }
+function welcome(){
+  setInfo(`<span class="meta">${esc(crewName("fly"))}</span><h3>${esc(T("wel_h"))}</h3><div class="row">${pimg("fly_hover")}<div class="meta" style="flex:1;min-width:0">${T("wel_b")}</div></div>
+    <div class="links"><button class="btn big" data-tour="sia">${pimg("sia_wave")}<span><b>${esc(T("tour_sia"))}</b></span></button><button class="btn big" data-tour="moa">${pimg("moa_wave")}<span><b>${esc(T("tour_moa"))}</b></span></button></div>`,{welcome:1});
+  info.querySelectorAll("[data-tour]").forEach(b=>b.onclick=()=>startTour(b.dataset.tour));
+}
+document.getElementById("goTour").addEventListener("click",()=>{ if(SC.id!=="F1"){ toast("🛗 1F · "+T("tour_h"),"bad"); return; } tourMenu(); });
+document.getElementById("goGym").addEventListener("click",()=>{ if(SC.id==="B2"){ gymInfo(); return; } toast(T("gym_f1"),"good"); const s=SC.spots.find(x=>x.id==="elev"); closeDlg(); if(Math.hypot(player.x-s.x,player.y-s.y)<70) openElev(); else walkTo(s.x,s.y,s); cv.focus({preventScroll:true}); });
 document.getElementById("goDoc").addEventListener("click",()=>{ const s=spotById("docinfo"); if(SC.id==="F1") walkTo(s.x,s.y,null); inspect(s); });
 document.getElementById("goRes").addEventListener("click",()=>{ const s=spotById("research"); if(SC.id==="F1") walkTo(s.x,s.y,null); inspect(s); });
 document.getElementById("goElev").addEventListener("click",()=>{ const s=SC.spots.find(x=>x.id==="elev"); closeDlg(); if(Math.hypot(player.x-s.x,player.y-s.y)<70) openElev(); else walkTo(s.x,s.y,s); cv.focus({preventScroll:true}); });
+
+/* ======================================================================
+   new crew on the map: interns + unrevealed X1~X3
+   ====================================================================== */
+Object.assign(POSE,{"sia_idle":{"w":121,"h":257,"ax":0.563},"sia_walk":{"w":136,"h":257,"ax":0.52},"sia_wave":{"w":126,"h":253,"ax":0.494},"sia_clean":{"w":139,"h":253,"ax":0.466},"sia_tray":{"w":160,"h":249,"ax":0.368},"sia_clap":{"w":116,"h":258,"ax":0.33},"sia_cheer":{"w":142,"h":254,"ax":0.573},"sia_sleep":{"w":138,"h":175,"ax":0.498},"sia_shock":{"w":184,"h":239,"ax":0.556},"moa_idle":{"w":145,"h":245,"ax":0.555},"moa_walk":{"w":144,"h":253,"ax":0.588},"moa_wave":{"w":156,"h":252,"ax":0.516},"moa_tea":{"w":155,"h":242,"ax":0.483},"moa_clap":{"w":121,"h":252,"ax":0.41},"moa_cheer":{"w":158,"h":252,"ax":0.517},"moa_sad":{"w":133,"h":235,"ax":0.477},"moa_suit":{"w":113,"h":225,"ax":0.555},"moa_duster":{"w":165,"h":231,"ax":0.347},"moa_shock":{"w":185,"h":242,"ax":0.569},"x1_idle":{"w":151,"h":244,"ax":0.36},"x1_cheer":{"w":189,"h":218,"ax":0.423},"x2_idle":{"w":187,"h":274,"ax":0.5},"x2_cheer":{"w":210,"h":261,"ax":0.501},"x3_idle":{"w":109,"h":171,"ax":0.495},"x3_cheer":{"w":152,"h":174,"ax":0.456}});
+Object.assign(CREW,{
+  sia:{idle:["sia_idle","sia_clean","sia_idle","sia_tray","sia_idle","sia_sleep"],move:"sia_walk",base:"sia_idle",h:116},
+  moa:{idle:["moa_idle","moa_tea","moa_idle","moa_clap","moa_idle","moa_duster"],move:"moa_walk",base:"moa_idle",h:110},
+  x1:{idle:["x1_idle","x1_idle","x1_cheer"],move:"x1_idle",base:"x1_idle",h:108,secret:true,still:true},
+  x2:{idle:["x2_idle","x2_cheer","x2_idle"],move:"x2_idle",base:"x2_idle",h:120,secret:true,still:true},
+  x3:{idle:["x3_idle","x3_cheer","x3_idle","x3_idle"],move:"x3_idle",base:"x3_idle",h:78,secret:true,still:true}
+});
+const XK=["x1","x2","x3"];
+Object.assign(REACT.bad,{sia:"sia_shock",moa:"moa_shock",x1:"x1_idle",x2:"x2_idle",x3:"x3_idle"});
+Object.assign(REACT.good,{sia:"sia_clap",moa:"moa_clap",x1:"x1_cheer",x2:"x2_cheer",x3:"x3_cheer"});
+Object.assign(REACT.jack,{sia:"sia_cheer",moa:"moa_cheer",x1:"x1_cheer",x2:"x2_cheer",x3:"x3_cheer"});
+const MP_NEW={happy:["sia_cheer","moa_cheer","_cheer"],down:["sia_shock","moa_sad","_idle"],cross:["sia_idle","moa_idle","_idle"],talk:["sia_wave","moa_wave","_idle"],calm:["sia_idle","moa_idle","_idle"],sleep:["sia_sleep","moa_idle","_idle"],wow:["sia_shock","moa_shock","_cheer"]};
+for(const m in MP_NEW){ MOOD_POSE[m].sia=MP_NEW[m][0]; MOOD_POSE[m].moa=MP_NEW[m][1]; XK.forEach(x=>MOOD_POSE[m][x]=x+MP_NEW[m][2]); }
+Object.assign(TALK_EXPR,{sia_wave:"E13",sia_idle:"E07",sia_clean:"E06",sia_tray:"E07",sia_cheer:"E12",sia_sleep:"E17",sia_shock:"E24",sia_clap:"E12",
+  moa_wave:"E13",moa_tea:"E01",moa_idle:"E07",moa_clap:"E12",moa_cheer:"E12",moa_suit:"E14",moa_shock:"E24",moa_sad:"E02",moa_duster:"E08",
+  x1_idle:"E13",x1_cheer:"E01",x2_idle:"E13",x2_cheer:"E16",x3_idle:"E13",x3_cheer:"E04"});
+// everyone reacts together (missing keys fall back to a sensible face)
+function emoteCrew(base,extra){ const m=Object.assign({sia:base.asst||"E13",moa:base.asst||"E13",x1:base.fly||"E13",x2:base.fly||"E13",x3:base.fly||"E13"},base,extra||{}); emoteAll(m,3.2); }
+
+/* ======================================================================
+   intern tours: Sia walks the 1F research zones, Moa explains the floors
+   ====================================================================== */
+let TOUR=null;
+function tourMenu(){
+  setInfo(`<span class="badge b-doing">${esc(T("tour_btn"))}</span><h3>${esc(T("tour_h"))}</h3><div class="meta">${esc(T("tour_desc"))}</div>
+    <div class="links"><button class="btn big" data-tour="sia">${pimg("sia_wave")}<span><b>${esc(T("tour_sia"))}</b><br><span class="meta">${esc(crewName("sia"))} · ${TOURS.sia.length}</span></span></button>
+    <button class="btn big" data-tour="moa">${pimg("moa_wave")}<span><b>${esc(T("tour_moa"))}</b><br><span class="meta">${esc(crewName("moa"))} · ${TOURS.moa.length}</span></span></button></div>`,{tour:1});
+  info.querySelectorAll("[data-tour]").forEach(b=>b.onclick=()=>startTour(b.dataset.tour));
+}
+function startTour(k){
+  if(running||travelling) return;
+  if(SC.id!=="F1"){ toast("🛗 1F · "+T("tour_h"),"bad"); return; }
+  if(playerKey===k){ playerKey=k==="sia"?"moa":"sia"; buildNPC(); renderPicker(); }
+  closeDlg(); info.hidden=true; lastInfo=null;
+  TOUR={k,i:0}; tourGo();
+}
+function tourGo(){
+  const n=NPC.find(x=>x.k===TOUR.k); if(!n){ TOUR=null; return; }
+  const [x,y]=TOURS[TOUR.k][TOUR.i];
+  n.away=true; npcWalk(n,x,y,()=>{ if(TOUR) tourSay(); });
+  walkTo(Math.max(30,x-70),Math.min(SC.h-20,y+26),null);
+  showTourWait();
+}
+function showTourWait(){
+  const k=TOUR.k; talk={k,tour:true,pose:CREW[k].move,at:now(),e:"E08"};
+  setPortrait(k,"E08"); dNm.textContent=crewName(k); dRl.textContent=crewRole(k);
+  dPg.textContent=T("tour_step",{i:TOUR.i+1,n:TOURS[k].length}); dTx.textContent="…"; tourButtons();
+}
+function tourSay(){
+  const k=TOUR.k, [,,pose,ex,text]=TOURS[k][TOUR.i], n=NPC.find(x=>x.k===k);
+  if(n) n.dir=player.x<n.x?-1:1;
+  talk={k,tour:true,pose,at:now(),e:ex}; setPortrait(k,ex); emote(k,ex,3.4);
+  dNm.textContent=crewName(k); dRl.textContent=crewRole(k);
+  dPg.textContent=T("tour_step",{i:TOUR.i+1,n:TOURS[k].length}); tourButtons();
+  typeLine(fill(L(text),k),true);
+}
+function tourButtons(){
+  const last=TOUR&&TOUR.i>=TOURS[TOUR.k].length-1;
+  document.getElementById("dNext").textContent=T(last?"tour_end":"tour_next");
+  document.getElementById("dClose").textContent=T("tour_end");
+  document.getElementById("dExpr").hidden=true;
+}
+function tourNext(){
+  if(!TOUR) return;
+  if(typer){ clearInterval(typer); typer=null; dTx.textContent=dTx.dataset.full; return; }
+  if(TOUR.i>=TOURS[TOUR.k].length-1){ endTour(); return; }
+  TOUR.i++; tourGo();
+}
+function endTour(){
+  if(!TOUR) return; const n=NPC.find(x=>x.k===TOUR.k); TOUR=null;
+  if(n) npcWalk(n,n.hx,n.hy,()=>{ n.away=false; n.off=0; });
+  document.getElementById("dNext").textContent=T("next"); document.getElementById("dClose").textContent=T("close");
+  talk=null; dlg.hidden=true; clearInterval(typer); typer=null;
+}
+function npcWalk(n,x,y,done){
+  const p=findPath(n.x,n.y,x,y); n.path=p?p.concat([[x,y]]):[[x,y]]; n.done=done; n.away=true;
+}
+function npcStep(n,dt){
+  if(!n.path||!n.path.length){ n.moving=false; return; }
+  const [tx,ty]=n.path[0], dx=tx-n.x, dy=ty-n.y, d=Math.hypot(dx,dy), sp=150;
+  if(d<4){ n.path.shift(); if(!n.path.length){ n.moving=false; n.path=null; const f=n.done; n.done=null; if(f) f(); } return; }
+  n.x+=dx/d*Math.min(d,sp*dt); n.y+=dy/d*Math.min(d,sp*dt); n.moving=true; if(Math.abs(dx)>1) n.dir=dx<0?-1:1;
+}
+
+/* ---------- X waiting seats + intern spots ---------- */
+function xsInfo(){
+  setInfo(`<span class="badge" style="color:#5f6663">No.007 · 008 · 009</span><h3>${esc(T("xs_h"))}</h3><div class="meta">${esc(T("xs_desc"))}</div>
+    <div class="egrid" style="grid-template-columns:repeat(3,minmax(0,1fr))">${XK.map(x=>`<button data-talk="${x}"><img src="${exprFace(x,"E13")}" alt=""><span>??? · ${esc(L(CREW_T[x].role).split("·").pop().trim())}</span></button>`).join("")}</div>`,{spot:"xs"});
+  info.querySelectorAll("[data-talk]").forEach(b=>b.onclick=()=>startTalk(b.dataset.talk));
+}
+function internInfo(k,s){
+  const t=doingOf(k);
+  setInfo(`<div class="row"><span class="badge b-doing">${esc(s.lab())}</span></div><h3>${esc(crewName(k))}</h3>
+    <div class="row">${pimg(CREW[k].base)}<div class="meta" style="flex:1;min-width:0">${esc(crewRole(k))}${t?"<br>"+esc(tLines(t)[0]):""}${k===playerKey?"<br>"+esc(T("playing")):""}</div></div>
+    <div class="links"><button class="btn pri" data-tour="${k}">${esc(T("tour_"+k))}</button><button class="btn" data-talk="${k}">${esc(T("talkto",{n:crewName(k)}))}</button></div>`,{spot:s.id});
+  info.querySelector("[data-tour]").onclick=()=>startTour(k); info.querySelector("[data-talk]").onclick=()=>startTalk(k);
+}
+
+/* ======================================================================
+   B2 gym: special-move tournament
+   strips: assets/fight/{sheet}.webp (8 frames in a row) from fruitfly-lab-expressions motion v1.2
+   ====================================================================== */
+const FM={"D1":{"w":115,"h":197,"n":8,"g":193,"face":"right","seg":{"idle":[1,4],"walk":[5,8]}},"D3":{"w":166,"h":197,"n":8,"g":193,"face":"right","seg":{"jab":[1,4],"guard":[5,6],"hit":[7,8]}},"D4":{"w":162,"h":198,"n":8,"g":190,"face":"front","seg":{"win":[1,4],"ko":[5,8]}},"D5":{"w":175,"h":178,"n":8,"g":169,"face":"right","seg":{"svd_chop":[1,8]}},"D6":{"w":183,"h":197,"n":8,"g":187,"face":"right","seg":{"broadcast_wave":[1,8]}},"D7":{"w":166,"h":202,"n":8,"g":194,"face":"right","seg":{"backprop_counter":[1,8]}},"A1":{"w":113,"h":174,"n":8,"g":169,"face":"left","seg":{"idle":[1,4],"walk":[5,8]}},"A3":{"w":165,"h":200,"n":8,"g":196,"face":"left","seg":{"jab":[1,4],"guard":[5,6],"hit":[7,8]}},"A4":{"w":167,"h":200,"n":8,"g":188,"face":"front","seg":{"win":[1,4],"ko":[5,8]}},"A5":{"w":142,"h":184,"n":8,"g":181,"face":"left","seg":{"onehot_barrage":[1,8]}},"A6":{"w":161,"h":188,"n":8,"g":163,"face":"left","seg":{"gd_kick":[1,8]}},"A10":{"w":166,"h":184,"n":8,"g":170,"face":"left","seg":{"backprop_counter":[1,8]}},"F1":{"w":167,"h":169,"n":8,"g":164,"face":"front","seg":{"idle":[1,4],"start":[5,8]}},"F2":{"w":182,"h":162,"n":8,"g":155,"face":"front","seg":{"point_left":[1,4],"point_right":[5,8]}},"F3":{"w":158,"h":148,"n":8,"g":143,"face":"front","seg":{"draw":[1,4],"suspect":[5,8]}},"R1":{"w":180,"h":218,"n":8,"g":203,"face":"front","seg":{"idle":[1,4],"count":[5,8]}},"R2":{"w":125,"h":161,"n":8,"g":148,"face":"front","seg":{"cheer":[1,4],"sad":[5,8]}},"M1":{"w":118,"h":174,"n":8,"g":169,"face":"left","seg":{"idle":[1,4],"walk":[5,8]}},"M3":{"w":125,"h":174,"n":8,"g":169,"face":"left","seg":{"jab":[1,4],"guard":[5,6],"hit":[7,8]}},"M4":{"w":144,"h":174,"n":8,"g":169,"face":"front","seg":{"win":[1,4],"ko":[5,8]}},"M5":{"w":151,"h":174,"n":8,"g":169,"face":"left","seg":{"outlier_duster":[1,8]}},"M6":{"w":144,"h":174,"n":8,"g":169,"face":"left","seg":{"batch_serving":[1,8]}},"M7":{"w":126,"h":174,"n":8,"g":169,"face":"left","seg":{"backprop_counter":[1,8]}},"M11":{"w":143,"h":175,"n":8,"g":170,"face":"front","seg":{"idle":[1,4],"start":[5,8]}},"M12":{"w":141,"h":174,"n":8,"g":169,"face":"front","seg":{"point_left":[1,4],"point_right":[5,8]}},"M14":{"w":113,"h":174,"n":8,"g":169,"face":"front","seg":{"idle":[1,4],"clap":[5,8]}},"M15":{"w":115,"h":174,"n":8,"g":169,"face":"front","seg":{"cheer":[1,4],"sad":[5,8]}},"S1":{"w":113,"h":174,"n":8,"g":169,"face":"right","seg":{"idle":[1,4],"walk":[5,8]}},"S3":{"w":123,"h":174,"n":8,"g":169,"face":"right","seg":{"jab":[1,4],"guard":[5,6],"hit":[7,8]}},"S4":{"w":113,"h":174,"n":8,"g":169,"face":"front","seg":{"win":[1,4],"ko":[5,8]}},"S5":{"w":161,"h":174,"n":8,"g":169,"face":"right","seg":{"missing_value_mop":[1,8]}},"S6":{"w":138,"h":174,"n":8,"g":169,"face":"right","seg":{"normalize_tray":[1,8]}},"S7":{"w":129,"h":174,"n":8,"g":169,"face":"right","seg":{"backprop_counter":[1,8]}},"S11":{"w":134,"h":182,"n":8,"g":177,"face":"front","seg":{"idle":[1,4],"start":[5,8]}},"S12":{"w":136,"h":174,"n":8,"g":169,"face":"front","seg":{"point_left":[1,4],"point_right":[5,8]}},"S14":{"w":113,"h":174,"n":8,"g":169,"face":"front","seg":{"idle":[1,4],"clap":[5,8]}},"S15":{"w":113,"h":174,"n":8,"g":169,"face":"front","seg":{"cheer":[1,4],"sad":[5,8]}},"X1A":{"w":130,"h":174,"n":8,"g":169,"face":"front","seg":{"idle":[1,4],"cheer":[5,8]}},"X2A":{"w":184,"h":204,"n":8,"g":199,"face":"front","seg":{"idle":[1,4],"cheer":[5,8]}},"X3A":{"w":131,"h":174,"n":8,"g":169,"face":"front","seg":{"idle":[1,4],"cheer":[5,8]}}};
+const GK=.68;                                   // strip pixels → world pixels
+const FS={
+  doc:{idle:["D1","idle"],walk:["D1","walk"],jab:["D3","jab"],guard:["D3","guard"],hit:["D3","hit"],win:["D4","win"],ko:["D4","ko"],sp:[["D5","svd_chop"],["D6","broadcast_wave"]],ctr:["D7","backprop_counter"]},
+  asst:{idle:["A1","idle"],walk:["A1","walk"],jab:["A3","jab"],guard:["A3","guard"],hit:["A3","hit"],win:["A4","win"],ko:["A4","ko"],sp:[["A5","onehot_barrage"],["A6","gd_kick"]],ctr:["A10","backprop_counter"]},
+  sia:{idle:["S1","idle"],walk:["S1","walk"],jab:["S3","jab"],guard:["S3","guard"],hit:["S3","hit"],win:["S4","win"],ko:["S4","ko"],sp:[["S5","missing_value_mop"],["S6","normalize_tray"]],ctr:["S7","backprop_counter"],
+       ref:["S11","idle"],start:["S11","start"],pl:["S12","point_left"],pr:["S12","point_right"],clap:["S14","clap"],cheer:["S15","cheer"],sit:["S14","idle"]},
+  moa:{idle:["M1","idle"],walk:["M1","walk"],jab:["M3","jab"],guard:["M3","guard"],hit:["M3","hit"],win:["M4","win"],ko:["M4","ko"],sp:[["M5","outlier_duster"],["M6","batch_serving"]],ctr:["M7","backprop_counter"],
+       ref:["M11","idle"],start:["M11","start"],pl:["M12","point_left"],pr:["M12","point_right"],clap:["M14","clap"],cheer:["M15","cheer"],sit:["M14","idle"]},
+  fly:{ref:["F1","idle"],start:["F1","start"],pl:["F2","point_left"],pr:["F2","point_right"],idle:["F3","suspect"]},
+  robo:{idle:["R1","idle"],count:["R1","count"],cheer:["R2","cheer"],sad:["R2","sad"]},
+  x1:{idle:["X1A","idle"],cheer:["X1A","cheer"]},x2:{idle:["X2A","idle"],cheer:["X2A","cheer"]},x3:{idle:["X3A","idle"],cheer:["X3A","cheer"]}
+};
+const MATCHES=[["doc","asst","sia"],["sia","moa","fly"],["asst","moa","sia"],["doc","sia","moa"],["asst","sia","moa"],["doc","moa","sia"]];
+const GSPOT={L:[460,500],R:[660,500],ref:[560,420],robo:[1010,268],x1:[300,214],x2:[372,216],x3:[440,214],bl1:[690,214],bl2:[770,214],rs1:[250,640],rs2:[880,640],rs3:[420,664]};
+let FIGHT=null, GYM={};
+function anim(set,key,o={}){ const a=FS[set]&&FS[set][key]; if(!a) return null; return {id:a[0],seg:a[1],t0:now(),fps:o.fps||(key==="idle"||key==="ref"||key==="sit"?5:10),loop:o.loop??(["idle","walk","ref","sit","clap","cheer","count"].includes(key)),key}; }
+function stripFrame(a,tn){
+  const m=FM[a.id], [s0,s1]=m.seg[a.seg], n=s1-s0+1; let k=Math.floor((tn-a.t0)*a.fps);
+  k=a.loop? ((k%n)+n)%n : Math.min(k,n-1); return s0-1+k;
+}
+function gymActor(k,pos,face,key,set){ return {k,set:set||k,x:pos[0],y:pos[1],face,a:anim(set||k,key),line:0,hp:100,meter:0,shake:0}; }
+function gymReset(){
+  // resting state: sparring partners on the ring, referee waiting, others in the stands
+  GYM={
+    L:gymActor("sia",GSPOT.L,1,"idle"), R:gymActor("moa",GSPOT.R,-1,"idle"), ref:gymActor("fly",GSPOT.ref,1,"ref"),
+    robo:gymActor("robo",GSPOT.robo,1,"idle"),
+    x1:gymActor("x1",GSPOT.x1,1,"idle"),x2:gymActor("x2",GSPOT.x2,1,"idle"),x3:gymActor("x3",GSPOT.x3,1,"idle"),
+    rs1:gymActor("doc",GSPOT.rs1,1,"idle"), rs2:gymActor("asst",GSPOT.rs2,-1,"idle")
+  };
+}
+function gymCast(a,b,ref){
+  const out={L:gymActor(a,GSPOT.L,1,"idle"),R:gymActor(b,GSPOT.R,-1,"idle"),ref:gymActor(ref,GSPOT.ref,1,"ref"),robo:gymActor("robo",GSPOT.robo,1,"count"),
+    x1:gymActor("x1",GSPOT.x1,1,"idle"),x2:gymActor("x2",GSPOT.x2,1,"idle"),x3:gymActor("x3",GSPOT.x3,1,"idle")};
+  const rest=["doc","asst","sia","moa","fly"].filter(k=>![a,b,ref].includes(k));
+  let bl=["bl1","bl2"], rs=["rs1","rs2","rs3"];
+  rest.forEach(k=>{
+    if((k==="sia"||k==="moa")&&bl.length){ const s=bl.shift(); out[s]=gymActor(k,GSPOT[s],1,"sit"); }
+    else { const s=rs.shift(); out[s]=gymActor(k,GSPOT[s],GSPOT[s][0]<560?1:-1,k==="fly"?"idle":"idle"); }
+  });
+  return out;
+}
+function drawStrip(g,act,tn){
+  if(!act||!act.a) return null; const a=act.a, m=FM[a.id], img=IMG["fs_"+a.id]; if(!img) return null;
+  const f=stripFrame(a,tn), w=m.w*GK, h=m.h*GK, gy=m.g*GK;
+  const flip = m.face==="front"? false : (m.face==="right"? act.face<0 : act.face>0);
+  const sx=Math.sin(tn*60)*act.shake;
+  g.fillStyle="rgba(31,34,36,.18)"; g.beginPath(); g.ellipse(act.x,act.y,Math.min(w*.3,44),7,0,0,7); g.fill();
+  g.save(); g.translate(act.x+sx,act.y); if(flip) g.scale(-1,1);
+  g.drawImage(img,f*m.w,0,m.w,m.h,-w/2,-gy,w,h); g.restore();
+  return {x0:act.x-w*.3,x1:act.x+w*.3,top:act.y-gy+h*.12,y:act.y};
+}
+function setA(act,key,o){ const a=anim(act.set,key,o); if(a) act.a=a; return a; }
+function animDur(a){ const [s0,s1]=FM[a.id].seg[a.seg]; return (s1-s0+1)/a.fps; }
+const gwait=ms=>new Promise(r=>setTimeout(r,ms));
+function tween(act,x,ms){ const x0=act.x, t0=performance.now(); return new Promise(res=>{ const st=()=>{ const k=Math.min(1,(performance.now()-t0)/ms); act.x=x0+(x-x0)*k; if(k<1) requestAnimationFrame(st); else res(); }; st(); }); }
+function banner(text,kind,ms){ FIGHT&&(FIGHT.banner={text,kind,until:now()+ms/1000,at:now()}); }
+function fightCheer(on){ const c=GYM; XK.forEach(x=>c[x]&&setA(c[x],on?"cheer":"idle")); ["bl1","bl2"].forEach(s=>c[s]&&setA(c[s],on?"cheer":"sit")); }
+async function runMatch(m){
+  if(FIGHT){ toast(T("gym_busy"),"bad"); return; }
+  if(SC.id!=="B2"){ toast(T("gym_f1"),"bad"); return; }
+  const [a,b,ref]=m; closeDlg(); info.hidden=true; lastInfo=null;
+  GYM=gymCast(a,b,ref);
+  const L_=GYM.L, R_=GYM.R;
+  FIGHT={L:L_,R:R_,ref:GYM.ref,phase:"intro",banner:null,hidePlayer:[a,b,ref].includes(playerKey)};
+  cine={x:560,y:430,until:now()+600}; FIGHT.refit=fit; if(fit){ fit=false; resize(); }
+  if(FIGHT.hidePlayer){ player.x=560; player.y=650; }
+  walkTo(560,640,null);
+  emote(a,"E22",2.4); emote(b,"E22",2.4);
+  banner("ROUND 1","n",1300); await gwait(1300);
+  setA(GYM.ref,"start",{fps:8}); await gwait(700);
+  banner("FIGHT!","g",900); FIGHT.phase="fight"; await gwait(500); setA(GYM.ref,"ref");
+  let turn=Math.random()<.5?L_:R_, guard=0;
+  while(L_.hp>0&&R_.hp>0&&guard++<30){
+    const att=turn, def=turn===L_?R_:L_; turn=def;
+    const dir=att===L_?1:-1;
+    // step in
+    setA(att,"walk"); await tween(att,def.x-dir*118,320); setA(att,"idle");
+    let special=null;
+    if(att.meter>=100){ special=FS[att.k].sp[Math.floor(Math.random()*2)]; att.meter=0; }
+    else if(att.hp<35&&att.meter>=60&&Math.random()<.5){ special=FS[att.k].ctr; att.meter=0; }
+    if(special){
+      const nm=L(MOVE_NAME[special[1]]); emote(att.k,"E22",2.2); emote(def.k,"E24",2.2);
+      banner(nm,att===L_?"l":"r",1500); fightCheer(true); setA(GYM.robo,"count");
+      att.a={id:special[0],seg:special[1],t0:now(),fps:9,loop:false,key:"sp"};
+      await gwait(560); const dmg=28+Math.floor(Math.random()*10); def.hp-=dmg; def.shake=4;
+      spawnFx(def.x,def.y-70,"jack"); setA(def,"hit",{fps:8}); tween(def,def.x+dir*46,260);
+      await gwait(520); def.shake=0; fightCheer(false);
+    } else if(Math.random()<.3){
+      setA(att,"jab",{fps:12}); setA(def,"guard",{fps:8}); await gwait(260); def.hp-=4; spawnFx(def.x-dir*20,def.y-80,"good"); att.meter+=25; await gwait(260);
+    } else {
+      setA(att,"jab",{fps:12}); await gwait(240); const dmg=10+Math.floor(Math.random()*7); def.hp-=dmg; def.shake=2.5; att.meter+=45;
+      setA(def,"hit",{fps:9}); spawnFx(def.x-dir*16,def.y-84,"bad"); tween(def,def.x+dir*16,160); await gwait(260); def.shake=0;
+    }
+    setA(att,"idle"); if(def.hp>0) setA(def,"idle");
+    await Promise.all([tween(att,att===L_?GSPOT.L[0]:GSPOT.R[0],300),tween(def,def===L_?GSPOT.L[0]:GSPOT.R[0],300)]);
+    await gwait(120);
+  }
+  if(L_.hp>0&&R_.hp>0){ (L_.hp<R_.hp?L_:R_).hp=0; }
+  const win=L_.hp>0?L_:R_, lose=win===L_?R_:L_;
+  FIGHT.phase="ko"; setA(lose,"ko",{fps:7,loop:false}); setA(win,"win",{fps:6,loop:true});
+  emote(win.k,"E16",3.5); emote(lose.k,"E21",3.5); banner("K.O.!","g",1400);
+  setA(GYM.robo,"cheer"); fightCheer(true); await gwait(1300);
+  setA(GYM.ref,win===L_?"pl":"pr",{fps:7,loop:false});
+  banner(T("f_win",{n:crewName(win.k)}),win===L_?"l":"r",2600);
+  fightRecord(win.k,lose.k); await gwait(2600);
+  FIGHT.phase="end"; await gwait(900);
+  const refit=FIGHT.refit; fightCheer(false); FIGHT=null; cine=null; gymReset(); if(refit){ fit=true; resize(); }
+  if(SC.id==="B2") gymInfo();
+}
+function fightRecord(w,l){
+  let R={}; try{ R=JSON.parse(localStorage.getItem("alt_fight")||"{}"); }catch(e){}
+  R.n=(R.n||0)+1; R[w]=R[w]||{w:0,l:0}; R[l]=R[l]||{w:0,l:0}; R[w].w++; R[l].l++;
+  try{ localStorage.setItem("alt_fight",JSON.stringify(R)); }catch(e){}
+}
+function gymInfo(){
+  const ref=k=>T("gym_ref",{n:crewName(k)});
+  setInfo(`<span class="badge b-gold">B2</span><h3>${esc(T("gym_h"))}</h3><div class="meta">${esc(T("gym_desc"))}</div>
+    <div class="sec">${esc(T("gym_pick"))}</div>
+    <div class="links">${MATCHES.map((m,i)=>`<button class="btn big" data-m="${i}"><img src="${exprFace(m[0],"E22")}" alt="" style="border-radius:8px"><span><b>${esc(crewName(m[0]))} vs ${esc(crewName(m[1]))}</b><br><span class="meta">${esc(ref(m[2]))} · ${esc(L(MOVE_NAME[FS[m[0]].sp[0][1]]))} / ${esc(L(MOVE_NAME[FS[m[1]].sp[0][1]]))}</span></span><img src="${exprFace(m[1],"E22")}" alt="" style="border-radius:8px;margin-left:auto"></button>`).join("")}
+    <button class="btn pri" data-m="r">${esc(T("gym_rand"))}</button></div>`,{gym:1});
+  info.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ const v=b.dataset.m; runMatch(v==="r"?MATCHES[Math.floor(Math.random()*MATCHES.length)]:MATCHES[+v]); });
+}
+function recordInfo(){
+  let R={}; try{ R=JSON.parse(localStorage.getItem("alt_fight")||"{}"); }catch(e){}
+  const ks=["doc","asst","sia","moa"];
+  setInfo(`<span class="badge b-done">${esc(T("sign_board"))}</span><h3>${esc(T("rec_h"))}</h3><div class="meta">${esc(T("rec_meta",{n:R.n||0}))}</div>
+    <ul class="items srv">${ks.map(k=>{ const r=R[k]||{w:0,l:0}; return `<li><div class="row">${pimg(CREW[k].base)}<b style="flex:1">${esc(crewName(k))}</b><span class="meta">${esc(T("rec_wl",{w:r.w,l:r.l}))}</span></div><span class="tags"><span class="tg">${esc(T("gym_moves"))}</span>${FS[k].sp.concat([FS[k].ctr]).map(s=>`<span class="tg">${esc(L(MOVE_NAME[s[1]]))}</span>`).join("")}</span></li>`; }).join("")}</ul>`,{spot:"board"});
+}
+function bagInfo(hit){
+  if(hit){ bagHits++; try{ localStorage.setItem("alt_bag",String(bagHits)); }catch(e){} bagSwing[Math.floor(Math.random()*2)]=.35; toast("🥊 "+T("bag_hit"),"good"); emote(playerKey,["E12","E16","E22","E01"][bagHits%4],2); }
+  setInfo(`<span class="badge b-todo">${esc(T("sign_bag"))}</span><h3>${esc(T("sign_bag"))} · ${esc(T("bag_n",{n:bagHits}))}</h3><div class="meta">${esc(T("bag_desc"))}</div><div class="links"><button class="btn pri" id="bagGo">${esc(T("bag_punch"))}</button></div>`,{spot:"bag"});
+  document.getElementById("bagGo").onclick=()=>bagInfo(true);
+}
+function drawGymActors(list){ const hp=FIGHT&&FIGHT.hidePlayer; for(const k in GYM){ if(!hp&&GYM[k].k===playerKey) continue; list.push({y:GYM[k].y,gym:GYM[k]}); } }
+function drawFightHUD(g,t){
+  if(!FIGHT) return;
+  const W=cssW, pad=12, bw=Math.min(300,(W-120)/2);
+  const bar=(x,act,right)=>{
+    const hp=Math.max(0,act.hp)/100;
+    g.fillStyle="#fff"; rr(g,x,pad,bw,30,8); g.fill(); g.lineWidth=2.5; g.strokeStyle=INK; g.stroke();
+    g.fillStyle=right?"#2f6fbf":"#d9668f"; const w=(bw-8)*hp; if(right) g.fillRect(x+4+(bw-8-w),pad+4,w,14); else g.fillRect(x+4,pad+4,w,14);
+    g.fillStyle="#f2c744"; const mw=(bw-8)*Math.min(1,act.meter/100); if(right) g.fillRect(x+4+(bw-8-mw),pad+21,mw,5); else g.fillRect(x+4,pad+21,mw,5);
+    g.font=`600 13px ${CF}`; g.textAlign=right?"right":"left"; g.fillStyle=INK; g.fillText(crewName(act.k),right?x+bw:x,pad+46);
+  };
+  bar(pad,FIGHT.L,false); bar(W-pad-bw,FIGHT.R,true);
+  g.font="22px 'Do Hyeon',sans-serif"; g.textAlign="center"; g.fillStyle=INK; g.fillText("VS",W/2,pad+24);
+  const b=FIGHT.banner; if(b&&now()<b.until){
+    const age=now()-b.at, s=Math.min(1,age*5), size=Math.round((b.kind==="l"||b.kind==="r"?34:56)*(0.7+0.3*s));
+    g.save(); g.font=`${size}px 'Do Hyeon',${CF}`; g.textAlign="center"; g.lineJoin="round";
+    const y=cssH*.42; g.lineWidth=8; g.strokeStyle=INK; g.strokeText(b.text,W/2,y);
+    g.fillStyle=b.kind==="g"?"#f2c744":b.kind==="l"?"#ff8fb3":b.kind==="r"?"#8fc1ff":"#ffffff"; g.fillText(b.text,W/2,y); g.restore();
+  }
+}
 
 /* ---------- server room panels ---------- */
 function rackInfo(i){
@@ -1410,6 +2135,7 @@ function coreInfo(){
 /* ---------- elevator ---------- */
 const elevEl=document.getElementById("elev"), transEl=document.getElementById("trans");
 function openElev(){
+  if(FIGHT){ toast(T("gym_busy"),"bad"); return; }
   closeDlg(); elevForce=1; elevEl.hidden=false; document.getElementById("eMsg").textContent=""; renderElev();
   const cur=elevEl.querySelector('[aria-current="true"]'); (cur||elevEl.querySelector("button")).focus({preventScroll:true});
 }
@@ -1440,8 +2166,8 @@ async function travel(f){
   led.textContent=f.code; msg.textContent=T("el_arrive",{f:`${f.code} ${L(f.name)}`});
   await wait(reduceMo?200:550);
   transEl.hidden=true; elevForce=1; travelling=false; setTimeout(()=>{ if(!elevEl.hidden) return; elevForce=0; },1200);
-  toast(T("el_arrive",{f:`${f.code} ${L(f.name)}`}),"good"); emote(playerKey,f.id==="B1"?"E19":"E13",3);
-  if(f.id==="B1") coreInfo(); else welcome();
+  toast(T("el_arrive",{f:`${f.code} ${L(f.name)}`}),"good"); emote(playerKey,f.id==="F1"?"E13":"E19",3);
+  if(f.id==="B1") coreInfo(); else if(f.id==="B2") gymInfo(); else welcome();
   cv.focus({preventScroll:true});
 }
 
@@ -1502,15 +2228,15 @@ lvl.addEventListener("input",updRisk);
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 go.addEventListener("click",async()=>{
   if(SC.id!=="F1"){ toast(T("con_f1"),"bad"); game.scrollIntoView({block:"center"}); return; }
-  if(running) return; running=true; go.disabled=true;
+  if(running) return; if(TOUR) endTour(); running=true; go.disabled=true;
   const e=EVENTS.find(x=>x.id===evSel), l=+lvl.value, p=riskOf(e,l), r=Math.random();
   const outcome = r<p ? "accident" : r<2*p ? "jackpot" : "ok";
   closeDlg(); res.hidden=true;
   const reduceMo=matchMedia("(prefers-reduced-motion: reduce)").matches;
   game.scrollIntoView({behavior:reduceMo?"auto":"smooth",block:"center"});
-  cine={x:e.x,y:e.y+120,ex:e.x,ey:e.y+40,until:now()+6.4};
+  cine={x:e.x,y:e.y+60,ex:e.x,ey:e.y+20,until:now()+6.4};
   // countdown
-  emoteAll({doc:"E20",asst:"E15",fly:"E09",robo:"E09"},3.4);
+  emoteCrew({doc:"E20",asst:"E15",fly:"E09",robo:"E09"},{sia:"E09",moa:"E20",x1:"E04",x2:"E09",x3:"E04"});
   cd.hidden=false; document.getElementById("cdL").textContent=T("cd_label"); document.getElementById("cdE").textContent=`${zoneLabel(e)} · ${L(e.name)}`;
   for(const n of [3,2,1]){ cdN.className="n"; void cdN.offsetWidth; cdN.textContent=n; await wait(1000); }
   cdN.className="n go"; void cdN.offsetWidth; cdN.textContent=T("cd_go"); await wait(350); cd.hidden=true;
@@ -1519,7 +2245,8 @@ go.addEventListener("click",async()=>{
   spawnFx(e.x,e.y+60,mode);
   counterHit(e.id,outcome,l);
   react={mode,until:now()+3};
-  emoteAll(outcome==="accident"?{doc:"E24",asst:"E21",fly:"E05",robo:"E24"}:outcome==="jackpot"?{doc:"E19",asst:"E19",fly:"E19",robo:"E19"}:{doc:"E10",asst:"E01",fly:"E16",robo:"E01"},3.2);
+  emoteCrew(outcome==="accident"?{doc:"E24",asst:"E21",fly:"E05",robo:"E24"}:outcome==="jackpot"?{doc:"E19",asst:"E19",fly:"E19",robo:"E19"}:{doc:"E10",asst:"E01",fly:"E16",robo:"E01"},
+    outcome==="accident"?{sia:"E24",moa:"E21",x1:"E24",x2:"E15",x3:"E24"}:outcome==="jackpot"?{sia:"E19",moa:"E19",x1:"E16",x2:"E16",x3:"E01"}:{sia:"E10",moa:"E12",x1:"E01",x2:"E01",x3:"E01"});
   if(outcome==="accident"){
     fxMode="bad"; fxUntil=now()+3;
     toast(T("t_bad",{z:zoneLabel(e),n:L(e.name)}),"bad");
@@ -1528,7 +2255,7 @@ go.addEventListener("click",async()=>{
   } else if(outcome==="jackpot"){
     fxMode="jack"; fxUntil=now()+3;
     toast(T("t_jack",{z:zoneLabel(e),n:L(e.name)}),"jack");
-    showRes(true,T("b_jack",{n:STATS.jack}),A+"group_large.webp",L(e.jack));
+    showRes(true,T("b_jack",{n:STATS.jack}),A+(e.jk||"cuts/jack_all.webp"),L(e.jack));
     setInfo(`<span class="badge b-gold">${esc(T("b_jack",{n:STATS.jack}))}</span><h3>${esc(L(e.jack))}</h3><div class="row">${pimg("robo_dance")}<div class="meta" style="flex:1;min-width:0">${esc(T("jack_body",{z:zoneLabel(e),l,lv:L(UI.levels)[l-1]}))}</div></div>`);
   } else {
     fxMode=null; toast(T("t_good",{n:L(e.name)}),"good");
@@ -1550,8 +2277,8 @@ function showRes(gold,tagText,img,cap){
    picker + lists
    ====================================================================== */
 const picker=document.getElementById("picker");
-function renderPicker(){ picker.innerHTML=Object.keys(CREW).map(k=>`<button class="pick" data-k="${k}" aria-pressed="${k===playerKey}"><img src="${P}${CREW[k].base}.webp" alt="">${esc(crewName(k))}</button>`).join(""); }
-picker.addEventListener("click",e=>{ const b=e.target.closest(".pick"); if(!b) return; playerKey=b.dataset.k; buildNPC(); renderPicker(); closeDlg(); cv.focus({preventScroll:true}); });
+function renderPicker(){ picker.innerHTML=Object.keys(CREW).filter(k=>!CREW[k].secret).map(k=>`<button class="pick" data-k="${k}" aria-pressed="${k===playerKey}"><img src="${P}${CREW[k].base}.webp" alt="">${esc(crewName(k))}</button>`).join(""); }
+picker.addEventListener("click",e=>{ const b=e.target.closest(".pick"); if(!b) return; if(TOUR) endTour(); playerKey=b.dataset.k; buildNPC(); renderPicker(); closeDlg(); cv.focus({preventScroll:true}); });
 function renderLists(){
   const n=s=>TASKS.filter(t=>t.status===s).length;
   document.getElementById("sWork").innerHTML=["todo","doing","done"].map(s=>`<span class="chip"><span class="dot" style="background:var(--${s})"></span>${esc(T(s))} ${n(s)}</span>`).join("");
@@ -1571,11 +2298,13 @@ function applyLang(){
   document.querySelectorAll("[data-i18n-html]").forEach(el=>el.innerHTML=T(el.dataset.i18nHtml));
   document.getElementById("footMascot").href=mascotUrl();
   zoomBtn.textContent=T(fit?"zoom_in":"zoom_all");
+  if(TOUR){ tourButtons(); }
   document.getElementById("tgSoon").hidden=!!CFG.TELEGRAM_BOT_URL;
   cv.setAttribute("aria-label",T("k_hint"));
   setActLabel(); renderEvs(); renderPicker(); renderLists(); renderStats(); ostUI();
-  if(talk){ if(talk.free) { setPortrait(talk.k,talk.e); dNm.textContent=crewName(talk.k); dRl.textContent=crewRole(talk.k); typeLine(exprLine(talk.k,talk.e),false); } else showLine(false); }
-  if(lastInfo){ if(lastInfo.welcome) welcome(); else if(lastInfo.expr) exprGallery(lastInfo.expr); else if(lastInfo.tg) tgInfo(); else if(lastInfo.spot){ const s=spotById(lastInfo.spot); if(s) inspect(s); } }
+  if(talk&&talk.tour){ const tk=TOURS[talk.k][TOUR?TOUR.i:0]; dNm.textContent=crewName(talk.k); dRl.textContent=crewRole(talk.k); typeLine(fill(L(tk[4]),talk.k),false); }
+  else if(talk){ if(talk.free) { setPortrait(talk.k,talk.e); dNm.textContent=crewName(talk.k); dRl.textContent=crewRole(talk.k); typeLine(exprLine(talk.k,talk.e),false); } else showLine(false); }
+  if(lastInfo){ if(lastInfo.welcome) welcome(); else if(lastInfo.expr) exprGallery(lastInfo.expr); else if(lastInfo.tg) tgInfo(); else if(lastInfo.tour) tourMenu(); else if(lastInfo.gym) gymInfo(); else if(lastInfo.spot){ const s=spotById(lastInfo.spot); if(s) inspect(s); } }
   if(!elevEl.hidden) renderElev();
 }
 function setLang(l){ lang=l; try{localStorage.setItem("alt_lang",l)}catch(e){} applyLang(); }
@@ -1592,11 +2321,14 @@ async function boot(){
   if(cfg) Object.assign(CFG,cfg);
   SRV=await svLoad([CFG.SERVER_CSV_URL,"servers.csv"],FALLBACK_SRV);
   await ostLoad(CFG.OST_PLAYLIST_URL||"ost/ost.csv"); ostBind(); ostUI();
-  buildHall(); buildB1(); if(document.fonts) document.fonts.ready.then(()=>{ buildHall(); });
+  buildF1(); buildB1(); buildB2(); gymReset(); if(document.fonts) document.fonts.ready.then(()=>{ buildF1(); buildB2(); });
   TASKS=pj.list; PJ_OK=pj.ok; RES=resd;
   buildNPC(); resize(); welcome(); applyLang(); counterInit();
-  await Promise.all([["map","map@2x.webp"],["map_ov","map_overload@2x.webp"]].map(([k,f])=>load(k,A+f)).concat(Object.keys(POSE).map(p=>load(p,P+p+".webp"))));
-  ["cut1_panic","cut2_robot","cut3_gpu","cut4_fly","doc_large","group_large"].forEach(f=>{const i=new Image(); i.src=A+f+".webp"});
+  await Promise.all(Object.keys(POSE).map(p=>load(p,P+p+".webp")));
+  requestAnimationFrame(frame);
+  Object.keys(FM).forEach(id=>load("fs_"+id,A+"fight/"+id+".webp"));
+  EVENTS.map(e=>e.cut).concat(EVENTS.map(e=>e.jk),["doc_large.webp"]).filter(Boolean).forEach(f=>{const i=new Image(); i.src=A+f});
+  return;
   requestAnimationFrame(frame);
 }
 boot();

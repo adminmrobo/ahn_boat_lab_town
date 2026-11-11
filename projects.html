@@ -413,6 +413,8 @@ Object.assign(UI,{
   expr_h:L6("{n}의 표정 24종","{n}: 24 expressions","{n} 的 24 种表情","{n}の表情24種","{n}: 24 ta ifoda","{n}: 24 эмоции"),
   expr_hint:L6("표정을 누르면 그 표정으로 말한다. 연구원을 빠르게 세 번 누르면 반응이 달라진다.","Tap an expression to hear that line. Tap a researcher three times fast for a special reaction.","点表情就会用那个表情说话。快速连点研究员三下会有不同反应。","表情を押すとその表情でしゃべる。研究員を素早く3回押すと反応が変わる。","Ifodani bossangiz, o'sha ifoda bilan gapiradi. Tadqiqotchini tez-tez uch marta bossangiz, boshqacha javob beradi.","Нажмите на эмоцию — персонаж скажет реплику. Три быстрых нажатия на исследователя вызовут особую реакцию.")
 });
+CREW_T.sia={name:L6("인턴 시아","Sia (Intern)","实习生 Sia","インターン シア","Amaliyotchi Sia","Стажёр Сия"),role:L6("메이드 인턴 · 자료 정리","Maid intern · tidies data","女仆实习生 · 整理资料","メイドインターン・資料整理","Xizmatchi amaliyotchi · ma'lumotlarni tartiblaydi","Стажёр-горничная · порядок в данных")};
+CREW_T.moa={name:L6("인턴 모아","Moa (Intern)","实习生 Moa","インターン モア","Amaliyotchi Moa","Стажёр Моа"),role:L6("메이드 인턴 · 기록 모으기","Maid intern · record keeping","女仆实习生 · 收集记录","メイドインターン・記録集め","Xizmatchi amaliyotchi · yozuvlarni yig'ish","Стажёр-горничная · сбор записей")};
 CREW_T.asst.name=L6("조수 하루","Haru (Assistant)","助手 Haru","助手ハル","Yordamchi Haru","Ассистент Хару");
 TALK.asst[0][1]=L6("안녕하세요! 저는 조수 하루예요. 처음 오셨나요?","Hi! I'm Haru, the Assistant. Is this your first visit?","你好！我是助手 Haru。你是第一次来吗？","こんにちは！助手のハルです。はじめてですか？","Salom! Men yordamchi Haru. Birinchi marta keldingizmi?","Привет! Я Хару, ассистент. Вы здесь впервые?");
 
@@ -452,6 +454,8 @@ function pjOwner(s){
   s=String(s||"").trim().toLowerCase();
   if(/조수|조교|asst|assistant/.test(s)) return "asst";
   if(/초파리|fly/.test(s)) return "fly";
+  if(/시아|sia/.test(s)) return "sia";
+  if(/모아|moa/.test(s)) return "moa";
   if(/robo|로보|money|주판|aba|算盘|アバ|аба/.test(s)) return "robo";
   return "doc";
 }
