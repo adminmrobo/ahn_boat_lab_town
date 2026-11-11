@@ -711,7 +711,11 @@ EVENTS.push(
    jack:L6("신호 해독 성공 — ‘곧 새 식구가 옵니다’","Signal decoded — ‘New members are coming soon’","信号解读成功——“新成员即将到来”","信号解読成功——「もうすぐ新しい仲間が来ます」","Signal ochildi — «Tez orada yangi a'zolar keladi»","Сигнал расшифрован: «Скоро придут новые участники»")}
 );
 // redrawn comic cuts for the original six experiments (whole crew now appears)
-[["e1","cuts/e1_acc.webp"],["e2","cuts/e2_acc.webp"],["e3","cuts/e3_acc.webp"],["e4","cuts/e4_acc.webp"],["e5","cuts/e5_acc.webp"],["e6","cuts/e6_acc.webp"]].forEach(([id,c])=>{ const e=EVENTS.find(x=>x.id===id); e.cut=c; e.jk="cuts/jack_all.webp"; });
+// the original cuts stay in rotation: each run alternates original ↔ redrawn (e.g. the giant fruit-fly hologram)
+[["e1","cuts/e1_acc.webp"],["e2","cuts/e2_acc.webp"],["e3","cuts/e3_acc.webp"],["e4","cuts/e4_acc.webp"],["e5","cuts/e5_acc.webp"],["e6","cuts/e6_acc.webp"]].forEach(([id,c])=>{ const e=EVENTS.find(x=>x.id===id); e.cuts=[e.cut,c]; e.cut=c; e.jks=["group_large.webp","cuts/jack_all.webp"]; e.jk="cuts/jack_all.webp"; });
+EVENTS.filter(e=>!e.cuts).forEach(e=>{ e.cuts=[e.cut]; e.jks=[e.jk,"cuts/jack_all.webp"]; });
+const CUT_N={}; try{ Object.assign(CUT_N,JSON.parse(localStorage.getItem("alt_cutn")||"{}")); }catch(e){}
+function pickCut(e,kind){ const list=kind==="acc"?e.cuts:e.jks, k=e.id+kind, i=(CUT_N[k]=(CUT_N[k]??Math.floor(Math.random()*list.length))+1)%list.length; try{ localStorage.setItem("alt_cutn",JSON.stringify(CUT_N)); }catch(_){} return list[i]; }
 // new map coordinates for the original experiments (1F was redrawn smaller)
 Object.assign(EVENTS.find(e=>e.id==="e1"),{x:180,y:240}); Object.assign(EVENTS.find(e=>e.id==="e2"),{x:510,y:180});
 Object.assign(EVENTS.find(e=>e.id==="e3"),{x:800,y:190}); Object.assign(EVENTS.find(e=>e.id==="e4"),{x:150,y:400});
@@ -2250,12 +2254,12 @@ go.addEventListener("click",async()=>{
   if(outcome==="accident"){
     fxMode="bad"; fxUntil=now()+3;
     toast(T("t_bad",{z:zoneLabel(e),n:L(e.name)}),"bad");
-    showRes(false,T("b_acc",{n:STATS.acc}),A+e.cut,L(e.acc));
+    showRes(false,T("b_acc",{n:STATS.acc}),A+pickCut(e,"acc"),L(e.acc));
     setInfo(`<span class="badge b-alarm">${esc(T("b_acc",{n:STATS.acc}))}</span><h3>${esc(L(e.acc))}</h3><div class="row">${pimg("robo_alert")}<div class="meta" style="flex:1;min-width:0">${esc(T("acc_body",{z:zoneLabel(e),l,lv:L(UI.levels)[l-1]}))}</div></div>`);
   } else if(outcome==="jackpot"){
     fxMode="jack"; fxUntil=now()+3;
     toast(T("t_jack",{z:zoneLabel(e),n:L(e.name)}),"jack");
-    showRes(true,T("b_jack",{n:STATS.jack}),A+(e.jk||"cuts/jack_all.webp"),L(e.jack));
+    showRes(true,T("b_jack",{n:STATS.jack}),A+pickCut(e,"jack"),L(e.jack));
     setInfo(`<span class="badge b-gold">${esc(T("b_jack",{n:STATS.jack}))}</span><h3>${esc(L(e.jack))}</h3><div class="row">${pimg("robo_dance")}<div class="meta" style="flex:1;min-width:0">${esc(T("jack_body",{z:zoneLabel(e),l,lv:L(UI.levels)[l-1]}))}</div></div>`);
   } else {
     fxMode=null; toast(T("t_good",{n:L(e.name)}),"good");
@@ -2327,7 +2331,7 @@ async function boot(){
   await Promise.all(Object.keys(POSE).map(p=>load(p,P+p+".webp")));
   requestAnimationFrame(frame);
   Object.keys(FM).forEach(id=>load("fs_"+id,A+"fight/"+id+".webp"));
-  EVENTS.map(e=>e.cut).concat(EVENTS.map(e=>e.jk),["doc_large.webp"]).filter(Boolean).forEach(f=>{const i=new Image(); i.src=A+f});
+  EVENTS.flatMap(e=>e.cuts.concat(e.jks)).concat(["doc_large.webp"]).filter(Boolean).forEach(f=>{const i=new Image(); i.src=A+f});
   return;
   requestAnimationFrame(frame);
 }
