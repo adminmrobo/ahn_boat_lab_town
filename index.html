@@ -71,6 +71,10 @@ h2{font-family:var(--display);font-weight:400;margin:0;font-size:24px}
 
 .game{position:relative;border:3px solid #2a1f3d;border-radius:14px;overflow:hidden;background:#0d0b16}
 .game canvas{display:block;width:100%;touch-action:none;cursor:pointer}
+.b1g{position:absolute;left:10px;bottom:44px;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:min(32%,210px);padding:5px 5px 3px;border-radius:10px;background:rgba(20,13,8,.88);border:1.5px solid #c98a3c;box-shadow:0 0 14px rgba(242,163,58,.35);text-decoration:none}
+.b1g[hidden]{display:none}
+.b1g video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;border-radius:6px;background:#000;pointer-events:none}
+.b1g span{grid-column:1/-1;text-align:center;font-size:11px;color:#f2a33a;font-family:var(--mono);letter-spacing:.04em;line-height:1.5}
 .game.alarm{border-color:var(--alarm)}
 .game.alarm canvas{animation:shake .32s linear infinite}
 .game.gold{border-color:var(--gold)}
@@ -353,6 +357,7 @@ footer{border-top:2px solid var(--ink)}
   <div class="stage">
     <div class="game" id="game">
       <canvas id="cv" tabindex="0" aria-label="Lab map"></canvas>
+      <a class="b1g" id="b1g" hidden target="_blank" rel="noopener" href="https://adminmrobo.github.io/ahnboat_server_room_guards/"></a>
       <div class="toast" id="toast" hidden></div>
       <div class="ctrl">
         <div class="pad" aria-hidden="true">
@@ -2140,6 +2145,18 @@ function drawFightHUD(g,t){
 /* ---------- server room panels ---------- */
 /* B1 guard loops (Haru · Sia · Moa) — 12s silent loops hosted in adminmrobo/ahnboat_server_room_guards */
 const GUARD_BASE="https://adminmrobo.github.io/ahnboat_server_room_guards/";
+function syncGuards(){
+  const el=document.getElementById("b1g"); if(!el) return;
+  const on=SC&&SC.id==="B1";
+  if(on&&!el.dataset.ready){
+    const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.innerHTML=["haru","sia","moa"].map(k=>`<video ${still?"":"autoplay "}loop muted playsinline preload="metadata" poster="${GUARD_BASE}loops/SR_${k}_poster.jpg" aria-label="${esc(T("guard_"+k))}"><source src="${GUARD_BASE}loops/SR_${k}_loop.webm" type="video/webm"><source src="${GUARD_BASE}loops/SR_${k}_loop.mp4" type="video/mp4"></video>`).join("")+`<span>${esc(T("guard_h"))}</span>`;
+    el.dataset.ready="1";
+  }
+  if(el.dataset.ready){ el.querySelector("span").textContent=T("guard_h"); el.setAttribute("aria-label",T("guard_more")); }
+  el.hidden=!on;
+  el.querySelectorAll("video").forEach(v=>{ try{ on&&v.hasAttribute("autoplay")?v.play().catch(()=>{}):v.pause(); }catch(e){} });
+}
 function guardStrip(){
   const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
   const v=k=>`<figure class="gd"><video ${still?"":"autoplay "}loop muted playsinline preload="metadata" poster="${GUARD_BASE}loops/SR_${k}_poster.jpg" aria-label="${esc(T("guard_"+k))}"><source src="${GUARD_BASE}loops/SR_${k}_loop.webm" type="video/webm"><source src="${GUARD_BASE}loops/SR_${k}_loop.mp4" type="video/mp4"></video><figcaption>${esc(T("guard_"+k))}</figcaption></figure>`;
@@ -2187,7 +2204,7 @@ async function travel(f){
   msg.textContent=T("el_moving",{f:`${f.code} ${L(f.name)}`});
   const dir=FLOORS.indexOf(f)>FLOORS.indexOf(from)?"▼":"▲";
   led.textContent=from.code; await wait(reduceMo?200:600); led.textContent=dir; await wait(reduceMo?100:450);
-  SC=SCENES[f.id]; ostScene(f.id); const e=elevOf(); player.x=e.x; player.y=e.doorY+56; player.path=null; player.goal=null; near=null; draw.init=0; resize();
+  SC=SCENES[f.id]; syncGuards(); ostScene(f.id); const e=elevOf(); player.x=e.x; player.y=e.doorY+56; player.path=null; player.goal=null; near=null; draw.init=0; resize();
   led.textContent=f.code; msg.textContent=T("el_arrive",{f:`${f.code} ${L(f.name)}`});
   await wait(reduceMo?200:550);
   transEl.hidden=true; elevForce=1; travelling=false; setTimeout(()=>{ if(!elevEl.hidden) return; elevForce=0; },1200);
