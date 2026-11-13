@@ -156,6 +156,14 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-b
 .btn.big{width:100%;padding:11px 12px;font-size:14px;justify-content:flex-start;text-align:left}
 .btn.big img{width:34px;height:34px;object-fit:contain;flex:0 0 34px}
 .links{display:grid;gap:8px;margin-top:8px}
+.guards{margin:0 0 14px;padding:10px 10px 8px;border-radius:12px;background:#140d08;border:1px solid #3a2716;color:#f3e6d3}
+.guards .gh{font-size:15px;color:#f2a33a}
+.guards .meta{color:#b9a58a}
+.guards .grow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0 4px}
+.guards .gd{margin:0}
+.guards video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;border-radius:8px;background:#000}
+.guards figcaption{text-align:center;font-size:12px;margin-top:3px;color:#f3e6d3}
+.guards .gmore{display:inline-block;margin-top:2px;color:#4fd1c5}
 .items.srv li{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:grid;gap:3px}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
 .tg{font-size:11px;font-family:var(--mono);border:1px solid var(--line);border-radius:999px;padding:0 7px;color:#cfe9ff}
@@ -608,6 +616,12 @@ Object.assign(UI,{
   el_locked_msg:L6("{f} — 접근 금지 구역입니다.","{f} — restricted area. Access denied.","{f}——禁止进入区域。","{f}は立入禁止区域です。","{f} — kirish taqiqlangan hudud.","{f} — запретная зона. Доступ закрыт."),
   el_moving:L6("{f} 이동 중…","Heading to {f}…","正在前往 {f}…","{f}へ移動中…","{f} ga ketmoqda…","Едем: {f}…"),
   el_arrive:L6("{f} 도착","Arrived: {f}","已到达 {f}","{f}に到着","{f} ga yetib keldik","Прибыли: {f}"),
+  guard_h:L6("오늘의 서버실 당직","Tonight's server-room guards","今晚的机房值班","今夜のサーバールーム当番","Bugungi server xonasi navbatchilari","Сегодняшние дежурные серверной"),
+  guard_desc:L6("조수 하루와 인턴 시아·모아가 랙을 지킨다.","Assistant Haru and interns Sia and Moa keep watch over the racks.","助手小春和实习生诗雅、茉雅守护着机架。","助手ハルとインターンのシア・モアがラックを見守る。","Yordamchi Haru va stajyorlar Sia, Moa javonlarni qo'riqlaydi.","Ассистент Хару и стажёры Сиа и Моа стерегут стойки."),
+  guard_haru:L6("하루","Haru","小春","ハル","Haru","Хару"),
+  guard_sia:L6("시아","Sia","诗雅","シア","Sia","Сиа"),
+  guard_moa:L6("모아","Moa","茉雅","モア","Moa","Моа"),
+  guard_more:L6("지킴이 영상 크게 보기 ↗","Watch the guards full size ↗","查看大图视频 ↗","大きく見る ↗","Kattaroq ko'rish ↗","Смотреть крупно ↗"),
   core_sign:L6("서버 코어","Server core","服务器核心","サーバーコア","Server yadrosi","Ядро серверов"),
   core_h:L6("서버 코어 · 전체 랙","Server core · all racks","服务器核心 · 全部机架","サーバーコア・全ラック","Server yadrosi · barcha javonlar","Ядро · все стойки"),
   core_desc:L6("지금까지의 분석과 포트폴리오 결과가 10개의 랙에 나뉘어 저장돼 있다. 랙을 눌러 내용을 확인해라.","All analyses and portfolio results so far are stored across 10 racks. Tap a rack to look inside.","迄今为止的分析与作品成果分存在 10 个机架里。点击机架查看内容。","これまでの分析とポートフォリオの成果が10台のラックに分けて保存されている。ラックを押して中身を確かめろ。","Shu paytgacha bo'lgan tahlillar va portfolio natijalari 10 ta javonda saqlangan. Ichini ko'rish uchun javonni bosing.","Все анализы и результаты портфолио хранятся в 10 стойках. Нажмите на стойку, чтобы заглянуть внутрь."),
@@ -2124,6 +2138,13 @@ function drawFightHUD(g,t){
 }
 
 /* ---------- server room panels ---------- */
+/* B1 guard loops (Haru · Sia · Moa) — 12s silent loops hosted in adminmrobo/ahnboat_server_room_guards */
+const GUARD_BASE="https://adminmrobo.github.io/ahnboat_server_room_guards/";
+function guardStrip(){
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const v=k=>`<figure class="gd"><video ${still?"":"autoplay "}loop muted playsinline preload="metadata" poster="${GUARD_BASE}loops/SR_${k}_poster.jpg" aria-label="${esc(T("guard_"+k))}"><source src="${GUARD_BASE}loops/SR_${k}_loop.webm" type="video/webm"><source src="${GUARD_BASE}loops/SR_${k}_loop.mp4" type="video/mp4"></video><figcaption>${esc(T("guard_"+k))}</figcaption></figure>`;
+  return `<div class="guards"><b class="gh">${esc(T("guard_h"))}</b><div class="meta">${esc(T("guard_desc"))}</div><div class="grow">${["haru","sia","moa"].map(v).join("")}</div><a class="meta gmore" href="${GUARD_BASE}" target="_blank" rel="noopener">${esc(T("guard_more"))}</a></div>`;
+}
 function rackInfo(i){
   const cat=rackCat(i), col=RACK_COL[i], code="RACK "+String(i+1).padStart(2,"0");
   if(!cat){ setInfo(`<span class="badge" style="color:#7a85a0">${code}</span><h3>${esc(T("rack_empty"))}</h3><div class="meta">${esc(T("rack_empty_desc"))}</div>`,{spot:"rack"+i}); return; }
@@ -2131,7 +2152,7 @@ function rackInfo(i){
     <ul class="items srv">${cat.items.map(it=>{ const ti=svT(it,"title"), de=svT(it,"desc"), tg=svT(it,"tags"), no=svT(it,"note"); return `<li><b>${esc(ti)}</b>${de?`<span class="who" style="color:var(--fg);opacity:.85">${linkify(de)}</span>`:""}${tg.length?`<span class="tags">${tg.map(x=>`<span class="tg" style="border-color:${col}66">${esc(x)}</span>`).join("")}</span>`:""}<span class="who">${it.date?esc(T("created"))+" "+esc(it.date):""}${it.date&&no?" · ":""}${no?linkify(no):""}</span></li>`; }).join("")}</ul>`,{spot:"rack"+i});
 }
 function coreInfo(){
-  setInfo(`<span class="badge b-doing">${esc(T("core_sign"))}</span><h3>${esc(T("core_h"))}</h3><div class="meta">${esc(T("core_desc"))}<br>${esc(T("total_n",{n:SRV.cats.reduce((a,c)=>a+c.items.length,0)}))}</div>
+  setInfo(`${guardStrip()}<span class="badge b-doing">${esc(T("core_sign"))}</span><h3>${esc(T("core_h"))}</h3><div class="meta">${esc(T("core_desc"))}<br>${esc(T("total_n",{n:SRV.cats.reduce((a,c)=>a+c.items.length,0)}))}</div>
     <div class="links">${RACKS.map(r=>{ const c=rackCat(r.i); return `<button class="btn big" data-rack="${r.i}" style="border-left:4px solid ${c?RACK_COL[r.i]:"#3a4258"}"><span style="font-family:var(--mono);font-size:12px;color:var(--muted);width:56px">R${String(r.i+1).padStart(2,"0")}</span><span><b>${esc(c?catName(c):T("rack_empty"))}</b> <span class="meta">${c?esc(T("items_n",{n:c.items.length})):""}</span></span></button>`; }).join("")}</div>`,{spot:"core"});
   info.querySelectorAll("[data-rack]").forEach(b=>b.onclick=()=>{ const s=spotById("rack"+b.dataset.rack); walkTo(s.x,s.y,null); rackInfo(+b.dataset.rack); });
 }
