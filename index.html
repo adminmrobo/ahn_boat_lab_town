@@ -73,6 +73,7 @@ h2{font-family:var(--display);font-weight:400;margin:0;font-size:24px}
 .game canvas{display:block;width:100%;touch-action:none;cursor:pointer}
 .b1g{position:absolute;left:10px;bottom:44px;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:min(32%,210px);padding:5px 5px 3px;border-radius:10px;background:rgba(20,13,8,.88);border:1.5px solid #c98a3c;box-shadow:0 0 14px rgba(242,163,58,.35);text-decoration:none}
 .b1g[hidden]{display:none}
+@media (max-width:700px){.b1g{bottom:118px;width:40%}}
 .b1g video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;border-radius:6px;background:#000;pointer-events:none}
 .b1g span{grid-column:1/-1;text-align:center;font-size:11px;color:#f2a33a;font-family:var(--mono);letter-spacing:.04em;line-height:1.5}
 .game.alarm{border-color:var(--alarm)}
@@ -255,6 +256,8 @@ h1{font-size:clamp(28px,4.4vw,42px)}
 .nbtn.hl{background:#fff4d6;color:var(--ink);border-color:var(--ink)}
 .nbtn.tour{background:#e3f4ea}
 .nbtn.gym{background:#fde6ee}
+.nbtn.srv{background:#2a1b10;color:#f2a33a;border-color:#2a1b10}
+.nbtn.srv:hover{border-color:#2a1b10;color:#ffd59a}
 .ost .nbtn[aria-pressed="true"],.pick[aria-pressed="true"]{background:#1f2224;color:#fff;border-color:var(--ink)}
 .soon{border-color:var(--ink);background:#fff}
 .stage{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
@@ -348,6 +351,8 @@ footer{border-top:2px solid var(--ink)}
       <button class="nbtn gym" id="goGym"><span data-i18n="gym_btn"></span></button>
       <a class="nbtn" href="#console"><span data-i18n="nav_con"></span></a>
       <button class="nbtn" id="tgNav"><span data-i18n="tg_btn"></span> <span class="soon" id="tgSoon" data-i18n="tg_soon"></span></button>
+      <button class="nbtn srv" id="goGuard"><img src="assets/pose/asst_wave.webp" alt=""><span data-i18n="guard_btn"></span></button>
+      <a class="nbtn srv" id="guardPage" href="https://adminmrobo.github.io/ahnboat_server_room_guards/" target="_blank" rel="noopener"><span data-i18n="guard_page_btn"></span></a>
       <button class="nbtn" id="zoomBtn" aria-pressed="false"></button>
     </div>
     <div class="ost" role="group" aria-label="OST"><button class="nbtn" id="ostBtn" aria-pressed="false"></button><button class="nbtn" id="ostNext">⏭</button><input type="range" id="ostVol" min="0" max="1" step="0.05" value="0.5"><span class="ostNow" id="ostNow" aria-live="polite"></span></div>
@@ -444,6 +449,8 @@ const UI={
   work_asst:L6("「{n}」 만드는 중이에요!","Building “{n}”!","正在做「{n}」！","「{n}」を作ってます！","«{n}»ni yasayapman!","Делаю «{n}»!"),
   work_fly:L6("「{n}」 조사 중이다","Investigating “{n}”","正在调查「{n}」","「{n}」を調査中だ","«{n}»ni tekshiryapman","Изучаю «{n}»"),
   work_robo:L6("「{n}」 계산 중입니다","Calculating “{n}”","正在计算「{n}」","「{n}」を計算中です","«{n}» hisoblanmoqda","Считаю «{n}»"),
+  guard_btn:L6("🛡 서버실 당직 보기","🛡 Server-room guards","🛡 机房值班","🛡 サーバールーム当番","🛡 Server xonasi navbatchilari","🛡 Дежурные серверной"),
+  guard_page_btn:L6("🎞 지킴이 영상 ↗","🎞 Guard videos ↗","🎞 守护者视频 ↗","🎞 当番の映像 ↗","🎞 Navbatchi videolari ↗","🎞 Видео дежурных ↗"),
   tg_btn:L6("✈ 텔레그램 조교 봇","✈ Telegram assistant bot","✈ Telegram 助教机器人","✈ Telegram 助手ボット","✈ Telegram yordamchi bot","✈ Telegram-бот ассистента"),
   tg_soon:L6("준비 중","Coming soon","准备中","準備中","Tez kunda","Скоро"),
   tg_desc:L6("조수와 텔레그램으로 이야기하는 조교 봇을 준비하고 있다. 열리면 여기서 바로 연결된다.","A Telegram bot for chatting with the Assistant is being prepared. Once it's live, you can connect right here.","正在准备可以通过 Telegram 和助手聊天的助教机器人。上线后可在这里直接连接。","Telegramで助手と話せる助手ボットを準備中だ。公開されたらここからすぐつながる。","Yordamchi bilan Telegram orqali suhbatlashish uchun bot tayyorlanmoqda. Ishga tushgach, shu yerdan ulanasiz.","Готовится Telegram-бот для общения с Ассистентом. Когда он заработает, подключиться можно будет прямо отсюда."),
@@ -1879,6 +1886,12 @@ document.getElementById("goTour").addEventListener("click",()=>{ if(SC.id!=="F1"
 document.getElementById("goGym").addEventListener("click",()=>{ if(SC.id==="B2"){ gymInfo(); return; } toast(T("gym_f1"),"good"); const s=SC.spots.find(x=>x.id==="elev"); closeDlg(); if(Math.hypot(player.x-s.x,player.y-s.y)<70) openElev(); else walkTo(s.x,s.y,s); cv.focus({preventScroll:true}); });
 document.getElementById("goDoc").addEventListener("click",()=>{ const s=spotById("docinfo"); if(SC.id==="F1") walkTo(s.x,s.y,null); inspect(s); });
 document.getElementById("goRes").addEventListener("click",()=>{ const s=spotById("research"); if(SC.id==="F1") walkTo(s.x,s.y,null); inspect(s); });
+document.getElementById("goGuard").addEventListener("click",()=>{
+  if(FIGHT){ toast(T("gym_busy"),"bad"); return; }
+  closeDlg(); document.getElementById("game").scrollIntoView({behavior:"smooth",block:"center"});
+  if(SC.id==="B1"){ coreInfo(); syncGuards(); cv.focus({preventScroll:true}); return; }
+  travel(FLOORS.find(f=>f.id==="B1"));
+});
 document.getElementById("goElev").addEventListener("click",()=>{ const s=SC.spots.find(x=>x.id==="elev"); closeDlg(); if(Math.hypot(player.x-s.x,player.y-s.y)<70) openElev(); else walkTo(s.x,s.y,s); cv.focus({preventScroll:true}); });
 
 /* ======================================================================
