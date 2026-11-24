@@ -2166,6 +2166,12 @@ function syncGuards(){
   if(v){ try{ on&&v.hasAttribute("autoplay")?v.play().catch(()=>{}):v.pause(); }catch(e){} }
   guardOn=on;
 }
+function rackInfo(i){
+  const cat=rackCat(i), col=RACK_COL[i], code="RACK "+String(i+1).padStart(2,"0");
+  if(!cat){ setInfo(`<span class="badge" style="color:#7a85a0">${code}</span><h3>${esc(T("rack_empty"))}</h3><div class="meta">${esc(T("rack_empty_desc"))}</div>`,{spot:"rack"+i}); return; }
+  setInfo(`<span class="badge" style="color:${col}">${code}</span><h3>${esc(catName(cat))}</h3><div class="meta">${esc(T("items_n",{n:cat.items.length}))} · ${esc(T("srv_src"))}${SRV.ok?"":"<br>"+esc(T("srv_err"))}</div>
+    <ul class="items srv">${cat.items.map(it=>{ const ti=svT(it,"title"), de=svT(it,"desc"), tg=svT(it,"tags"), no=svT(it,"note"); return `<li><b>${esc(ti)}</b>${de?`<span class="who" style="color:var(--fg);opacity:.85">${linkify(de)}</span>`:""}${tg.length?`<span class="tags">${tg.map(x=>`<span class="tg" style="border-color:${col}66">${esc(x)}</span>`).join("")}</span>`:""}<span class="who">${it.date?esc(T("created"))+" "+esc(it.date):""}${it.date&&no?" · ":""}${no?linkify(no):""}</span></li>`; }).join("")}</ul>`,{spot:"rack"+i});
+}
 function coreInfo(){
   setInfo(`<span class="badge b-doing">${esc(T("core_sign"))}</span><h3>${esc(T("core_h"))}</h3><div class="meta">${esc(T("core_desc"))}<br>${esc(T("total_n",{n:SRV.cats.reduce((a,c)=>a+c.items.length,0)}))}</div>
     <div class="links">${RACKS.map(r=>{ const c=rackCat(r.i); return `<button class="btn big" data-rack="${r.i}" style="border-left:4px solid ${c?RACK_COL[r.i]:"#3a4258"}"><span style="font-family:var(--mono);font-size:12px;color:var(--muted);width:56px">R${String(r.i+1).padStart(2,"0")}</span><span><b>${esc(c?catName(c):T("rack_empty"))}</b> <span class="meta">${c?esc(T("items_n",{n:c.items.length})):""}</span></span></button>`; }).join("")}</div>`,{spot:"core"});
