@@ -124,7 +124,11 @@ const STATIONS=[
    stats:[["25.8%","일반 망 · 옮긴 그림","#e4572e"],["98.0%","CNN · 옮긴 그림","#1f8fd6"]],
    url:"https://adminmrobo.github.io/CNN-neural-network-tutorial/",
    line:"3×3 필터를 그림 위로 미끄러뜨려 봤어요. 고양이를 옮겨도 알아봐요!"},
-  {ep:"EP.04",title:"준비 중",pos:[5,0,5],open:false,line:"좌표는 정해 뒀어요. 실험만 남았어요."},
+  {ep:"EP.04",title:"시아와 모아는 얼마나 멀까",pos:[5,0,5],open:true,holo:"distance",
+   desc:"1부 · 공간 속 거리: 시아 (4, 0, 10)와 모아 (12, 5, 7) 사이를 유클리드·맨해튼·체비쇼프·민코프스키로 재고, 피규어 후기는 코사인, 서울–런던은 하버사인으로 쟀어요. 2부(해밍·자카드·다이스)는 준비 중이에요.",
+   stats:[["9.899","유클리드 · 시아 ↔ 모아","#e0a92a"],["0.990","코사인 · 두 사람의 후기","#1f8fd6"]],
+   url:"https://adminmrobo.github.io/Distance-metrics-tutorial/",
+   line:"시아와 모아 사이를 자 여섯 개로 재 봤어요. 자마다 답이 달라요!"},
   {ep:"EP.05",title:"준비 중",pos:[11,5,4],open:false,line:"공중에 떠 있는 실험대예요. y = 5, 높이까지 써요!"},
   // EP.06부터: {ep:"EP.06",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
 ];
@@ -199,6 +203,16 @@ function slider(){const g=new THREE.Group(),n=6,sp=.38,dots=[],outs=[],cy=1.15;
   const h=sp*1.5,fg=new THREE.BufferGeometry().setFromPoints([[-h,-h],[h,-h],[h,h],[-h,h],[-h,-h]].map(([x,z])=>new THREE.Vector3(x,0,z)));const frame=new THREE.Line(fg,new THREE.LineBasicMaterial({color:C.gold}));g.add(frame);
   const rays=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:.5}));g.add(rays);
   g.position.set(-(n-1)*sp/2,.2,-(n-1)*sp/2);const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"cnn",dots,outs,frame,rays,sp,cy,n,step:-1};return wrap}
+/* EP.04 홀로그램: 두 점 사이 직선·꺾인 길·한 축이 번갈아 켜지고, 그 둘레에서 '거리 1인 면'이 정팔면체 → 공 → 정육면체로 바뀐다 */
+function distHolo(){const g=new THREE.Group(),A=new THREE.Vector3(-.9,.2,.5),B=new THREE.Vector3(.9,1.3,-.4),mat=o=>new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:o});
+  [A,B].forEach(p=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.1,12,10),new THREE.MeshBasicMaterial({color:C.gold}));m.position.copy(p);g.add(m)});
+  const mk=pts=>{const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),mat(.25));g.add(l);return l};
+  const paths=[mk([A,B]),mk([A,new THREE.Vector3(B.x,A.y,A.z),new THREE.Vector3(B.x,A.y,B.z),B]),mk([A,new THREE.Vector3(B.x,A.y,A.z)])];
+  const ball=new THREE.LineSegments(new THREE.BufferGeometry(),mat(.8));ball.position.set(0,.75,0);g.add(ball);
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"distance",paths,ball,step:-1};return wrap}
+function supBall(p,R=.42){const pts=[],lv=[-.8,-.4,0,.4,.8],N=40,se=(a,t)=>{const u=Math.cos(t),v=Math.sin(t),r=a*Math.pow(Math.pow(Math.abs(u),p)+Math.pow(Math.abs(v),p),-1/p);return[u*r,v*r]};
+  lv.forEach(y0=>{const a=Math.pow(Math.max(0,1-Math.pow(Math.abs(y0),p)),1/p);for(let i=0;i<N;i++){const [u1,v1]=se(a,i/N*6.2832),[u2,v2]=se(a,(i+1)/N*6.2832);pts.push(new THREE.Vector3(u1*R,y0*R,v1*R),new THREE.Vector3(u2*R,y0*R,v2*R))}});
+  lv.forEach(x0=>{const a=Math.pow(Math.max(0,1-Math.pow(Math.abs(x0),p)),1/p);for(let i=0;i<N;i++){const [u1,v1]=se(a,i/N*6.2832),[u2,v2]=se(a,(i+1)/N*6.2832);pts.push(new THREE.Vector3(x0*R,u1*R,v1*R),new THREE.Vector3(x0*R,u2*R,v2*R))}});return pts}
 /* 새 회차 기본 홀로그램: 점 구름이 천천히 도는 모형 (회차 전용 holo를 만들기 전까지) */
 function orbitHolo(){const g=new THREE.Group(),r=mulberry(11),dots=[];for(let i=0;i<48;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:C.cyan}));
     const a=r()*Math.PI*2,b=Math.acos(2*r()-1),R0=.75+r()*.25;m.position.set(R0*Math.sin(b)*Math.cos(a),.9+R0*Math.cos(b)*.8,R0*Math.sin(b)*Math.sin(a));g.add(m);dots.push(m)}
@@ -214,7 +228,7 @@ STATIONS.forEach((s,i)=>{const g=new THREE.Group();g.position.set(...s.pos);scen
   if(s.pos[1]>0){const pg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-s.pos[1],0)]);const pl=new THREE.Line(pg,new THREE.LineDashedMaterial({color:C.ink,dashSize:.3,gapSize:.25}));pl.computeLineDistances();g.add(pl);
     const sh=new THREE.Mesh(new THREE.CircleGeometry(1.2,32),new THREE.MeshBasicMaterial({color:0x1f2224,transparent:true,opacity:.08}));sh.rotation.x=-Math.PI/2;sh.position.y=-s.pos[1]+.02;g.add(sh)}
   const top=new THREE.Group();top.position.y=ph;g.add(top);
-  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
+  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
     const ring=new THREE.Mesh(new THREE.RingGeometry(1.25,1.4,48),new THREE.MeshBasicMaterial({color:C.gold,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.02;top.add(ring);s.ring=ring}
   else{const cg=new THREE.BoxGeometry(2,2,2),cov=new THREE.Mesh(cg,new THREE.MeshLambertMaterial({color:0xeef0f3,transparent:true,opacity:.55}));cov.position.y=1;outline(cg,cov,0x8a919c);top.add(cov);
     const q=label("?",{size:90,bg:false,col:"#8a919c",scale:.016});q.position.y=1;top.add(q)}
@@ -281,7 +295,9 @@ function tick(){const dt=Math.min(.05,clock.getDelta());T+=dt;
   if(fly){fly.t=Math.min(1,fly.t+dt*1.4);const k=fly.t<.5?2*fly.t*fly.t:1-Math.pow(-2*fly.t+2,2)/2;cam.position.lerpVectors(fly.from.p,fly.to.p,k);ctl.target.lerpVectors(fly.from.t,fly.to.t,k);if(fly.t>=1)fly=null}
   ctl.update();
   // holograms: dropout flicker (a new half every step)
-  holos.forEach(h=>{const u=h.userData;if(u.kind==="orbit"){h.rotation.y=reduce?.6:T*.3;return}if(u.kind==="cnn"){h.rotation.y=reduce?.6:T*.25;const st=Math.floor(T*(reduce?1:2.2))%16;if(st!==u.step){u.step=st;const r=Math.floor(st/4),q=st%4,sp=u.sp;
+  holos.forEach(h=>{const u=h.userData;if(u.kind==="orbit"){h.rotation.y=reduce?.6:T*.3;return}
+    if(u.kind==="distance"){h.rotation.y=reduce?.6:T*.3;const st=Math.floor(T/(reduce?3:1.5))%3;if(st!==u.step){u.step=st;u.paths.forEach((l,i)=>l.material.opacity=i===st?1:.2)}
+      const ph=(T*(reduce?.05:.12))%1,p=ph<.5?1+7*(ph*2)**2:8-7*((ph-.5)*2)**2,q=Math.round(p*10)/10;if(q!==u.p){u.p=q;u.ball.geometry.dispose();u.ball.geometry=new THREE.BufferGeometry().setFromPoints(supBall(q))}return}if(u.kind==="cnn"){h.rotation.y=reduce?.6:T*.25;const st=Math.floor(T*(reduce?1:2.2))%16;if(st!==u.step){u.step=st;const r=Math.floor(st/4),q=st%4,sp=u.sp;
        u.frame.position.set((q+1)*sp,.02,(r+1)*sp);u.dots.forEach((d,i)=>{const dr=Math.floor(i/u.n),dc=i%u.n,inW=Math.abs(dr-r-1)<=1&&Math.abs(dc-q-1)<=1;d.scale.setScalar(inW?1.35:1)});
        u.outs.forEach((o,i)=>{o.material.color.setHex(i===st?C.gold:i<st?C.cyan:0xc3cbd7)});
        const tip=new THREE.Vector3((q+1)*sp,u.cy,(r+1)*sp),cn=[[q,r],[q+2,r],[q+2,r+2],[q,r+2]].map(([x,z])=>new THREE.Vector3(x*sp,0,z*sp));u.rays.geometry.dispose();u.rays.geometry=new THREE.BufferGeometry().setFromPoints(cn.flatMap(p=>[p,tip]))}return}
