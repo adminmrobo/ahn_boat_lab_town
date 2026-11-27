@@ -9,8 +9,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
 <style>
 /* 2층 · 조수 하루의 3차원 실험실
-   랩타운과 같은 흰 툰(흰 종이 · 검은 외곽선 · 딱딱한 그림자). 방 전체가 x·y·z 좌표 격자이고,
-   실험대 5곳이 좌표 위에 놓인다. 실험대 목록은 아래 STATIONS 한 곳에서 고친다.
+   랩타운과 같은 흰 툰(흰 종이 · 검은 외곽선 · 딱딱한 그림자). 방 전체가 x·y·z 좌표 격자(32×12×32)이고,
+   실험대가 좌표 위에 놓인다. 실험대 목록은 아래 STATIONS 한 곳에서 고친다.
+   새 회차는 STATIONS에 한 줄만 더하면 된다. pos를 비우면 SLOTS의 다음 빈자리(바닥 먼저, 그다음 공중)에 놓인다.
    안내 영상: assets/haru3d/guide.mp4 (무음) — 처음 들어올 때 한 번, 이후 '안내 영상' 버튼으로. */
 :root{--ink:#1f2224;--paper:#fbfaf7;--muted:#5f6663;--gold:#e0a92a;--violet:#6b4fd6;--x:#e4572e;--y:#2a9d6f;--z:#1f8fd6;
   --display:"Do Hyeon","IBM Plex Sans KR",system-ui,sans-serif;--body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
@@ -45,8 +46,8 @@ body{background:#fff;color:var(--ink);font:15px/1.55 var(--body);overflow:hidden
 .panel .stats b{display:block;font:700 20px var(--mono)}
 .panel .stats span{font-size:11.5px;color:var(--muted)}
 .panel .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.list{position:fixed;right:12px;bottom:12px;z-index:5;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 260px)}
-.list button{min-height:44px;padding:0 12px;border:2px solid var(--ink);border-radius:99px;background:#fff;font:500 13px var(--body);cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.list{position:fixed;right:12px;bottom:12px;z-index:5;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 260px);max-height:104px;overflow-y:auto;padding:2px 4px 4px 2px}
+.list button{flex:none;min-height:44px;padding:0 12px;border:2px solid var(--ink);border-radius:99px;background:#fff;font:500 13px var(--body);cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
 .list button.lock{background:#f1f1ee;color:var(--muted);border-style:dashed}
 .list button.on{background:#fff4d6}
 .guide{position:fixed;inset:0;z-index:20;background:rgba(20,18,30,.72);display:flex;align-items:center;justify-content:center;padding:16px}
@@ -61,7 +62,7 @@ body{background:#fff;color:var(--ink);font:15px/1.55 var(--body);overflow:hidden
 @media (max-width:760px){
   .plate b{font-size:18px}.plate small{display:none}.lw{display:none}.top .sp{display:none}.hint{bottom:118px}
   .panel{top:auto;bottom:118px;right:8px;left:8px;width:auto;max-height:46vh;overflow:auto}
-  .list{left:8px;right:8px;max-width:none;justify-content:flex-start;bottom:8px}
+  .list{left:8px;right:8px;max-width:none;justify-content:flex-start;bottom:8px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;max-height:none}
   .hud{bottom:64px;left:8px;font-size:11.5px}
   .gbox{grid-template-columns:1fr;justify-items:center;overflow:auto}.gbox video{height:44vh}.gbox h1{font-size:26px}
 }
@@ -124,9 +125,16 @@ const STATIONS=[
    url:"https://adminmrobo.github.io/CNN-neural-network-tutorial/",
    line:"3×3 필터를 그림 위로 미끄러뜨려 봤어요. 고양이를 옮겨도 알아봐요!"},
   {ep:"EP.04",title:"준비 중",pos:[5,0,5],open:false,line:"좌표는 정해 뒀어요. 실험만 남았어요."},
-  {ep:"EP.05",title:"준비 중",pos:[11,5,4],open:false,line:"공중에 떠 있는 실험대예요. y = 5, 높이까지 써요!"}
+  {ep:"EP.05",title:"준비 중",pos:[11,5,4],open:false,line:"공중에 떠 있는 실험대예요. y = 5, 높이까지 써요!"},
+  // EP.06부터: {ep:"EP.06",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
 ];
-const ROOM={w:20,h:10,d:20};
+const ROOM={w:32,h:12,d:32};
+/* 미리 정해 둔 빈자리: 실험대끼리 5 이상, 벽에서 2 이상, 공중 실험대는 바닥 실험대와 수평 3 이상 떨어짐.
+   바닥 18곳을 먼저 쓰고, 그다음 공중(y = 6) 13곳을 쓴다. 기존 EP.01~05 좌표는 그대로. */
+const SLOTS=[[4,0,10],[16,0,16],[4,0,22],[22,0,4],[10,0,22],[22,0,10],[16,0,22],[22,0,16],[22,0,22],[4,0,28],[28,0,4],[10,0,28],[28,0,10],[16,0,28],[28,0,16],[22,0,28],[28,0,22],[28,0,28],
+  [7,6,13],[7,6,19],[19,6,7],[13,6,19],[19,6,13],[19,6,19],[7,6,25],[25,6,7],[13,6,25],[25,6,13],[19,6,25],[25,6,19],[25,6,25]];
+{const used=new Set(STATIONS.filter(s=>s.pos).map(s=>s.pos.join(",")));const free=SLOTS.filter(p=>!used.has(p.join(",")));
+ STATIONS.forEach(s=>{if(!s.pos){s.pos=free.shift();if(!s.pos)console.warn("빈자리가 없어요:",s.ep)}});}
 const C={ink:0x1f2224,grid:0xc9ced6,grid2:0xe6e9ee,wall:0xffffff,floor:0xfbfaf7,x:0xe4572e,y:0x2a9d6f,z:0x1f8fd6,cyan:0x2bb3e6,gold:0xe0a92a,lock:0xb7bcc6};
 const $=s=>document.querySelector(s);
 const HARU_FACE="assets/expr/asst_E07.webp";
@@ -135,11 +143,11 @@ const POSES={wave:"assets/pose/asst_wave.webp",present:"assets/pose/asst_present
 /* ---------- three ---------- */
 const stage=$("#stage"),renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));renderer.setClearColor(0xffffff);stage.appendChild(renderer.domElement);
-const scene=new THREE.Scene();scene.fog=new THREE.Fog(0xffffff,48,90);
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0xffffff,70,140);
 const cam=new THREE.PerspectiveCamera(48,1,.1,200);
-const HOME={pos:new THREE.Vector3(31,17,31),tgt:new THREE.Vector3(9,2.5,9)};
+const HOME={pos:new THREE.Vector3(30,19,34),tgt:new THREE.Vector3(10,2.5,11)};   // 처음엔 EP.01~05가 모인 쪽을 보고, 끌면 방 전체가 보인다
 cam.position.copy(HOME.pos);
-const ctl=new THREE.OrbitControls(cam,renderer.domElement);ctl.target.copy(HOME.tgt);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=6;ctl.maxDistance=60;ctl.maxPolarAngle=Math.PI*.49;
+const ctl=new THREE.OrbitControls(cam,renderer.domElement);ctl.target.copy(HOME.tgt);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.minDistance=6;ctl.maxDistance=95;ctl.maxPolarAngle=Math.PI*.49;
 scene.add(new THREE.HemisphereLight(0xffffff,0xdfe3ea,.95));const sun=new THREE.DirectionalLight(0xffffff,.45);sun.position.set(20,30,10);scene.add(sun);
 
 function outline(geo,mesh,col=C.ink){const e=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:col}));mesh.add(e);return e}
@@ -168,7 +176,8 @@ const room=new THREE.Group();scene.add(room);
  for(let i=2;i<=ROOM.d;i+=2){const l=label(String(i),{size:34,bg:false,col:"#1f8fd6",scale:.011,w:500});l.position.set(ROOM.w+.8,.35,i);room.add(l)}
  for(let i=2;i<=ROOM.h;i+=2){const l=label(String(i),{size:34,bg:false,col:"#2a9d6f",scale:.011,w:500});l.position.set(.45,i,.45);room.add(l)}
  const o=label("(0, 0, 0)",{size:30,scale:.011,w:500});o.position.set(-.9,-.4,-.9);room.add(o);
- const sign=label("조수 하루의 3차원 실험실",{size:60,scale:.016});sign.position.set(ROOM.w/2+1,ROOM.h-.9,2.2);room.add(sign);
+ // 간판은 뒷벽에 붙인 판(돌지 않아 벽 뒤로 파고들지 않음)
+ {const sp=label("조수 하루의 3차원 실험실",{size:60,scale:.024});const sg=new THREE.Mesh(new THREE.PlaneGeometry(sp.scale.x,sp.scale.y),new THREE.MeshBasicMaterial({map:sp.material.map,transparent:true}));sg.position.set(ROOM.w/2,ROOM.h-1.5,.06);room.add(sg)}
 }
 
 /* ---------- stations ---------- */
@@ -190,13 +199,22 @@ function slider(){const g=new THREE.Group(),n=6,sp=.38,dots=[],outs=[],cy=1.15;
   const h=sp*1.5,fg=new THREE.BufferGeometry().setFromPoints([[-h,-h],[h,-h],[h,h],[-h,h],[-h,-h]].map(([x,z])=>new THREE.Vector3(x,0,z)));const frame=new THREE.Line(fg,new THREE.LineBasicMaterial({color:C.gold}));g.add(frame);
   const rays=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:.5}));g.add(rays);
   g.position.set(-(n-1)*sp/2,.2,-(n-1)*sp/2);const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"cnn",dots,outs,frame,rays,sp,cy,n,step:-1};return wrap}
+/* 새 회차 기본 홀로그램: 점 구름이 천천히 도는 모형 (회차 전용 holo를 만들기 전까지) */
+function orbitHolo(){const g=new THREE.Group(),r=mulberry(11),dots=[];for(let i=0;i<48;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:C.cyan}));
+    const a=r()*Math.PI*2,b=Math.acos(2*r()-1),R0=.75+r()*.25;m.position.set(R0*Math.sin(b)*Math.cos(a),.9+R0*Math.cos(b)*.8,R0*Math.sin(b)*Math.sin(a));g.add(m);dots.push(m)}
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"orbit",dots};return wrap}
+/* 아직 쓰지 않은 빈자리: 바닥은 점선 네모, 공중은 점선 기둥 끝의 작은 점 */
+{const used=new Set(STATIONS.map(s=>s.pos.join(",")));const dm=new THREE.LineDashedMaterial({color:0xb7bcc6,dashSize:.25,gapSize:.2});
+ SLOTS.filter(p=>!used.has(p.join(","))).forEach(([x,y,z])=>{const h=1.2,sq=new THREE.BufferGeometry().setFromPoints([[-h,-h],[h,-h],[h,h],[-h,h],[-h,-h]].map(([a,b])=>new THREE.Vector3(x+a,y+.03,z+b)));
+   const l=new THREE.Line(sq,dm);l.computeLineDistances();scene.add(l);
+   if(y>0){const pg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,0,z),new THREE.Vector3(x,y,z)]);const pl=new THREE.Line(pg,dm);pl.computeLineDistances();scene.add(pl)}});}
 function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 STATIONS.forEach((s,i)=>{const g=new THREE.Group();g.position.set(...s.pos);scene.add(g);s.g=g;
   const ph=s.pos[1]>0?.3:1.1,geo=new THREE.BoxGeometry(2.4,ph,2.4),ped=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color:s.open?0xffffff:0xf1f1ee}));ped.position.y=ph/2;outline(geo,ped);g.add(ped);
   if(s.pos[1]>0){const pg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-s.pos[1],0)]);const pl=new THREE.Line(pg,new THREE.LineDashedMaterial({color:C.ink,dashSize:.3,gapSize:.25}));pl.computeLineDistances();g.add(pl);
     const sh=new THREE.Mesh(new THREE.CircleGeometry(1.2,32),new THREE.MeshBasicMaterial({color:0x1f2224,transparent:true,opacity:.08}));sh.rotation.x=-Math.PI/2;sh.position.y=-s.pos[1]+.02;g.add(sh)}
   const top=new THREE.Group();top.position.y=ph;g.add(top);
-  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():lattice();h.position.y=.6;top.add(h);holos.push(h);
+  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
     const ring=new THREE.Mesh(new THREE.RingGeometry(1.25,1.4,48),new THREE.MeshBasicMaterial({color:C.gold,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.02;top.add(ring);s.ring=ring}
   else{const cg=new THREE.BoxGeometry(2,2,2),cov=new THREE.Mesh(cg,new THREE.MeshLambertMaterial({color:0xeef0f3,transparent:true,opacity:.55}));cov.position.y=1;outline(cg,cov,0x8a919c);top.add(cov);
     const q=label("?",{size:90,bg:false,col:"#8a919c",scale:.016});q.position.y=1;top.add(q)}
@@ -209,8 +227,11 @@ const loader=new THREE.TextureLoader();const haruMat=new THREE.SpriteMaterial({t
 const POSE_TX={};Object.entries(POSES).forEach(([k,u])=>loader.load(u,t=>{POSE_TX[k]=t;if(!haruMat.map&&k==="wave")setPose("wave")}));
 let pose="";function setPose(k){if(!POSE_TX[k]||pose===k)return;pose=k;const t=POSE_TX[k];haruMat.map=t;haruMat.needsUpdate=true;const hgt=3.6;haru.scale.set(hgt*t.image.width/t.image.height,hgt,1)}
 const shadow=new THREE.Mesh(new THREE.CircleGeometry(.7,24),new THREE.MeshBasicMaterial({color:0x1f2224,transparent:true,opacity:.14}));shadow.rotation.x=-Math.PI/2;scene.add(shadow);
-const H={p:new THREE.Vector3(9,0,15),target:null,wait:2,route:[0,1,3,2,0],ri:0,stand:null};
+/* 하루의 길: 바닥 실험대를 가까운 순서로 이어 돈다(공개된 실험대 먼저). 실험대를 더하면 길도 저절로 늘어난다 */
 function standPoint(s){const [x,y,z]=s.pos;return new THREE.Vector3(x+1.9,0,z+1.9)}
+const ROUTE=(()=>{const fl=STATIONS.map((s,i)=>i).filter(i=>STATIONS[i].pos[1]===0);const left=fl.filter(i=>STATIONS[i].open).concat(fl.filter(i=>!STATIONS[i].open));
+  const out=[];let cur=new THREE.Vector3(9,0,15);while(left.length){left.sort((a,b)=>standPoint(STATIONS[a]).distanceTo(cur)-standPoint(STATIONS[b]).distanceTo(cur));const i=left.shift();out.push(i);cur=standPoint(STATIONS[i])}return out})();
+const H={p:new THREE.Vector3(9,0,15),target:null,wait:2,route:ROUTE,ri:0,stand:null};
 haru.position.copy(H.p);
 
 /* ---------- UI ---------- */
@@ -260,7 +281,7 @@ function tick(){const dt=Math.min(.05,clock.getDelta());T+=dt;
   if(fly){fly.t=Math.min(1,fly.t+dt*1.4);const k=fly.t<.5?2*fly.t*fly.t:1-Math.pow(-2*fly.t+2,2)/2;cam.position.lerpVectors(fly.from.p,fly.to.p,k);ctl.target.lerpVectors(fly.from.t,fly.to.t,k);if(fly.t>=1)fly=null}
   ctl.update();
   // holograms: dropout flicker (a new half every step)
-  holos.forEach(h=>{const u=h.userData;if(u.kind==="cnn"){h.rotation.y=reduce?.6:T*.25;const st=Math.floor(T*(reduce?1:2.2))%16;if(st!==u.step){u.step=st;const r=Math.floor(st/4),q=st%4,sp=u.sp;
+  holos.forEach(h=>{const u=h.userData;if(u.kind==="orbit"){h.rotation.y=reduce?.6:T*.3;return}if(u.kind==="cnn"){h.rotation.y=reduce?.6:T*.25;const st=Math.floor(T*(reduce?1:2.2))%16;if(st!==u.step){u.step=st;const r=Math.floor(st/4),q=st%4,sp=u.sp;
        u.frame.position.set((q+1)*sp,.02,(r+1)*sp);u.dots.forEach((d,i)=>{const dr=Math.floor(i/u.n),dc=i%u.n,inW=Math.abs(dr-r-1)<=1&&Math.abs(dc-q-1)<=1;d.scale.setScalar(inW?1.35:1)});
        u.outs.forEach((o,i)=>{o.material.color.setHex(i===st?C.gold:i<st?C.cyan:0xc3cbd7)});
        const tip=new THREE.Vector3((q+1)*sp,u.cy,(r+1)*sp),cn=[[q,r],[q+2,r],[q+2,r+2],[q,r+2]].map(([x,z])=>new THREE.Vector3(x*sp,0,z*sp));u.rays.geometry.dispose();u.rays.geometry=new THREE.BufferGeometry().setFromPoints(cn.flatMap(p=>[p,tip]))}return}
