@@ -154,7 +154,11 @@ const STATIONS=[
    stats:[["0.649 → 0.996","숨은 동네와 맞은 정도 · K-means → DBSCAN","#1f8fd6"],["8 / 10","고립 숲이 찾은 외딴 집","#e0a92a"]],
    url:"https://adminmrobo.github.io/haru_3d_unsupervised_learning_01_lab/",
    line:"가격표가 날아가서 점이 다 회색이 됐어요. 정답 없이 무리를 찾아봤어요!"},
-  {ep:"EP.10",title:"정답 대신 꿀 한 방울 — 강화학습",open:false},
+  {ep:"EP.10",title:"정답 대신 꿀 한 방울 — 강화학습",open:true,holo:"rl",
+   desc:"초파리가 7×7×7 격자를 날며, 정답 없이 꿀 +1·거미줄 −1 보상만으로 길을 배웠어요. 무작위로 날면 평균 35.9걸음 만에 거미줄, 학습 뒤엔 최단 18걸음이에요. 출발 옆에 작은 꿀을 두면 호기심 초파리만 큰 꿀을 찾아요.",
+   stats:[["35.9 → 18.0","걸음 · 무작위 → 학습 뒤","#e0a92a"],["0% → 100%","만약 B · 보통 → 호기심 초파리","#1f8fd6"]],
+   url:"https://adminmrobo.github.io/haru_3d_reinforcement_learning_01_lab/",
+   line:"정답 대신 꿀 한 방울! 초파리가 날아 보고, 주판봇이 적어서 길을 배웠어요."},
   // EP.11부터: {ep:"EP.11",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
 ];
 const ROOM={w:32,h:12,d:32};
@@ -272,6 +276,15 @@ function unsupervisedHolo(){const g=new THREE.Group(),r=mulberry(9),S=.8,dots=[]
   for(let i=0;i<45;i++){const k=i<42?i%3:-1,c=k<0?null:cs[k],end=k<0?[(r()-.5)*1.8,.4+r()*1.2,(r()-.5)*1.8]:[c[0]+(r()-.5)*.45,c[1]+(r()-.5)*.35,c[2]+(r()-.5)*.45],start=[(r()-.5)*1.8,.4+r()*1.2,(r()-.5)*1.8];
     const m=new THREE.Mesh(new THREE.SphereGeometry(.06,8,6),new THREE.MeshBasicMaterial({color:C.lock}));m.userData={k,start:k<0?end:start,end};{const a=m.userData.start;m.position.set(a[0]*S,a[1],a[2]*S)}g.add(m);dots.push(m)}
   const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"unsup",dots,cols,S};return wrap}
+/* EP.10 홀로그램: 작은 격자 안을 점 하나가 헤매다 꿀에 닿을 때마다 화살표가 하나씩 꿀 쪽으로 정렬된다 */
+function rlHolo(){const g=new THREE.Group(),S=.42,n=4,o=-(n-1)/2*S,P=(x,y,z)=>new THREE.Vector3(o+x*S,.35+y*S,o+z*S),arrows=[];
+  for(let x=0;x<n;x++)for(let y=0;y<n;y++)for(let z=0;z<n;z++){const m=new THREE.Mesh(new THREE.SphereGeometry(.025,6,4),new THREE.MeshBasicMaterial({color:C.cyan}));m.position.copy(P(x,y,z));g.add(m)}
+  const honey=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),new THREE.MeshBasicMaterial({color:C.gold}));honey.position.copy(P(n-1,n-1,n-1));g.add(honey);
+  const path=[[0,0,0],[0,1,0],[1,1,0],[1,1,1],[1,2,1],[2,2,1],[2,2,2],[2,3,2],[3,3,2],[3,3,3]];
+  const wander=[[0,0,0],[1,0,0],[1,0,1],[0,0,1],[0,1,1],[0,1,0],[1,1,0],[2,1,0],[2,1,1],[1,1,1],[1,2,1],[2,2,1],[2,2,2],[2,3,2],[3,3,2],[3,3,3]];
+  path.slice(0,-1).forEach((p,i)=>{const q=path[i+1],d=P(...q).sub(P(...p));const a=new THREE.ArrowHelper(d.clone().normalize(),P(...p),S*.75,C.gold,.09,.06);a.visible=false;g.add(a);arrows.push(a)});
+  const fly=new THREE.Mesh(new THREE.SphereGeometry(.06,10,8),new THREE.MeshBasicMaterial({color:C.x}));g.add(fly);
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"rl",fly,arrows,wander:wander.map(p=>P(...p)),path:path.map(p=>P(...p)),step:-1};return wrap}
 /* 새 회차 기본 홀로그램: 점 구름이 천천히 도는 모형 (회차 전용 holo를 만들기 전까지) */
 function orbitHolo(){const g=new THREE.Group(),r=mulberry(11),dots=[];for(let i=0;i<48;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:C.cyan}));
     const a=r()*Math.PI*2,b=Math.acos(2*r()-1),R0=.75+r()*.25;m.position.set(R0*Math.sin(b)*Math.cos(a),.9+R0*Math.cos(b)*.8,R0*Math.sin(b)*Math.sin(a));g.add(m);dots.push(m)}
@@ -287,7 +300,7 @@ STATIONS.forEach((s,i)=>{const g=new THREE.Group();g.position.set(...s.pos);scen
   if(s.pos[1]>0){const pg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-s.pos[1],0)]);const pl=new THREE.Line(pg,new THREE.LineDashedMaterial({color:C.ink,dashSize:.3,gapSize:.25}));pl.computeLineDistances();g.add(pl);
     const sh=new THREE.Mesh(new THREE.CircleGeometry(1.2,32),new THREE.MeshBasicMaterial({color:0x1f2224,transparent:true,opacity:.08}));sh.rotation.x=-Math.PI/2;sh.position.y=-s.pos[1]+.02;g.add(sh)}
   const top=new THREE.Group();top.position.y=ph;g.add(top);
-  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():s.holo==="bpe"?bpeHolo():s.holo==="classic"?classicHolo():s.holo==="supervised"?supervisedHolo():s.holo==="optimization"?optHolo():s.holo==="unsupervised"?unsupervisedHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
+  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():s.holo==="bpe"?bpeHolo():s.holo==="classic"?classicHolo():s.holo==="supervised"?supervisedHolo():s.holo==="optimization"?optHolo():s.holo==="unsupervised"?unsupervisedHolo():s.holo==="rl"?rlHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
     const ring=new THREE.Mesh(new THREE.RingGeometry(1.25,1.4,48),new THREE.MeshBasicMaterial({color:C.gold,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.02;top.add(ring);s.ring=ring}
   else{const cg=new THREE.BoxGeometry(2,2,2),cov=new THREE.Mesh(cg,new THREE.MeshLambertMaterial({color:0xeef0f3,transparent:true,opacity:.55}));cov.position.y=1;outline(cg,cov,0x8a919c);top.add(cov);
     const q=label("?",{size:90,bg:false,col:"#8a919c",scale:.016});q.position.y=1;top.add(q)}
@@ -357,6 +370,8 @@ function tick(){const dt=Math.min(.05,clock.getDelta());T+=dt;
   holos.forEach(h=>{const u=h.userData;if(u.kind==="orbit"){h.rotation.y=reduce?.6:T*.3;return}
     if(u.kind==="classic"){h.rotation.y=reduce?.6:Math.sin(T*.35)*.7;const per=reduce?3:1.6,st=Math.floor(T/per)%6,ph=Math.min(1,(T%per)/(per*.45)),e=ph*ph*(3-2*ph);
       u.rows.forEach((row,r)=>row.forEach(b=>{const t=r<st?1:r===st?e:0;b.position.x=b.userData.x0+(b.userData.x1-b.userData.x0)*t;b.material.color.setHex(r===st?C.gold:C.cyan)}));return}
+    if(u.kind==="rl"){h.rotation.y=reduce?.6:T*.25;const W_=u.wander.length,L=u.path.length,cyc=W_+L+4,st=Math.floor(T*(reduce?.8:2.4))%cyc;if(st!==u.step){u.step=st;
+      if(st<W_){u.fly.position.copy(u.wander[st]);u.arrows.forEach(a=>a.visible=false)}else{const k=Math.min(L-1,st-W_);u.fly.position.copy(u.path[k]);u.arrows.forEach((a,i)=>a.visible=i<k)}}return}
     if(u.kind==="unsup"){h.rotation.y=reduce?.6:T*.3;const per=reduce?8:5,ph=(T%per)/per,t=ph<.15?0:ph<.55?(ph-.15)/.4:ph<.9?1:1-(ph-.9)/.1,e=t*t*(3-2*t);
       u.dots.forEach(m=>{const a=m.userData.start,b=m.userData.end;m.position.set((a[0]+(b[0]-a[0])*e)*u.S,a[1]+(b[1]-a[1])*e,(a[2]+(b[2]-a[2])*e)*u.S);m.material.color.setHex(m.userData.k>=0&&e>.6?u.cols[m.userData.k]:C.lock)});return}
     if(u.kind==="supervised"){h.rotation.y=reduce?.6:T*.3;u.plane.material.opacity=reduce?.7:.15+.6*(.5+.5*Math.sin(T*1.3));return}
