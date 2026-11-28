@@ -159,7 +159,12 @@ const STATIONS=[
    stats:[["35.9 → 18.0","걸음 · 무작위 → 학습 뒤","#e0a92a"],["0% → 100%","만약 B · 보통 → 호기심 초파리","#1f8fd6"]],
    url:"https://adminmrobo.github.io/haru_3d_reinforcement_learning_01_lab/",
    line:"정답 대신 꿀 한 방울! 초파리가 날아 보고, 주판봇이 적어서 길을 배웠어요."},
-  // EP.11부터: {ep:"EP.11",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
+  {ep:"EP.11",title:"틀리면서 배우는 주판봇 — 퍼셉트론 · 비용 · 정규화",open:false,holo:"perceptron",
+   desc:"메일 660통을 (링크, 글자 수, 느낌표) 좌표에 찍고 주판봇이 스팸을 갈랐어요. 쉬운 메일은 14번 고친 뒤 1.000, 어려운 메일은 바닥 두 축 0.683에서 글자 수 축과 표준화로 0.983까지 올랐어요.",
+   stats:[["1.000","쉬운 메일 · 퍼셉트론 14번 고침","#e0a92a"],["0.683 → 0.983","어려운 메일 · 두 축 → 세 축+표준화","#1f8fd6"]],
+   url:"https://adminmrobo.github.io/haru_3d_neural_net_learns_01_lab/",
+   line:"주판봇이 틀릴 때마다 선을 조금씩 돌렸어요. 칭찬받으면 화면이 초록이에요!"},
+  // EP.12부터: {ep:"EP.12",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
 ];
 const ROOM={w:32,h:12,d:32};
 /* 미리 정해 둔 빈자리: 실험대끼리 5 이상, 벽에서 2 이상, 공중 실험대는 바닥 실험대와 수평 3 이상 떨어짐.
@@ -285,6 +290,15 @@ function rlHolo(){const g=new THREE.Group(),S=.42,n=4,o=-(n-1)/2*S,P=(x,y,z)=>ne
   path.slice(0,-1).forEach((p,i)=>{const q=path[i+1],d=P(...q).sub(P(...p));const a=new THREE.ArrowHelper(d.clone().normalize(),P(...p),S*.75,C.gold,.09,.06);a.visible=false;g.add(a);arrows.push(a)});
   const fly=new THREE.Mesh(new THREE.SphereGeometry(.06,10,8),new THREE.MeshBasicMaterial({color:C.x}));g.add(fly);
   const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"rl",fly,arrows,wander:wander.map(p=>P(...p)),path:path.map(p=>P(...p)),step:-1};return wrap}
+/* EP.11 홀로그램: 빨강·파랑 메일 점 사이에 세운 판정 벽이, 틀린 점이 금색으로 깜빡일 때마다 조금씩 돌아 제자리를 찾는다 */
+function percHolo(){const g=new THREE.Group(),r=mulberry(11),S=.85,dots=[];
+  const base=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(2*S,.02,2*S)),new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:.5}));base.position.y=.4;g.add(base);
+  for(let i=0;i<36;i++){const spam=i%3===0,x=spam?.25+r()*.65:-.9+r()*.85,z=spam?.25+r()*.65:-.9+r()*1.2,m=new THREE.Mesh(new THREE.SphereGeometry(.055,8,6),new THREE.MeshBasicMaterial({color:spam?C.x:C.z}));
+    m.position.set(x*S,.46,z*S);m.userData={spam,col:spam?C.x:C.z};g.add(m);dots.push(m)}
+  const wall=new THREE.Mesh(new THREE.PlaneGeometry(2.1*S,.8),new THREE.MeshBasicMaterial({color:C.cyan,transparent:true,opacity:.35,side:THREE.DoubleSide}));wall.position.y=.8;
+  const edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(2.1*S,.8)),new THREE.LineBasicMaterial({color:C.cyan}));wall.add(edge);
+  const piv=new THREE.Group();piv.add(wall);g.add(piv);
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"perceptron",piv,dots,step:-1,a0:-Math.PI*.15,a1:-Math.PI*.75};return wrap}
 /* 새 회차 기본 홀로그램: 점 구름이 천천히 도는 모형 (회차 전용 holo를 만들기 전까지) */
 function orbitHolo(){const g=new THREE.Group(),r=mulberry(11),dots=[];for(let i=0;i<48;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:C.cyan}));
     const a=r()*Math.PI*2,b=Math.acos(2*r()-1),R0=.75+r()*.25;m.position.set(R0*Math.sin(b)*Math.cos(a),.9+R0*Math.cos(b)*.8,R0*Math.sin(b)*Math.sin(a));g.add(m);dots.push(m)}
@@ -300,7 +314,7 @@ STATIONS.forEach((s,i)=>{const g=new THREE.Group();g.position.set(...s.pos);scen
   if(s.pos[1]>0){const pg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-s.pos[1],0)]);const pl=new THREE.Line(pg,new THREE.LineDashedMaterial({color:C.ink,dashSize:.3,gapSize:.25}));pl.computeLineDistances();g.add(pl);
     const sh=new THREE.Mesh(new THREE.CircleGeometry(1.2,32),new THREE.MeshBasicMaterial({color:0x1f2224,transparent:true,opacity:.08}));sh.rotation.x=-Math.PI/2;sh.position.y=-s.pos[1]+.02;g.add(sh)}
   const top=new THREE.Group();top.position.y=ph;g.add(top);
-  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():s.holo==="bpe"?bpeHolo():s.holo==="classic"?classicHolo():s.holo==="supervised"?supervisedHolo():s.holo==="optimization"?optHolo():s.holo==="unsupervised"?unsupervisedHolo():s.holo==="rl"?rlHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
+  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():s.holo==="bpe"?bpeHolo():s.holo==="classic"?classicHolo():s.holo==="supervised"?supervisedHolo():s.holo==="optimization"?optHolo():s.holo==="unsupervised"?unsupervisedHolo():s.holo==="rl"?rlHolo():s.holo==="perceptron"?percHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
     const ring=new THREE.Mesh(new THREE.RingGeometry(1.25,1.4,48),new THREE.MeshBasicMaterial({color:C.gold,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.02;top.add(ring);s.ring=ring}
   else{const cg=new THREE.BoxGeometry(2,2,2),cov=new THREE.Mesh(cg,new THREE.MeshLambertMaterial({color:0xeef0f3,transparent:true,opacity:.55}));cov.position.y=1;outline(cg,cov,0x8a919c);top.add(cov);
     const q=label("?",{size:90,bg:false,col:"#8a919c",scale:.016});q.position.y=1;top.add(q)}
@@ -372,6 +386,9 @@ function tick(){const dt=Math.min(.05,clock.getDelta());T+=dt;
       u.rows.forEach((row,r)=>row.forEach(b=>{const t=r<st?1:r===st?e:0;b.position.x=b.userData.x0+(b.userData.x1-b.userData.x0)*t;b.material.color.setHex(r===st?C.gold:C.cyan)}));return}
     if(u.kind==="rl"){h.rotation.y=reduce?.6:T*.25;const W_=u.wander.length,L=u.path.length,cyc=W_+L+4,st=Math.floor(T*(reduce?.8:2.4))%cyc;if(st!==u.step){u.step=st;
       if(st<W_){u.fly.position.copy(u.wander[st]);u.arrows.forEach(a=>a.visible=false)}else{const k=Math.min(L-1,st-W_);u.fly.position.copy(u.path[k]);u.arrows.forEach((a,i)=>a.visible=i<k)}}return}
+    if(u.kind==="perceptron"){h.rotation.y=reduce?.6:Math.sin(T*.3)*.6;const N=7,per=reduce?2.4:1.1,cyc=N+3,st=Math.floor(T/per)%cyc,k=Math.min(st,N),ph=Math.min(1,(T%per)/(per*.6)),e=ph*ph*(3-2*ph);
+      const ang=t=>u.a0+(u.a1-u.a0)*t;u.piv.rotation.y=st>=N?u.a1:ang((k+(st<N?e:0))/N)-(st<N?0:0);u.piv.position.set(Math.sin(u.piv.rotation.y)*0,0,0);
+      if(st!==u.step){u.step=st;u.dots.forEach(d=>d.material.color.setHex(d.userData.col));if(st<N){const d=u.dots[(st*5+1)%u.dots.length];d.material.color.setHex(C.gold)}}return}
     if(u.kind==="unsup"){h.rotation.y=reduce?.6:T*.3;const per=reduce?8:5,ph=(T%per)/per,t=ph<.15?0:ph<.55?(ph-.15)/.4:ph<.9?1:1-(ph-.9)/.1,e=t*t*(3-2*t);
       u.dots.forEach(m=>{const a=m.userData.start,b=m.userData.end;m.position.set((a[0]+(b[0]-a[0])*e)*u.S,a[1]+(b[1]-a[1])*e,(a[2]+(b[2]-a[2])*e)*u.S);m.material.color.setHex(m.userData.k>=0&&e>.6?u.cols[m.userData.k]:C.lock)});return}
     if(u.kind==="supervised"){h.rotation.y=reduce?.6:T*.3;u.plane.material.opacity=reduce?.7:.15+.6*(.5+.5*Math.sin(T*1.3));return}
