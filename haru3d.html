@@ -239,6 +239,28 @@ function distHolo(){const g=new THREE.Group(),A=new THREE.Vector3(-.9,.2,.5),B=n
 function supBall(p,R=.42){const pts=[],lv=[-.8,-.4,0,.4,.8],N=40,se=(a,t)=>{const u=Math.cos(t),v=Math.sin(t),r=a*Math.pow(Math.pow(Math.abs(u),p)+Math.pow(Math.abs(v),p),-1/p);return[u*r,v*r]};
   lv.forEach(y0=>{const a=Math.pow(Math.max(0,1-Math.pow(Math.abs(y0),p)),1/p);for(let i=0;i<N;i++){const [u1,v1]=se(a,i/N*6.2832),[u2,v2]=se(a,(i+1)/N*6.2832);pts.push(new THREE.Vector3(u1*R,y0*R,v1*R),new THREE.Vector3(u2*R,y0*R,v2*R))}});
   lv.forEach(x0=>{const a=Math.pow(Math.max(0,1-Math.pow(Math.abs(x0),p)),1/p);for(let i=0;i<N;i++){const [u1,v1]=se(a,i/N*6.2832),[u2,v2]=se(a,(i+1)/N*6.2832);pts.push(new THREE.Vector3(x0*R,u1*R,v1*R),new THREE.Vector3(x0*R,u2*R,v2*R))}});return pts}
+/* EP.06 홀로그램: 주판 다섯 줄(SVM·KNN·K-means·PCA·편향–분산) — 한 줄씩 알이 오른쪽으로 튕겨 간다 */
+function classicHolo(){const g=new THREE.Group(),rows=[],W=2.2,ln=new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:.6});
+  const fr=new THREE.BufferGeometry().setFromPoints([[-W/2-.12,.15],[W/2+.12,.15],[W/2+.12,1.75],[-W/2-.12,1.75],[-W/2-.12,.15]].map(([x,y])=>new THREE.Vector3(x,y,0)));g.add(new THREE.Line(fr,ln));
+  for(let r=0;r<5;r++){const y=.4+r*.3,rod=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-W/2,y,0),new THREE.Vector3(W/2,y,0)]);g.add(new THREE.Line(rod,ln));
+    const beads=[];for(let b=0;b<5;b++){const m=new THREE.Mesh(new THREE.SphereGeometry(.1,12,8),new THREE.MeshBasicMaterial({color:C.cyan}));m.scale.set(1.25,.8,.8);m.userData.x0=-W/2+.15+b*.22;m.userData.x1=W/2-.15-(4-b)*.22;m.position.set(m.userData.x0,y,0);g.add(m);beads.push(m)}rows.push(beads)}
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"classic",rows,step:-1,t0:0};return wrap}
+/* EP.07 홀로그램: 집 40채 점구름(비싼 집은 금색)과 가장 가까운 평면이 켜졌다 꺼진다 */
+function supervisedHolo(){const g=new THREE.Group(),r=mulberry(7),S=.9;
+  for(let i=0;i<40;i++){const x=r()*2-1,z=r()*2-1,y=.45*x-.3*z+(r()-.5)*.35,m=new THREE.Mesh(new THREE.SphereGeometry(.06,8,6),new THREE.MeshBasicMaterial({color:y>.25?C.gold:C.cyan}));m.position.set(x*S,1+y*S,z*S);g.add(m)}
+  const pts=[];for(let k=0;k<=4;k++){const t=-1+k*.5,P=(x,z)=>new THREE.Vector3(x*S,1+(.45*x-.3*z)*S,z*S);pts.push(P(-1,t),P(1,t),P(t,-1),P(t,1))}
+  const plane=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:.7}));g.add(plane);
+  const ax=[[C.x,[1.1,0,0]],[C.y,[0,1.1,0]],[C.z,[0,0,1.1]]];ax.forEach(([c,v])=>{const o=new THREE.Vector3(-S,.1,-S);g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([o,o.clone().add(new THREE.Vector3(...v))]),new THREE.LineBasicMaterial({color:c})))});
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"supervised",plane};return wrap}
+/* EP.08 홀로그램: 길쭉한 그릇 위에서 공이 기울기 반대쪽으로 한 걸음씩 내려가고, 화살표가 다음 걸음을 가리킨다 */
+function optHolo(){const g=new THREE.Group(),S=1,f=(x,z)=>.25+.55*(x*x+3*z*z)*.5,pts=[],N=8;
+  for(let i=0;i<=N;i++){const t=-1+2*i/N;for(let j=0;j<16;j++){const a=-1+2*j/16,b=a+2/16;pts.push(new THREE.Vector3(a*S,f(a,t*.6),t*.6*S),new THREE.Vector3(b*S,f(b,t*.6),t*.6*S));pts.push(new THREE.Vector3(t*S,f(t,a*.6),a*.6*S),new THREE.Vector3(t*S,f(t,b*.6),b*.6*S))}}
+  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:C.cyan,transparent:true,opacity:.35})));
+  const path=[];let x=.95,z=.5;for(let k=0;k<14;k++){path.push(new THREE.Vector3(x*S,f(x,z)+.08,z*S));const gx=.55*x,gz=.55*3*z;x-=.45*gx;z-=.45*gz}
+  const ball=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),new THREE.MeshBasicMaterial({color:C.gold}));g.add(ball);
+  const trail=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:C.gold}));g.add(trail);
+  const arrow=new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(),.4,C.x,.12,.08);g.add(arrow);
+  const wrap=new THREE.Group();wrap.add(g);wrap.userData={kind:"opt",path,ball,trail,arrow,step:-1};return wrap}
 /* 새 회차 기본 홀로그램: 점 구름이 천천히 도는 모형 (회차 전용 holo를 만들기 전까지) */
 function orbitHolo(){const g=new THREE.Group(),r=mulberry(11),dots=[];for(let i=0;i<48;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),new THREE.MeshBasicMaterial({color:C.cyan}));
     const a=r()*Math.PI*2,b=Math.acos(2*r()-1),R0=.75+r()*.25;m.position.set(R0*Math.sin(b)*Math.cos(a),.9+R0*Math.cos(b)*.8,R0*Math.sin(b)*Math.sin(a));g.add(m);dots.push(m)}
@@ -254,7 +276,7 @@ STATIONS.forEach((s,i)=>{const g=new THREE.Group();g.position.set(...s.pos);scen
   if(s.pos[1]>0){const pg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-s.pos[1],0)]);const pl=new THREE.Line(pg,new THREE.LineDashedMaterial({color:C.ink,dashSize:.3,gapSize:.25}));pl.computeLineDistances();g.add(pl);
     const sh=new THREE.Mesh(new THREE.CircleGeometry(1.2,32),new THREE.MeshBasicMaterial({color:0x1f2224,transparent:true,opacity:.08}));sh.rotation.x=-Math.PI/2;sh.position.y=-s.pos[1]+.02;g.add(sh)}
   const top=new THREE.Group();top.position.y=ph;g.add(top);
-  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():s.holo==="bpe"?bpeHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
+  if(s.open){const h=s.holo==="lora"?loraHolo():s.holo==="cnn"?slider():s.holo==="dropout"?lattice():s.holo==="distance"?distHolo():s.holo==="bpe"?bpeHolo():s.holo==="classic"?classicHolo():s.holo==="supervised"?supervisedHolo():s.holo==="optimization"?optHolo():orbitHolo();h.position.y=.6;top.add(h);holos.push(h);
     const ring=new THREE.Mesh(new THREE.RingGeometry(1.25,1.4,48),new THREE.MeshBasicMaterial({color:C.gold,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.02;top.add(ring);s.ring=ring}
   else{const cg=new THREE.BoxGeometry(2,2,2),cov=new THREE.Mesh(cg,new THREE.MeshLambertMaterial({color:0xeef0f3,transparent:true,opacity:.55}));cov.position.y=1;outline(cg,cov,0x8a919c);top.add(cov);
     const q=label("?",{size:90,bg:false,col:"#8a919c",scale:.016});q.position.y=1;top.add(q)}
@@ -322,6 +344,12 @@ function tick(){const dt=Math.min(.05,clock.getDelta());T+=dt;
   ctl.update();
   // holograms: dropout flicker (a new half every step)
   holos.forEach(h=>{const u=h.userData;if(u.kind==="orbit"){h.rotation.y=reduce?.6:T*.3;return}
+    if(u.kind==="classic"){h.rotation.y=reduce?.6:Math.sin(T*.35)*.7;const per=reduce?3:1.6,st=Math.floor(T/per)%6,ph=Math.min(1,(T%per)/(per*.45)),e=ph*ph*(3-2*ph);
+      u.rows.forEach((row,r)=>row.forEach(b=>{const t=r<st?1:r===st?e:0;b.position.x=b.userData.x0+(b.userData.x1-b.userData.x0)*t;b.material.color.setHex(r===st?C.gold:C.cyan)}));return}
+    if(u.kind==="supervised"){h.rotation.y=reduce?.6:T*.3;u.plane.material.opacity=reduce?.7:.15+.6*(.5+.5*Math.sin(T*1.3));return}
+    if(u.kind==="opt"){h.rotation.y=reduce?.6:T*.25;const L=u.path.length,st=Math.floor(T*(reduce?.6:1.8))%(L+3),k=Math.min(st,L-1);if(st!==u.step){u.step=st;
+      u.ball.position.copy(u.path[k]);u.trail.geometry.dispose();u.trail.geometry=new THREE.BufferGeometry().setFromPoints(u.path.slice(0,k+1));
+      if(k<L-1){const d=u.path[k+1].clone().sub(u.path[k]);u.arrow.visible=true;u.arrow.position.copy(u.path[k]);u.arrow.setDirection(d.clone().normalize());u.arrow.setLength(Math.max(.18,d.length()),.1,.07)}else u.arrow.visible=false}return}
     if(u.kind==="bpe"){h.rotation.y=reduce?.6:Math.sin(T*.4)*.6;const st=Math.floor(T/(reduce?3:1.4))%BPE_ST.length;if(st!==u.step){u.step=st;bpeStage(u,st)}return}
     if(u.kind==="distance"){h.rotation.y=reduce?.6:T*.3;const st=Math.floor(T/(reduce?3:1.5))%3;if(st!==u.step){u.step=st;u.paths.forEach((l,i)=>l.material.opacity=i===st?1:.2)}
       const ph=(T*(reduce?.05:.12))%1,p=ph<.5?1+7*(ph*2)**2:8-7*((ph-.5)*2)**2,q=Math.round(p*10)/10;if(q!==u.p){u.p=q;u.ball.geometry.dispose();u.ball.geometry=new THREE.BufferGeometry().setFromPoints(supBall(q))}return}if(u.kind==="cnn"){h.rotation.y=reduce?.6:T*.25;const st=Math.floor(T*(reduce?1:2.2))%16;if(st!==u.step){u.step=st;const r=Math.floor(st/4),q=st%4,sp=u.sp;
