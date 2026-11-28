@@ -134,7 +134,22 @@ const STATIONS=[
    stats:[["177 → 66","글자 → 토큰","#1f8fd6"],["2.7배","짧아진 길이","#e0a92a"]],
    url:"https://adminmrobo.github.io/Tokenization-BPE-tutorial/",
    line:"공중 실험대에서 글을 조각냈어요. 30번 세다가 숨찼는데, 시아·모아가 도와줬어요!"},
-  // EP.06부터: {ep:"EP.06",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
+  {ep:"EP.06",title:"주판봇의 고전 머신러닝",pos:[4,0,10],open:true,holo:"classic",
+   desc:"주판봇의 주판알 다섯 줄로 SVM·KNN·K-means·PCA·편향–분산을 튕겨 봤어요. 판을 정한 알은 80개 중 3개, 축 두 개가 흐름의 98.9%를 남겼어요.",
+   stats:[["3 / 80","서포트 벡터 · 판을 정한 알","#1f8fd6"],["0.989","PCA 축 2개가 남긴 몫","#e0a92a"]],
+   url:"https://adminmrobo.github.io/haru_3d_classic_learning_model_02_lab/",
+   line:"주판봇 주판을 보니 '고전'이 떠올랐어요. 나누고, 묶고, 줄이고, 재 봤어요!"},
+  {ep:"EP.07",title:"X1·X2·X3가 열어 준 3차원 — 지도학습",open:true,holo:"supervised",
+   desc:"하숙집 400채를 면적·방 수·연식 세 축에 찍고 지도학습 다섯 장면을 봤어요. 처음 보는 100채에서 나무 하나는 0.850, 숲 100그루는 0.910을 맞혔어요.",
+   stats:[["0.862","선형회귀 평면 R²","#1f8fd6"],["0.850 → 0.910","나무 하나 → 숲","#e0a92a"]],
+   url:"https://adminmrobo.github.io/haru_3d_classic_learning_model_01_lab/",
+   line:"새 식구 이름이 x1, x2, x3라서 축 세 개가 떠올랐어요. 집값을 맞혀 봤어요!"},
+  {ep:"EP.08",title:"박사의 과제 — 최적화 연습",open:true,holo:"optimization",
+   desc:"박사의 과제 카드를 받아 시아·모아와 최적화를 연습해요. 1부 기울기 나침반: 기울기 길이 7.211, 가장 가파른 방향은 56°예요. 2~6부는 준비 중이에요.",
+   stats:[["7.211","기울기 길이","#1f8fd6"],["56°","가장 가파른 방향","#e0a92a"]],
+   url:"https://adminmrobo.github.io/haru_3d_optimization_01/",
+   line:"박사님 과제예요! 기울기 나침반부터 하나씩 굴려 볼게요."},
+  // EP.09부터: {ep:"EP.09",title:"…",open:true,holo:"…",desc:"…",stats:[…],url:"…",line:"…"} — pos를 비우면 SLOTS에서 자동 배정
 ];
 const ROOM={w:32,h:12,d:32};
 /* 미리 정해 둔 빈자리: 실험대끼리 5 이상, 벽에서 2 이상, 공중 실험대는 바닥 실험대와 수평 3 이상 떨어짐.
